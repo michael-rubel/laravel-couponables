@@ -41,20 +41,20 @@ trait HasCoupons
     {
         $service = call(CouponServiceContract::class);
         $pivot   = call(CouponPivotContract::class);
-        $coupon  = call($service->verifyCoupon($code, $this));
+        $proxy   = call($service->verifyCoupon($code, $this));
+
+        $coupon = $proxy->getInternal(Call::INSTANCE);
 
         $this->coupons()->attach($coupon->id, [
             $pivot->getRedeemedAtColumn() => now(),
         ]);
 
-        if (! is_null($coupon->{$coupon->getQuantityColumn()})) {
-            $coupon->decrement($coupon->getQuantityColumn());
+        if (! is_null($coupon->{$proxy->getQuantityColumn()})) {
+            $coupon->decrement($proxy->getQuantityColumn());
         }
 
-        $instance = $coupon->getInternal(Call::INSTANCE);
+        event(new CouponRedeemed($this, $coupon));
 
-        event(new CouponRedeemed($this, $instance));
-
-        return $instance;
+        return $coupon;
     }
 }
