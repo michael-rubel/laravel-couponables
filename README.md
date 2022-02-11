@@ -1,4 +1,4 @@
-![Laravel Couponables]()
+![Laravel Couponables](https://user-images.githubusercontent.com/37669560/153603606-25f56bec-879c-4ec0-a061-fb11907e5e4e.png)
 
 # Laravel Couponables
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/michael-rubel/laravel-couponables.svg?style=flat-square&logo=packagist)](https://packagist.org/packages/michael-rubel/laravel-couponables)
@@ -23,7 +23,7 @@ Install the package using composer:
 composer require michael-rubel/laravel-couponables
 ```
 
-Publish the migration:
+Publish the migrations:
 ```bash
 php artisan vendor:publish --tag="couponables-migrations"
 ```
