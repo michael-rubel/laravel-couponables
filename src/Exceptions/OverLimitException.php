@@ -7,7 +7,7 @@ class OverLimitException extends \Exception
     /**
      * @var string
      */
-    protected $message = 'The user is already reached its limit of coupons.';
+    protected $message = 'Coupon usage limit has been reached.';
 
     /**
      * @var int
