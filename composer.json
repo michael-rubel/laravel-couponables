@@ -50,7 +50,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "CouponableServiceProvider"
+                "MichaelRubel\\Couponables\\CouponableServiceProvider"
             ]
         }
     },
