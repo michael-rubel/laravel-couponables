@@ -41,7 +41,7 @@ class CouponableServiceProvider extends PackageServiceProvider
      */
     public function packageRegistered(): void
     {
-        app()->register(LecServiceProvider::class);
+        $this->app->register(LecServiceProvider::class);
 
         $model = config('couponables.model', Coupon::class);
         $this->app->scoped(CouponContract::class, $model);
