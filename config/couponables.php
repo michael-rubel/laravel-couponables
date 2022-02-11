@@ -23,14 +23,6 @@ return [
     'table' => 'coupons',
 
     /*
-    | Service class to use by the package.
-    |
-    | Default: `\MichaelRubel\Couponables\Services\CouponService::class`
-    */
-
-    'service' => \MichaelRubel\Couponables\Services\CouponService::class,
-
-    /*
     | Polymorphic pivot model.
     |
     | Default: `\MichaelRubel\Couponables\Models\Couponable::class`
@@ -45,5 +37,13 @@ return [
     */
 
     'pivot_table' => 'couponables',
+
+    /*
+    | Service class to use by the package.
+    |
+    | Default: `\MichaelRubel\Couponables\Services\CouponService::class`
+    */
+
+    'service' => \MichaelRubel\Couponables\Services\CouponService::class,
 
 ];
