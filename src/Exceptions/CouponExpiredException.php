@@ -7,7 +7,7 @@ class CouponExpiredException extends \Exception
     /**
      * @var string
      */
-    protected $message = 'Invalid promotional code was passed.';
+    protected $message = 'Invalid coupon was passed.';
 
     /**
      * @var int

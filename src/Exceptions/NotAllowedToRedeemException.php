@@ -7,7 +7,7 @@ class NotAllowedToRedeemException extends \Exception
     /**
      * @var string
      */
-    protected $message = 'The promotional code cannot be used by this model.';
+    protected $message = 'The coupon cannot be used by this model.';
 
     /**
      * @var int

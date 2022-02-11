@@ -7,7 +7,7 @@ class OverLimitException extends \Exception
     /**
      * @var string
      */
-    protected $message = 'Promotional code is already used by current model.';
+    protected $message = 'The user is already reached its limit of coupons.';
 
     /**
      * @var int
