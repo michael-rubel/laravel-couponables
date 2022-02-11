@@ -1,0 +1,24 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+
+    paths:
+        - src
+
+    ignoreErrors:
+        - '#Property MichaelRubel\\Couponables\\Services\\CouponService\:\:\$model \(MichaelRubel\\EnhancedContainer\\Core\\CallProxy\) does not accept mixed\.#'
+        - '#Parameter \#2 \$concrete of method Illuminate\\Contracts\\Container\\Container(.*) expects Closure\|string\|null, mixed given\.#'
+        - '#Property Illuminate\\Database\\Eloquent\\Model\:\:\$table \(string\) does not accept mixed\.#'
+        - '#Property MichaelRubel\\Couponables\\Events\\CouponRedeemed(.*) is never read, only written\.#'
+        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:coupons\(\)#'
+        - '#Call to an undefined method MichaelRubel\\EnhancedContainer\\Core\\CallProxy(.*)#'
+        - '#Cannot call method (.*) on mixed\.#'
+
+    level: max
+
+    checkMissingIterableValueType: false
+
+    reportUnmatchedIgnoredErrors: false
+
+    checkOctaneCompatibility: true
