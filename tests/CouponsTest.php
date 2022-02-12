@@ -54,6 +54,48 @@ class CouponsTest extends TestCase
     }
 
     /** @test */
+    public function testIsThatCouponCodeAlreadyApplied()
+    {
+        Coupon::create([
+            'code' => 'test-code',
+        ]);
+
+        Coupon::create([
+            'code' => 'applied-code',
+        ]);
+
+        $redeemed = $this->user->redeemCoupon('applied-code');
+
+        $this->assertInstanceOf(Coupon::class, $redeemed);
+        $this->assertDatabaseHas('couponables', [
+            'couponable_id' => $this->user->id,
+        ]);
+
+        $this->assertTrue($this->user->isCouponAlreadyUsed('applied-code'));
+    }
+
+    /** @test */
+    public function testReturnsFalseIfCouponIsNotApplied()
+    {
+        Coupon::create([
+            'code' => 'test-code',
+        ]);
+
+        Coupon::create([
+            'code' => 'applied-code',
+        ]);
+
+        $redeemed = $this->user->redeemCoupon('test-code');
+
+        $this->assertInstanceOf(Coupon::class, $redeemed);
+        $this->assertDatabaseHas('couponables', [
+            'couponable_id' => $this->user->id,
+        ]);
+
+        $this->assertFalse($this->user->isCouponAlreadyUsed('applied-code'));
+    }
+
+    /** @test */
     public function testCanRedeemCouponToUseOnlyForSpecificModel()
     {
         Coupon::create([

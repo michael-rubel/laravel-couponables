@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Str;
 use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 use MichaelRubel\Couponables\Models\Contracts\CouponPivotContract;
-use MichaelRubel\Couponables\Models\Coupon;
 use MichaelRubel\Couponables\Services\Contracts\CouponServiceContract;
 use MichaelRubel\EnhancedContainer\Call;
 
@@ -21,10 +20,9 @@ trait HasCoupons
      */
     public function coupons(): MorphToMany
     {
-        return $this->morphToMany(
-            config('couponables.model', Coupon::class),
-            Str::singular(config('couponables.pivot_table', 'couponables'))
-        )->withPivot(
+        return $this->morphToMany(app(CouponContract::class), Str::singular(
+            config('couponables.pivot_table', 'couponables')
+        ))->withPivot(
             call(CouponPivotContract::class)->getRedeemedAtColumn()
         );
     }
@@ -57,6 +55,23 @@ trait HasCoupons
      */
     public function applyCoupon(string $code): CouponContract
     {
-        return $this->redeemCoupon($code);
+        return call($this)->redeemCoupon($code);
+    }
+
+    /**
+     * Check if coupon with this code is already used.
+     *
+     * @param string $code
+     *
+     * @return bool
+     */
+    public function isCouponAlreadyUsed(string $code): bool
+    {
+        $column = call(CouponContract::class)
+            ->getCodeColumn();
+
+        return $this->coupons()
+            ->where($column, $code)
+            ->exists();
     }
 }
