@@ -39,11 +39,9 @@ trait HasCoupons
         $service = call(CouponServiceContract::class);
         $proxy   = call($service->verifyCoupon($code, $this));
 
-        $coupon = $proxy->getInternal(Call::INSTANCE);
+        $coupon  = $proxy->getInternal(Call::INSTANCE);
 
-        $service->applyCoupon($coupon, $this);
-
-        return $coupon;
+        return $service->applyCoupon($coupon, $this);
     }
 
     /**

@@ -30,10 +30,10 @@ interface CouponServiceContract
     /**
      * Apply the coupon.
      *
-     * @param Model $coupon
-     * @param Model $redeemer
+     * @param CouponContract $coupon
+     * @param Model          $redeemer
      *
-     * @return void
+     * @return CouponContract
      */
-    public function applyCoupon(Model $coupon, Model $redeemer): void;
+    public function applyCoupon(CouponContract $coupon, Model $redeemer): CouponContract;
 }
