@@ -19,7 +19,7 @@ use MichaelRubel\Couponables\Tests\Stubs\Models\FakeCoupon;
 use MichaelRubel\Couponables\Tests\Stubs\Models\FakeCouponable;
 use MichaelRubel\Couponables\Tests\Stubs\Models\User;
 
-class CouponablesTest extends TestCase
+class CouponsTest extends TestCase
 {
     /**
      * @var User
@@ -40,49 +40,6 @@ class CouponablesTest extends TestCase
         ]);
 
         Event::fake();
-    }
-
-    /** @test */
-    public function testCouponIsGenerated()
-    {
-        Coupon::create([
-            'code' => 'test-code',
-        ]);
-
-        $this->assertDatabaseHas(
-            'coupons',
-            ['code' => 'test-code']
-        );
-    }
-
-    /** @test */
-    public function testUserIsCreated()
-    {
-        $this->assertDatabaseHas(
-            'users',
-            ['email' => 'test@example.com']
-        );
-    }
-
-    /** @test */
-    public function testIsNotExpired()
-    {
-        $coupon = Coupon::create([
-            'code' => 'not-expired-coupon',
-        ]);
-
-        $this->assertTrue($coupon->isNotExpired());
-    }
-
-    /** @test */
-    public function testIsExpired()
-    {
-        $coupon = Coupon::create([
-            'code'       => 'expired-coupon',
-            'expires_at' => now()->subMonth(),
-        ]);
-
-        $this->assertTrue($coupon->isExpired());
     }
 
     /** @test */
@@ -274,45 +231,5 @@ class CouponablesTest extends TestCase
         $fakePivotModel = FakeCouponable::where($redeemed_at, $now)->first();
 
         $this->assertStringContainsString($fakePivotModel->{$redeemed_at}, $now->toDateTimeString());
-    }
-
-    /** @test */
-    public function testCanOverrideMethodsThroughContainer()
-    {
-        Coupon::create([
-            'code' => 'bound-coupon',
-            'limit' => 1,
-        ]);
-
-        bind(CouponContract::class)->method('isOverLimitFor', function ($model, $app, $parameters) {
-            if (! $isOverLimit = $model->isOverLimitFor($parameters['redeemer'])) {
-                $parameters['redeemer']->name = 'Modified';
-                $parameters['redeemer']->save();
-            }
-
-            return $isOverLimit;
-        });
-
-        $this->user->redeemCoupon('bound-coupon');
-
-        $this->assertStringContainsString('Modified', $this->user->fresh()->name);
-    }
-
-    /** @test */
-    public function testCanOverrideColumnsThroughContainer()
-    {
-        $this->expectException(InvalidCouponException::class);
-
-        Coupon::create([
-            'code' => 'column-coupon',
-            'limit' => 1,
-        ]);
-
-        bind(CouponContract::class)->method(
-            'getCodeColumn',
-            fn ($model) => $model->getCodeColumn() . 's'
-        );
-
-        $this->user->redeemCoupon('column-coupon');
     }
 }
