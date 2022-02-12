@@ -45,18 +45,6 @@ trait HasCoupons
     }
 
     /**
-     * @alias redeemCoupon()
-     *
-     * @param string $code
-     *
-     * @return CouponContract
-     */
-    public function applyCoupon(string $code): CouponContract
-    {
-        return call($this)->redeemCoupon($code);
-    }
-
-    /**
      * Check if coupon with this code is already used.
      *
      * @param string $code
