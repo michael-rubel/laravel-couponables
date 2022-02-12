@@ -6,7 +6,6 @@ namespace MichaelRubel\Couponables;
 
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Str;
-use MichaelRubel\Couponables\Events\CouponRedeemed;
 use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 use MichaelRubel\Couponables\Models\Contracts\CouponPivotContract;
 use MichaelRubel\Couponables\Models\Coupon;
@@ -31,7 +30,7 @@ trait HasCoupons
     }
 
     /**
-     * Use the promotional code.
+     * Use the coupon.
      *
      * @param string $code
      *
@@ -40,21 +39,24 @@ trait HasCoupons
     public function redeemCoupon(string $code): CouponContract
     {
         $service = call(CouponServiceContract::class);
-        $pivot   = call(CouponPivotContract::class);
         $proxy   = call($service->verifyCoupon($code, $this));
 
         $coupon = $proxy->getInternal(Call::INSTANCE);
 
-        $this->coupons()->attach($coupon->id, [
-            $pivot->getRedeemedAtColumn() => now(),
-        ]);
-
-        if (! is_null($coupon->{$proxy->getQuantityColumn()})) {
-            $coupon->decrement($proxy->getQuantityColumn());
-        }
-
-        event(new CouponRedeemed($this, $coupon));
+        $service->applyCoupon($coupon, $this);
 
         return $coupon;
+    }
+
+    /**
+     * @alias redeemCoupon()
+     *
+     * @param string $code
+     *
+     * @return CouponContract
+     */
+    public function applyCoupon(string $code): CouponContract
+    {
+        return $this->redeemCoupon($code);
     }
 }

@@ -26,4 +26,14 @@ interface CouponServiceContract
      * @throws InvalidCouponException
      */
     public function verifyCoupon(string $code, Model $redeemer): CouponContract;
+
+    /**
+     * Apply the coupon.
+     *
+     * @param Model $coupon
+     * @param Model $redeemer
+     *
+     * @return void
+     */
+    public function applyCoupon(Model $coupon, Model $redeemer): void;
 }
