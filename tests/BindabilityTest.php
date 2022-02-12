@@ -27,16 +27,16 @@ class BindabilityTest extends TestCase
             'email'    => 'test@example.com',
             'password' => Hash::make('pass'),
         ]);
+
+        Coupon::create([
+            'code'     => 'bound-coupon',
+            'quantity' => 2,
+        ]);
     }
 
     /** @test */
     public function testCanOverrideMethodsThroughContainer()
     {
-        Coupon::create([
-            'code' => 'bound-coupon',
-            'limit' => 1,
-        ]);
-
         bind(CouponContract::class)->method('isOverLimitFor', function ($model, $app, $parameters) {
             if (! $isOverLimit = $model->isOverLimitFor($parameters['redeemer'])) {
                 $parameters['redeemer']->name = 'Modified';
@@ -52,20 +52,38 @@ class BindabilityTest extends TestCase
     }
 
     /** @test */
-    public function testCanOverrideColumnsThroughContainer()
+    public function testCanOverrideCodeColumnThroughContainer()
     {
         $this->expectException(InvalidCouponException::class);
-
-        Coupon::create([
-            'code' => 'column-coupon',
-            'limit' => 1,
-        ]);
 
         bind(CouponContract::class)->method(
             'getCodeColumn',
             fn ($model) => $model->getCodeColumn() . 's'
         );
 
-        $this->user->redeemCoupon('column-coupon');
+        $this->user->redeemCoupon('bound-coupon');
+    }
+
+    /** @test */
+    public function testCanOverrideQuantityColumnThroughContainer()
+    {
+        $coupon = $this->user->redeemCoupon('bound-coupon');
+        $this->assertSame(1, $coupon->quantity);
+
+        bind(CouponContract::class)->method(
+            'getQuantityColumn',
+            fn ($model) => $model->getQuantityColumn() . 'with'
+        );
+
+        $coupon = $this->user->redeemCoupon('bound-coupon');
+        $this->assertSame(1, $coupon->quantity);
+
+        bind(CouponContract::class)->method(
+            'getQuantityColumn',
+            fn ($model) => $model->getQuantityColumn()
+        );
+
+        $coupon = $this->user->redeemCoupon('bound-coupon');
+        $this->assertSame(0, $coupon->quantity);
     }
 }

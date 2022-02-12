@@ -2,10 +2,26 @@
 
 namespace MichaelRubel\Couponables\Tests;
 
+use Illuminate\Support\Facades\Hash;
 use MichaelRubel\Couponables\Models\Coupon;
+use MichaelRubel\Couponables\Tests\Stubs\Models\User;
 
 class BasicOperationsTest extends TestCase
 {
+    /**
+     * @var void
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        User::create([
+            'name'     => 'Tester',
+            'email'    => 'test@example.com',
+            'password' => Hash::make('pass'),
+        ]);
+    }
+
     /** @test */
     public function testCouponIsGenerated()
     {
