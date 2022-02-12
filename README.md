@@ -34,6 +34,7 @@ php artisan vendor:publish --tag="couponables-config"
 ```
 
 ## Usage
+- The package is in the `Beta` stage. Coming soon...
 
 ## Testing
 ```bash
