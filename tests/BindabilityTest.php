@@ -31,6 +31,7 @@ class BindabilityTest extends TestCase
         Coupon::create([
             'code'     => 'bound-coupon',
             'quantity' => 2,
+            'limit'    => 3,
         ]);
     }
 
@@ -58,7 +59,7 @@ class BindabilityTest extends TestCase
 
         bind(CouponContract::class)->method(
             'getCodeColumn',
-            fn ($model) => $model->getCodeColumn() . 's'
+            fn ($model) => $model->getCodeColumn() . '_changed_column_name'
         );
 
         $this->user->redeemCoupon('bound-coupon');
@@ -72,7 +73,7 @@ class BindabilityTest extends TestCase
 
         bind(CouponContract::class)->method(
             'getQuantityColumn',
-            fn ($model) => $model->getQuantityColumn() . 'with'
+            fn ($model) => $model->getQuantityColumn() . '_changed'
         );
 
         $coupon = $this->user->redeemCoupon('bound-coupon');
