@@ -72,6 +72,10 @@ This method references the model assigned to redeem the coupon:
 public function redeemer(): ?Model;
 ```
 
+### Listeners
+If you go event-driven, you can handle package events:
+- [CouponRedeemed](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Events/CouponRedeemed.php)
+
 ### Overriding the package functionality
 Traits [DefinesColumns](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Models/Traits/DefinesColumns.php) and [DefinesPivotColumns](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Models/Traits/DefinesPivotColumns.php) contain the methods that define column names to use by the package. You can use a method binding to override the package's method behavior.
 
