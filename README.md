@@ -47,11 +47,11 @@ $model->redeemCoupon($code);
 `redeemCoupon` method throws an exception if something's wrong:
 
 ```php
-CouponExpiredException      | Coupon is expired (`expires_at` column).
-InvalidCouponException      | Coupon is not found in the database.
-NotAllowedToRedeemException | Coupon is assigned to the specific model. (`redeemer` morphs).
-OverLimitException          | Coupon is over the limit for the specific model (`limit` column).
-OverQuantityException       | Coupon is exhausted (`quantity` column).
+CouponExpiredException      // Coupon is expired (`expires_at` column).
+InvalidCouponException      // Coupon is not found in the database.
+NotAllowedToRedeemException // Coupon is assigned to the specific model (`redeemer` morphs).
+OverLimitException          // Coupon is over the limit for the specific model (`limit` column).
+OverQuantityException       // Coupon is exhausted (`quantity` column).
 ```
 
 Check if this coupon is already redeemed by the model (at least one record exists in the `couponables` table):
@@ -67,7 +67,7 @@ public function isOverQuantity(): bool;
 public function isOverLimitFor(Model $redeemer): bool;
 ```
 
-This method references the model assigned to redeem the coupon.
+This method references the model assigned to redeem the coupon:
 ```php
 public function redeemer(): ?Model;
 ```
