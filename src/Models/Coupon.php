@@ -60,7 +60,7 @@ class Coupon extends Model implements CouponContract
      */
     public function isExpired(): bool
     {
-        $expires_at = $this->{call($this)->getExpiresAtColumn()};
+        $expires_at = $this->{call(CouponContract::class)->getExpiresAtColumn()};
 
         return $expires_at && now()->gte($expires_at);
     }
@@ -82,9 +82,27 @@ class Coupon extends Model implements CouponContract
      */
     public function isOverQuantity(): bool
     {
-        $quantity = $this->{call($this)->getQuantityColumn()};
+        $quantity = $this->{call(CouponContract::class)->getQuantityColumn()};
 
         return ! is_null($quantity) && $quantity <= 0;
+    }
+
+    /**
+     * Check if coupon is already redeemed by the model.
+     *
+     * @param Model $redeemer
+     *
+     * @return bool
+     */
+    public function isRedeemedBy(Model $redeemer): bool
+    {
+        $column = call(CouponContract::class)->getCodeColumn();
+        $code   = $this->{$column};
+
+        return ! is_null($code) && $redeemer
+            ->coupons()
+            ->where($column, $code)
+            ->exists();
     }
 
     /**
@@ -96,7 +114,7 @@ class Coupon extends Model implements CouponContract
      */
     public function isOverLimitFor(Model $redeemer): bool
     {
-        $limit = $this->{call($this)->getLimitColumn()};
+        $limit = $this->{call(CouponContract::class)->getLimitColumn()};
 
         return ! is_null($limit) && $limit <= $redeemer->coupons()->count();
     }
