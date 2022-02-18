@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use MichaelRubel\Couponables\Events\CouponRedeemed;
 use MichaelRubel\Couponables\Exceptions\CouponExpiredException;
+use MichaelRubel\Couponables\Exceptions\InvalidCouponException;
 use MichaelRubel\Couponables\Exceptions\NotAllowedToRedeemException;
 use MichaelRubel\Couponables\Exceptions\OverLimitException;
 use MichaelRubel\Couponables\Exceptions\OverQuantityException;
@@ -221,5 +222,59 @@ class CouponsTest extends TestCase
                 ],
             ]),
         ]);
+    }
+
+    /** @test */
+    public function testCanCheckIsRedeemedByModel()
+    {
+        Coupon::create([
+            'code' => 'redeemed-by-coupon',
+        ]);
+
+        $coupon = $this->user->redeemCoupon('redeemed-by-coupon');
+
+        $this->assertTrue($coupon->isRedeemedBy($this->user));
+    }
+
+    /** @test */
+    public function testSimulatesProductionUsage()
+    {
+        Coupon::create([
+            'code' => 'business-coupon',
+            'data' => [
+                'run-jobs' => [
+                    'queue-job-name' => true,
+                ],
+            ],
+        ]);
+
+        $this->be($this->user);
+
+        // code from form request or livewire input
+        $code = 'business-coupon';
+
+        if (! $this->user->isCouponAlreadyUsed($code)) {
+            // show different validation errors
+            try {
+                $coupon = $this->user->redeemCoupon($code);
+            } catch (InvalidCouponException $e) {
+                $this->assertStringContainsString('The coupon is invalid', $e->getMessage());
+            } catch (CouponExpiredException $e) {
+                $this->assertStringContainsString('The coupon is expired', $e->getMessage());
+            } catch (OverQuantityException $e) {
+                $this->assertStringContainsString('The coupon is exhausted', $e->getMessage());
+            } catch (OverLimitException $e) {
+                $this->assertStringContainsString('Coupon usage limit has been reached', $e->getMessage());
+            } catch (NotAllowedToRedeemException $e) {
+                $this->assertStringContainsString('You cannot use this coupon', $e->getMessage());
+            }
+
+            // apply some action if coupon isn't fail
+            // for example get the data from the coupon to identify
+            // which queue job or action to run after coupon is redeemed.
+            if (isset($coupon) && $coupon->isRedeemedBy($this->user)) {
+                $this->assertArrayHasKey('queue-job-name', $coupon->data->get('run-jobs'));
+            }
+        }
     }
 }

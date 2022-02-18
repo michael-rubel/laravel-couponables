@@ -2,10 +2,10 @@
 
 namespace MichaelRubel\Couponables\Tests\Stubs\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use MichaelRubel\Couponables\HasCoupons;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Model
+class User extends Authenticatable
 {
     use HasCoupons;
 
