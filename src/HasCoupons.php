@@ -45,6 +45,23 @@ trait HasCoupons
     }
 
     /**
+     * Check if the coupon is already redeemed by the model at least once.
+     *
+     * @param string $code
+     *
+     * @return bool
+     */
+    public function isCouponRedeemed(string $code): bool
+    {
+        $column = call(CouponContract::class)
+            ->getCodeColumn();
+
+        return $this->coupons()
+            ->where($column, $code)
+            ->exists();
+    }
+
+    /**
      * Check if coupon with this code is already used.
      *
      * @param string $code
@@ -53,11 +70,6 @@ trait HasCoupons
      */
     public function isCouponAlreadyUsed(string $code): bool
     {
-        $column = call(CouponContract::class)
-            ->getCodeColumn();
-
-        return $this->coupons()
-            ->where($column, $code)
-            ->exists();
+        return $this->isCouponRedeemed($code);
     }
 }
