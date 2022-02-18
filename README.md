@@ -56,14 +56,15 @@ OverQuantityException       // Coupon is exhausted (`quantity` column).
 
 Check if this coupon is already redeemed by the model (at least one record exists in the `couponables` table):
 ```php
-$model->isCouponAlreadyUsed($code);
+$model->isCouponRedeemed($code);
 ```
 
-### Available [Coupon](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Models/Coupon.php) model API:
+### Available [coupon](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Models/Coupon.php) model API:
 ```php
 public function isExpired(): bool;
 public function isNotExpired(): bool;
 public function isOverQuantity(): bool;
+public function isRedeemedBy(Model $redeemer): bool;
 public function isOverLimitFor(Model $redeemer): bool;
 ```
 
