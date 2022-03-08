@@ -27,6 +27,7 @@ class Coupon extends Model implements CouponContract
      */
     protected $casts = [
         'code'     => 'string',
+        'type'     => 'string',
         'data'     => 'collection',
         'quantity' => 'integer',
         'limit'    => 'integer',

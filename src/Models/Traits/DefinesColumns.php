@@ -17,6 +17,14 @@ trait DefinesColumns
     /**
      * @return string
      */
+    public function getTypeColumn(): string
+    {
+        return 'type';
+    }
+
+    /**
+     * @return string
+     */
     public function getQuantityColumn(): string
     {
         return 'quantity';
