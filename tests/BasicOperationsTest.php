@@ -64,4 +64,18 @@ class BasicOperationsTest extends TestCase
 
         $this->assertTrue($coupon->isExpired());
     }
+
+    /** @test */
+    public function testTypeColumnIsAccessible()
+    {
+        $coupon = Coupon::create([
+            'code' => 'coupon',
+            'type' => 'percent',
+        ]);
+
+        $this->assertStringContainsString(
+            'percent',
+            $coupon->{$coupon->getTypeColumn()}
+        );
+    }
 }
