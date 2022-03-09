@@ -13,6 +13,7 @@ parameters:
         - '#Property MichaelRubel\\Couponables\\Events\\CouponRedeemed(.*) is never read, only written\.#'
         - '#Access to an undefined property MichaelRubel\\Couponables\\Models\\Contracts\\CouponContract(.*)#'
         - '#Call to an undefined method MichaelRubel\\Couponables\\Models\\Contracts\\CouponContract(.*)#'
+        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:isCouponRedeemed\(\)\.#'
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:coupons\(\)#'
         - '#Call to an undefined method MichaelRubel\\EnhancedContainer\\Core\\CallProxy(.*)#'
         - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model(.*)#'
