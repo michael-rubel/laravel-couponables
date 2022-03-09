@@ -276,7 +276,7 @@ class CouponsTest extends TestCase
         if (! $this->user->isCouponAlreadyUsed($code)) {
             // show different validation errors
             try {
-                $coupon = $this->user->redeemCoupon($code);
+                $coupon = $this->user->verifyCoupon($code);
 
                 // apply some action if coupon isn't fail
                 // for example get the data from the coupon to identify
@@ -295,6 +295,11 @@ class CouponsTest extends TestCase
             } catch (NotAllowedToRedeemException $e) {
                 $this->assertStringContainsString('You cannot use this coupon', $e->getMessage());
             }
+
+            // If all set.
+            $coupon = $this->user->redeemCoupon($code);
+
+            $this->assertSame('business-coupon', $coupon->code);
         }
     }
 
