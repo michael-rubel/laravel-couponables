@@ -31,11 +31,11 @@ trait HasCoupons
     /**
      * Perform coupon verification.
      *
-     * @param string $code
+     * @param string|null $code
      *
      * @return CouponContract
      */
-    public function verifyCoupon(string $code): CouponContract
+    public function verifyCoupon(?string $code): CouponContract
     {
         $service = call(CouponServiceContract::class);
         $proxy   = call($service->verifyCoupon($code, $this));
@@ -46,16 +46,16 @@ trait HasCoupons
     /**
      * Use the coupon.
      *
-     * @param string $code
+     * @param string|null $code
      *
      * @return CouponContract
      */
-    public function redeemCoupon(string $code): CouponContract
+    public function redeemCoupon(?string $code): CouponContract
     {
         $service = call(CouponServiceContract::class);
         $proxy   = call($service->verifyCoupon($code, $this));
 
-        $coupon  = $proxy->getInternal(Call::INSTANCE);
+        $coupon = $proxy->getInternal(Call::INSTANCE);
 
         return $service->applyCoupon($coupon, $this);
     }
@@ -80,11 +80,11 @@ trait HasCoupons
     /**
      * Check if coupon with this code is already used.
      *
-     * @param string $code
+     * @param string|null $code
      *
      * @return bool
      */
-    public function isCouponAlreadyUsed(string $code): bool
+    public function isCouponAlreadyUsed(?string $code): bool
     {
         return call($this)->isCouponRedeemed($code);
     }
@@ -92,17 +92,16 @@ trait HasCoupons
     /**
      * Check if the coupon is over limit for the model.
      *
-     * @param string $code
+     * @param string|null $code
      *
      * @return bool
      *
-     * @throws InvalidCouponException
      */
-    public function isCouponOverLimit(string $code): bool
+    public function isCouponOverLimit(?string $code): bool
     {
         $service = call(CouponServiceContract::class);
-        $coupon  = call($service->getCoupon($code));
+        $coupon  = $service->getCoupon($code);
 
-        return $coupon->isOverLimitFor($this);
+        return ! is_null($coupon) && call($coupon)->isOverLimitFor($this);
     }
 }
