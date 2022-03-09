@@ -75,7 +75,7 @@ trait HasCoupons
     }
 
     /**
-     * Check if the coupon is over limit for the user.
+     * Check if the coupon is over limit for the model.
      *
      * @param string $code
      *
