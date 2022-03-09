@@ -90,4 +90,23 @@ trait HasCoupons
 
         return $coupon->isOverLimitFor($this);
     }
+
+    /**
+     * Check if coupon is disposable.
+     *
+     * @param string $code
+     *
+     * @return bool
+     */
+    public function isCouponDisposable(string $code): bool
+    {
+        $service = call(CouponServiceContract::class);
+        $coupon  = call($service->getCoupon($code));
+
+        $limit = $coupon->{call(CouponContract::class)->getLimitColumn()};
+
+        return ! is_null($limit)
+            && single($limit)
+            && single($this->coupons()->count());
+    }
 }
