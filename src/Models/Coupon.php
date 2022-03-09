@@ -132,7 +132,7 @@ class Coupon extends Model implements CouponContract
         $column = call(CouponContract::class)->getCodeColumn();
         $limit  = $this->{call(CouponContract::class)->getLimitColumn()};
 
-        return ! is_null($limit) && $limit < $redeemer
+        return ! is_null($limit) && $limit <= $redeemer
             ->coupons()
             ->where($column, $this->{$column})
             ->count();

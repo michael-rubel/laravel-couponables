@@ -187,7 +187,7 @@ class CouponsTest extends TestCase
         ]);
 
         Collection::times(
-            4,
+            3,
             fn () => $this->user->redeemCoupon('limited-coupon')
         );
 
