@@ -3,11 +3,11 @@
 namespace MichaelRubel\Couponables\Services\Contracts;
 
 use Illuminate\Database\Eloquent\Model;
-use MichaelRubel\Couponables\Exceptions\OverLimitException;
-use MichaelRubel\Couponables\Exceptions\InvalidCouponException;
-use MichaelRubel\Couponables\Exceptions\OverQuantityException;
-use MichaelRubel\Couponables\Exceptions\NotAllowedToRedeemException;
 use MichaelRubel\Couponables\Exceptions\CouponExpiredException;
+use MichaelRubel\Couponables\Exceptions\InvalidCouponException;
+use MichaelRubel\Couponables\Exceptions\NotAllowedToRedeemException;
+use MichaelRubel\Couponables\Exceptions\OverLimitException;
+use MichaelRubel\Couponables\Exceptions\OverQuantityException;
 use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 
 interface CouponServiceContract

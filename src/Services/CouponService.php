@@ -6,11 +6,11 @@ namespace MichaelRubel\Couponables\Services;
 
 use Illuminate\Database\Eloquent\Model;
 use MichaelRubel\Couponables\Events\CouponRedeemed;
-use MichaelRubel\Couponables\Exceptions\OverLimitException;
+use MichaelRubel\Couponables\Exceptions\CouponExpiredException;
 use MichaelRubel\Couponables\Exceptions\InvalidCouponException;
 use MichaelRubel\Couponables\Exceptions\NotAllowedToRedeemException;
+use MichaelRubel\Couponables\Exceptions\OverLimitException;
 use MichaelRubel\Couponables\Exceptions\OverQuantityException;
-use MichaelRubel\Couponables\Exceptions\CouponExpiredException;
 use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 use MichaelRubel\Couponables\Models\Contracts\CouponPivotContract;
 use MichaelRubel\Couponables\Services\Contracts\CouponServiceContract;
