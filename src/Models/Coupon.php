@@ -109,6 +109,18 @@ class Coupon extends Model implements CouponContract
     }
 
     /**
+     * Check if coupon is disposable.
+     *
+     * @return bool
+     */
+    public function isDisposable(): bool
+    {
+        $limit = $this->{call(CouponContract::class)->getLimitColumn()};
+
+        return ! is_null($limit) && single($limit);
+    }
+
+    /**
      * Check if the code is reached its limit for the passed model.
      *
      * @param Model $redeemer
@@ -117,8 +129,12 @@ class Coupon extends Model implements CouponContract
      */
     public function isOverLimitFor(Model $redeemer): bool
     {
-        $limit = $this->{call(CouponContract::class)->getLimitColumn()};
+        $column = call(CouponContract::class)->getCodeColumn();
+        $limit  = $this->{call(CouponContract::class)->getLimitColumn()};
 
-        return ! is_null($limit) && $limit < $redeemer->coupons()->count();
+        return ! is_null($limit) && $limit < $redeemer
+            ->coupons()
+            ->where($column, $this->{$column})
+            ->count();
     }
 }

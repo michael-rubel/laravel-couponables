@@ -79,7 +79,7 @@ class CouponService implements CouponServiceContract
             throw new OverQuantityException;
         }
 
-        if ($redeemer->isCouponDisposable($code) || $coupon->isOverLimitFor($redeemer)) {
+        if (($coupon->isDisposable() && $redeemer->isCouponRedeemed($code)) || $coupon->isOverLimitFor($redeemer)) {
             throw new OverLimitException;
         }
 
