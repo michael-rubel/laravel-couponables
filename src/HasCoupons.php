@@ -6,6 +6,7 @@ namespace MichaelRubel\Couponables;
 
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Str;
+use MichaelRubel\Couponables\Exceptions\InvalidCouponException;
 use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 use MichaelRubel\Couponables\Models\Contracts\CouponPivotContract;
 use MichaelRubel\Couponables\Services\Contracts\CouponServiceContract;
@@ -71,5 +72,22 @@ trait HasCoupons
     public function isCouponAlreadyUsed(string $code): bool
     {
         return call($this)->isCouponRedeemed($code);
+    }
+
+    /**
+     * Check if the coupon is over limit for the user.
+     *
+     * @param string $code
+     *
+     * @return bool
+     *
+     * @throws InvalidCouponException
+     */
+    public function isCouponOverLimit(string $code): bool
+    {
+        $service = call(CouponServiceContract::class);
+        $coupon  = call($service->getCoupon($code));
+
+        return $coupon->isOverLimitFor($this);
     }
 }

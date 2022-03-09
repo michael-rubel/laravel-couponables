@@ -179,6 +179,24 @@ class CouponsTest extends TestCase
     }
 
     /** @test */
+    public function testIsOverLimitForModel()
+    {
+        Coupon::create([
+            'code'  => 'limited-coupon',
+            'limit' => 3,
+        ]);
+
+        Collection::times(
+            3,
+            fn () => $this->user->redeemCoupon('limited-coupon')
+        );
+
+        $this->assertTrue(
+            $this->user->isCouponOverLimit('limited-coupon')
+        );
+    }
+
+    /** @test */
     public function testCouponIsOverQuantity()
     {
         $this->expectException(OverQuantityException::class);

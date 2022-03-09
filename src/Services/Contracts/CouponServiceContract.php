@@ -13,6 +13,16 @@ use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 interface CouponServiceContract
 {
     /**
+     * Get the coupon model by the code.
+     *
+     * @param string $code
+     *
+     * @return CouponContract
+     * @throws InvalidCouponException
+     */
+    public function getCoupon(string $code): CouponContract;
+
+    /**
      * Verify if promotional code is valid otherwise throw an exception.
      *
      * @param string $code

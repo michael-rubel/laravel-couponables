@@ -40,6 +40,21 @@ class CouponService implements CouponServiceContract
     }
 
     /**
+     * Get the coupon model by the code.
+     *
+     * @param string $code
+     *
+     * @return CouponContract
+     * @throws InvalidCouponException
+     */
+    public function getCoupon(string $code): CouponContract
+    {
+        return $this->model
+            ->where($this->model->getCodeColumn(), $code)
+            ->firstOr(fn () => throw new InvalidCouponException);
+    }
+
+    /**
      * Verify if coupon is valid otherwise throw an exception.
      *
      * @param string $code
@@ -54,11 +69,7 @@ class CouponService implements CouponServiceContract
      */
     public function verifyCoupon(string $code, Model $redeemer): CouponContract
     {
-        $coupon = $this->model
-            ->where($this->model->getCodeColumn(), $code)
-            ->firstOr(fn () => throw new InvalidCouponException);
-
-        $coupon = call($coupon);
+        $coupon = call($this->getCoupon($code));
 
         if ($coupon->isExpired()) {
             throw new CouponExpiredException;
