@@ -14,6 +14,16 @@ interface CouponContract
     /**
      * @return string
      */
+    public function getTypeColumn(): string;
+
+    /**
+     * @return string
+     */
+    public function getValueColumn(): string;
+
+    /**
+     * @return string
+     */
     public function getQuantityColumn(): string;
 
     /**
