@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MichaelRubel\Couponables\Exceptions;
 
-class OverLimitException extends \Exception
+class OverLimitException extends CouponException
 {
     /**
      * @var string

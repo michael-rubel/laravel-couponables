@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MichaelRubel\Couponables\Exceptions;
 
-class InvalidCouponException extends \Exception
+class InvalidCouponException extends CouponException
 {
     /**
      * @var string

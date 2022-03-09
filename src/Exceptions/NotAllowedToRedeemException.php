@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MichaelRubel\Couponables\Exceptions;
 
-class NotAllowedToRedeemException extends \Exception
+class NotAllowedToRedeemException extends CouponException
 {
     /**
      * @var string
