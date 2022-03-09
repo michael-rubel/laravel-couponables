@@ -5,7 +5,9 @@ namespace MichaelRubel\Couponables\Tests;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 use MichaelRubel\Couponables\Events\CouponRedeemed;
+use MichaelRubel\Couponables\Exceptions\CouponException;
 use MichaelRubel\Couponables\Exceptions\CouponExpiredException;
 use MichaelRubel\Couponables\Exceptions\InvalidCouponException;
 use MichaelRubel\Couponables\Exceptions\NotAllowedToRedeemException;
@@ -239,8 +241,11 @@ class CouponsTest extends TestCase
     /** @test */
     public function testSimulatesProductionUsage()
     {
+        // code from form request or livewire input
+        $code = 'business-coupon';
+
         Coupon::create([
-            'code' => 'business-coupon',
+            'code' => $code,
             'data' => [
                 'run-jobs' => [
                     'queue-job-name' => true,
@@ -250,13 +255,17 @@ class CouponsTest extends TestCase
 
         $this->be($this->user);
 
-        // code from form request or livewire input
-        $code = 'business-coupon';
-
         if (! $this->user->isCouponAlreadyUsed($code)) {
             // show different validation errors
             try {
                 $coupon = $this->user->redeemCoupon($code);
+
+                // apply some action if coupon isn't fail
+                // for example get the data from the coupon to identify
+                // which queue job or action to run after coupon is redeemed.
+                if ($coupon->isRedeemedBy($this->user)) {
+                    $this->assertArrayHasKey('queue-job-name', $coupon->data->get('run-jobs'));
+                }
             } catch (InvalidCouponException $e) {
                 $this->assertStringContainsString('The coupon is invalid', $e->getMessage());
             } catch (CouponExpiredException $e) {
@@ -268,13 +277,28 @@ class CouponsTest extends TestCase
             } catch (NotAllowedToRedeemException $e) {
                 $this->assertStringContainsString('You cannot use this coupon', $e->getMessage());
             }
+        }
+    }
 
-            // apply some action if coupon isn't fail
-            // for example get the data from the coupon to identify
-            // which queue job or action to run after coupon is redeemed.
-            if (isset($coupon) && $coupon->isRedeemedBy($this->user)) {
-                $this->assertArrayHasKey('queue-job-name', $coupon->data->get('run-jobs'));
+    /** @test */
+    public function testSimulatesProductionUsageWithGenericException()
+    {
+        $this->be($this->user);
+
+        Coupon::create([
+            'code' => 'correct-coupon',
+        ]);
+
+        try {
+            try {
+                $this->user->redeemCoupon('wrong-coupon');
+            } catch (CouponException $e) {
+                throw ValidationException::withMessages([
+                    'coupon' => $e->getMessage(),
+                ]);
             }
+        } catch (ValidationException $e) {
+            $this->assertSame([0 => 'The coupon is invalid.'], $e->errors()['coupon']);
         }
     }
 }
