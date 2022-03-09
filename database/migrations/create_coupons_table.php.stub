@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('code', 64)->unique();
             $table->string('type', 128)->nullable();
+            $table->string('value')->nullable();
             $table->json('data')->nullable();
             $table->unsignedInteger('quantity')->nullable();
             $table->unsignedInteger('limit')->nullable();

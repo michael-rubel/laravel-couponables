@@ -78,4 +78,18 @@ class BasicOperationsTest extends TestCase
             $coupon->{$coupon->getTypeColumn()}
         );
     }
+
+    /** @test */
+    public function testValueColumnIsAccessible()
+    {
+        $coupon = Coupon::create([
+            'code'  => 'coupon',
+            'value' => '1000',
+        ]);
+
+        $this->assertStringContainsString(
+            '1000',
+            $coupon->{$coupon->getValueColumn()}
+        );
+    }
 }
