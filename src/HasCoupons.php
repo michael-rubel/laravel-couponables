@@ -70,6 +70,6 @@ trait HasCoupons
      */
     public function isCouponAlreadyUsed(string $code): bool
     {
-        return $this->isCouponRedeemed($code);
+        return call($this)->isCouponRedeemed($code);
     }
 }
