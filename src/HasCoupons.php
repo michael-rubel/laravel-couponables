@@ -29,6 +29,21 @@ trait HasCoupons
     }
 
     /**
+     * Perform coupon verification.
+     *
+     * @param string $code
+     *
+     * @return CouponContract
+     */
+    public function verifyCoupon(string $code): CouponContract
+    {
+        $service = call(CouponServiceContract::class);
+        $proxy   = call($service->verifyCoupon($code, $this));
+
+        return $proxy->getInternal(Call::INSTANCE);
+    }
+
+    /**
      * Use the coupon.
      *
      * @param string $code
