@@ -50,6 +50,7 @@ InvalidCouponException      // Coupon is not found in the database.
 NotAllowedToRedeemException // Coupon is assigned to the specific model (`redeemer` morphs).
 OverLimitException          // Coupon is over the limit for the specific model (`limit` column).
 OverQuantityException       // Coupon is exhausted (`quantity` column).
+CouponException             // Generic exception for all cases.
 ```
 
 Check if this coupon is already redeemed by the model (at least one record exists in the `couponables` table):
