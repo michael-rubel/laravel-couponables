@@ -45,6 +45,8 @@ class Coupon extends Model implements CouponContract
     }
 
     /**
+     * The only model allowed to redeem the code if assigned.
+     *
      * @return Model|null
      */
     public function redeemer(): ?Model
@@ -107,7 +109,7 @@ class Coupon extends Model implements CouponContract
     }
 
     /**
-     * Check if code is for one-time use.
+     * Check if the code is reached its limit for the passed model.
      *
      * @param Model $redeemer
      *
