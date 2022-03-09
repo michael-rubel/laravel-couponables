@@ -17,10 +17,10 @@ interface CouponServiceContract
      *
      * @param string $code
      *
-     * @return CouponContract
+     * @return CouponContract|null
      * @throws InvalidCouponException
      */
-    public function getCoupon(string $code): CouponContract;
+    public function getCoupon(string $code): ?CouponContract;
 
     /**
      * Verify if promotional code is valid otherwise throw an exception.

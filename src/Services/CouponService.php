@@ -44,14 +44,13 @@ class CouponService implements CouponServiceContract
      *
      * @param string $code
      *
-     * @return CouponContract
-     * @throws InvalidCouponException
+     * @return CouponContract|null
      */
-    public function getCoupon(string $code): CouponContract
+    public function getCoupon(string $code): ?CouponContract
     {
         return $this->model
             ->where($this->model->getCodeColumn(), $code)
-            ->firstOr(fn () => throw new InvalidCouponException);
+            ->first();
     }
 
     /**
@@ -69,7 +68,7 @@ class CouponService implements CouponServiceContract
      */
     public function verifyCoupon(string $code, Model $redeemer): CouponContract
     {
-        $coupon = call($this->getCoupon($code));
+        $coupon = call($this->getCoupon($code) ?? throw new InvalidCouponException);
 
         if ($coupon->isExpired()) {
             throw new CouponExpiredException;
@@ -100,7 +99,7 @@ class CouponService implements CouponServiceContract
      */
     public function applyCoupon(CouponContract $coupon, Model $redeemer): CouponContract
     {
-        $redeemer->coupons()->attach($coupon->id, [
+        $redeemer->coupons()->attach($coupon, [
             $this->pivot->getRedeemedAtColumn() => now(),
         ]);
 
