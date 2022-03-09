@@ -63,7 +63,7 @@ Check if this coupon is already redeemed by the model (at least one record exist
 $model->isCouponRedeemed($code);
 ```
 
-Or check if it's over limit:
+Or check if it's over the limit:
 ```php
 $model->isCouponOverLimit($code);
 ```
