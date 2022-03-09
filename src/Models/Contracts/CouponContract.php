@@ -52,6 +52,13 @@ interface CouponContract
     public function isRedeemedBy(Model $redeemer): bool;
 
     /**
+     * Check if coupon is disposable.
+     *
+     * @return bool
+     */
+    public function isDisposable(): bool;
+
+    /**
      * Check if the code is reached its limit for the passed model.
      *
      * @param Model $redeemer

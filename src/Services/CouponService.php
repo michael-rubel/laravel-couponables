@@ -42,11 +42,11 @@ class CouponService implements CouponServiceContract
     /**
      * Get the coupon model by the code.
      *
-     * @param string $code
+     * @param string|null $code
      *
      * @return CouponContract|null
      */
-    public function getCoupon(string $code): ?CouponContract
+    public function getCoupon(?string $code): ?CouponContract
     {
         return $this->model
             ->where($this->model->getCodeColumn(), $code)
