@@ -37,12 +37,17 @@ After publishing migrations you can use trait in any of your models:
 use HasCoupons;
 ```
 
-Seed your database with coupon codes using `Coupon` model, then apply the code using:
+Seed your database with coupon codes using `Coupon` model, then verify the code using:
+```php
+$model->verifyCoupon($code);
+```
+
+And redeem the coupon when all set:
 ```php
 $model->redeemCoupon($code);
 ```
 
-`redeemCoupon` method throws an exception if something's wrong:
+Methods `verifyCoupon` and `redeemCoupon` throw an exception if something's wrong:
 
 ```php
 CouponExpiredException      // Coupon is expired (`expires_at` column).
@@ -58,10 +63,16 @@ Check if this coupon is already redeemed by the model (at least one record exist
 $model->isCouponRedeemed($code);
 ```
 
+Or check if it's over limit:
+```php
+$model->isCouponOverLimit($code);
+```
+
 ### Available [coupon](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Models/Coupon.php) model API:
 ```php
 public function isExpired(): bool;
 public function isNotExpired(): bool;
+public function isDisposable(): bool;
 public function isOverQuantity(): bool;
 public function isRedeemedBy(Model $redeemer): bool;
 public function isOverLimitFor(Model $redeemer): bool;
