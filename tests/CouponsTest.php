@@ -13,6 +13,7 @@ use MichaelRubel\Couponables\Exceptions\InvalidCouponException;
 use MichaelRubel\Couponables\Exceptions\NotAllowedToRedeemException;
 use MichaelRubel\Couponables\Exceptions\OverLimitException;
 use MichaelRubel\Couponables\Exceptions\OverQuantityException;
+use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 use MichaelRubel\Couponables\Models\Coupon;
 use MichaelRubel\Couponables\Tests\Stubs\Models\User;
 
@@ -323,5 +324,31 @@ class CouponsTest extends TestCase
         } catch (ValidationException $e) {
             $this->assertSame([0 => 'The coupon is invalid.'], $e->errors()['coupon']);
         }
+    }
+
+    /** @test */
+    public function testNullifyOrRedeemAsNull()
+    {
+        $this->be($this->user);
+
+        $null = $this->user->redeemOrNullifyCoupon(null);
+        $this->assertNull($null);
+
+        $non_existing = $this->user->redeemOrNullifyCoupon('non-existing');
+        $this->assertNull($non_existing);
+    }
+
+    /** @test */
+    public function testNullifyOrRedeemAsExistingCoupon()
+    {
+        $this->be($this->user);
+
+        Coupon::create([
+            'code' => 'existing-coupon',
+        ]);
+
+        $coupon = $this->user->redeemOrNullifyCoupon('existing-coupon');
+
+        $this->assertInstanceOf(CouponContract::class, $coupon);
     }
 }

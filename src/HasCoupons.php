@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace MichaelRubel\Couponables;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Str;
+use MichaelRubel\Couponables\Exceptions\CouponException;
 use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 use MichaelRubel\Couponables\Models\Contracts\CouponPivotContract;
 use MichaelRubel\Couponables\Services\Contracts\CouponServiceContract;
@@ -57,6 +59,28 @@ trait HasCoupons
         $coupon = $proxy->getInternal(Call::INSTANCE);
 
         return $service->applyCoupon($coupon, $this);
+    }
+
+    /**
+     * Redeem the coupon.
+     *
+     * @param string|null $code
+     * @param mixed|null  $rescue
+     * @param bool        $report
+     *
+     * @return CouponContract|null
+     */
+    public function redeemOrNullifyCoupon(?string $code, mixed $rescue = null, bool $report = false): ?CouponContract
+    {
+        if ($code) {
+            return rescue(
+                callback: fn () => call($this)->redeemCoupon($code),
+                rescue: $rescue,
+                report: $report
+            );
+        }
+
+        return null;
     }
 
     /**
