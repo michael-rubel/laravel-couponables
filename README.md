@@ -60,8 +60,11 @@ CouponException             // Generic exception for all cases.
 
 If you want to bypass the exceptions, use:
 ```php
+$model->verifyOrNullifyCoupon($code);
 $model->redeemOrNullifyCoupon($code);
-// returns null if an exception is thrown
+
+// these methods return null
+// if an exception is thrown
 ```
 
 Check if this coupon is already redeemed by the model (at least one record exists in the `couponables` table):

@@ -350,5 +350,35 @@ class CouponsTest extends TestCase
         $coupon = $this->user->redeemOrNullifyCoupon('existing-coupon');
 
         $this->assertInstanceOf(CouponContract::class, $coupon);
+
+        $this->assertDatabaseHas('couponables', [
+            'couponable_id' => $this->user->id,
+        ]);
+    }
+
+    /** @test */
+    public function testNullifyOrVerifyAsNull()
+    {
+        $this->be($this->user);
+
+        $null = $this->user->verifyOrNullifyCoupon(null);
+        $this->assertNull($null);
+
+        $non_existing = $this->user->verifyOrNullifyCoupon('non-existing');
+        $this->assertNull($non_existing);
+    }
+
+    /** @test */
+    public function testNullifyOrVerifyAsExistingCoupon()
+    {
+        $this->be($this->user);
+
+        Coupon::create([
+            'code' => 'existing-coupon',
+        ]);
+
+        $coupon = $this->user->verifyOrNullifyCoupon('existing-coupon');
+
+        $this->assertInstanceOf(CouponContract::class, $coupon);
     }
 }

@@ -45,6 +45,28 @@ trait HasCoupons
     }
 
     /**
+     * Redeem the coupon.
+     *
+     * @param string|null $code
+     * @param mixed|null  $rescue
+     * @param bool        $report
+     *
+     * @return CouponContract|null
+     */
+    public function verifyOrNullifyCoupon(?string $code, mixed $rescue = null, bool $report = false): ?CouponContract
+    {
+        if ($code) {
+            return rescue(
+                callback: fn () => call($this)->verifyCoupon($code),
+                rescue: $rescue,
+                report: $report
+            );
+        }
+
+        return null;
+    }
+
+    /**
      * Use the coupon.
      *
      * @param string|null $code
