@@ -78,7 +78,7 @@ class CouponService implements CouponServiceContract
             throw new OverQuantityException;
         }
 
-        if (($coupon->isDisposable() && $redeemer->isCouponRedeemed($code)) || $coupon->isOverLimitFor($redeemer)) {
+        if ($this->isOverLimit($coupon, $redeemer, $code)) {
             throw new OverLimitException;
         }
 
@@ -110,5 +110,18 @@ class CouponService implements CouponServiceContract
         event(new CouponRedeemed($this, $coupon));
 
         return $coupon;
+    }
+
+    /**
+     * @param CallProxy $coupon
+     * @param Model     $redeemer
+     * @param string    $code
+     *
+     * @return bool
+     */
+    protected function isOverLimit(CallProxy $coupon, Model $redeemer, string $code): bool
+    {
+        return ($coupon->isDisposable() && call($redeemer)->isCouponRedeemed($code))
+            || $coupon->isOverLimitFor($redeemer);
     }
 }
