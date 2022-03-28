@@ -113,13 +113,13 @@ class CouponService implements CouponServiceContract
     }
 
     /**
-     * @param mixed  $coupon
-     * @param Model  $redeemer
-     * @param string $code
+     * @param mixed       $coupon
+     * @param Model       $redeemer
+     * @param string|null $code
      *
      * @return bool
      */
-    protected function isOverLimit(mixed $coupon, Model $redeemer, string $code): bool
+    protected function isOverLimit(mixed $coupon, Model $redeemer, ?string $code): bool
     {
         return ($coupon->isDisposable() && call($redeemer)->isCouponRedeemed($code))
             || $coupon->isOverLimitFor($redeemer);
