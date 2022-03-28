@@ -34,5 +34,6 @@ class MacroabilityTest extends TestCase
             ->getCouponUsing('type', 'macro');
 
         $this->assertInstanceOf(Coupon::class, $coupon);
+        $this->assertStringContainsString('macro', $coupon->{$coupon->getTypeColumn()});
     }
 }
