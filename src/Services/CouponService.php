@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MichaelRubel\Couponables\Services;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Traits\Macroable;
 use MichaelRubel\Couponables\Events\CouponRedeemed;
 use MichaelRubel\Couponables\Exceptions\CouponExpiredException;
 use MichaelRubel\Couponables\Exceptions\InvalidCouponException;
@@ -16,7 +17,6 @@ use MichaelRubel\Couponables\Models\Contracts\CouponPivotContract;
 use MichaelRubel\Couponables\Services\Contracts\CouponServiceContract;
 use MichaelRubel\EnhancedContainer\Call;
 use MichaelRubel\EnhancedContainer\Core\CallProxy;
-use Spatie\Macroable\Macroable;
 
 class CouponService implements CouponServiceContract
 {
