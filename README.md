@@ -101,7 +101,7 @@ public function redeemer(): ?Model;
 If you go event-driven, you can handle package events:
 - [CouponRedeemed](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Events/CouponRedeemed.php)
 
-### Overriding the package functionality
+### Extending package functionality
 Traits [DefinesColumns](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Models/Traits/DefinesColumns.php) and [DefinesPivotColumns](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Models/Traits/DefinesPivotColumns.php) contain the methods that define column names to use by the package. You can use a method binding to override the package's method behavior.
 
 Example method binding in your ServiceProvider:
@@ -111,6 +111,19 @@ bind(CouponContract::class)->method('getCodeColumn', fn () => 'coupon')
 ```
 
 Alternatively, you can extend/override the entire class using [config values](https://github.com/michael-rubel/laravel-couponables/blob/main/config/couponables.php) or [container bindings](https://github.com/michael-rubel/laravel-couponables/blob/main/src/CouponableServiceProvider.php). All the classes in the package have their own contract (interface), so you're free to modify it as you wish.
+
+`CouponService` has the `Macroable` trait, so you can inject the methods to interact with the service without overriding anything.
+
+For example:
+```php
+CouponService::macro('getCouponUsing', function (string $column, string $value) {
+    return $this->model
+        ->where($column, $value)
+        ->first();
+});
+
+call(CouponService::class)->getCouponUsing('type', 'macro')
+```
 
 ## Contributing
 If you see any ways we can improve the package, PRs are welcomed. But remember to write tests for your use cases.
