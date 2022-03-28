@@ -56,8 +56,8 @@ class CouponService implements CouponServiceContract
     /**
      * Verify if coupon is valid otherwise throw an exception.
      *
-     * @param string $code
-     * @param Model  $redeemer
+     * @param string|null $code
+     * @param Model       $redeemer
      *
      * @return CouponContract
      * @throws OverQuantityException
@@ -66,7 +66,7 @@ class CouponService implements CouponServiceContract
      * @throws CouponExpiredException
      * @throws InvalidCouponException
      */
-    public function verifyCoupon(string $code, Model $redeemer): CouponContract
+    public function verifyCoupon(?string $code, Model $redeemer): CouponContract
     {
         $coupon = call($this->getCoupon($code) ?? throw new InvalidCouponException);
 
