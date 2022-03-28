@@ -16,9 +16,12 @@ use MichaelRubel\Couponables\Models\Contracts\CouponPivotContract;
 use MichaelRubel\Couponables\Services\Contracts\CouponServiceContract;
 use MichaelRubel\EnhancedContainer\Call;
 use MichaelRubel\EnhancedContainer\Core\CallProxy;
+use Spatie\Macroable\Macroable;
 
 class CouponService implements CouponServiceContract
 {
+    use Macroable;
+
     /**
      * @var CallProxy
      */
