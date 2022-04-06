@@ -381,4 +381,24 @@ class CouponsTest extends TestCase
 
         $this->assertInstanceOf(CouponContract::class, $coupon);
     }
+
+    /** @test */
+    public function testCanVerifyOrReturn()
+    {
+        $coupon = $this->user->verifyCouponOr('non-existing-coupon', function () {
+            return false;
+        });
+
+        $this->assertFalse($coupon);
+    }
+
+    /** @test */
+    public function testCanRedeemOrReturn()
+    {
+        $coupon = $this->user->redeemCouponOr('non-existing-coupon', function () {
+            return null;
+        });
+
+        $this->assertNull($coupon);
+    }
 }
