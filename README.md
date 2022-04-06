@@ -58,18 +58,17 @@ OverQuantityException       // Coupon is exhausted (`quantity` column).
 CouponException             // Generic exception for all cases.
 ```
 
-If you want to bypass the exceptions, use:
+If you want to bypass the exceptions:
 ```php
-$model->verifyOrNullifyCoupon($code);
+$model->verifyCouponOr($code, function () {
+    return null;
+});
 ```
 
 ```php
-$model->redeemOrNullifyCoupon($code);
-```
-
-```php
-// These methods will return null
-// if an exception is thrown.
+$model->redeemCouponOr($code, function () {
+    return null;
+});
 ```
 
 Check if this coupon is already redeemed by the model (at least one record exists in the `couponables` table):
