@@ -63,7 +63,9 @@ trait HasCoupons
     }
 
     /**
-     * Alias to `verifyCouponOr` with predefined `null`.
+     * Alias to `verifyCouponOr` with default `null`.
+     *
+     * @deprecated
      *
      * @param string|null $code
      * @param mixed|null  $rescue
@@ -112,7 +114,9 @@ trait HasCoupons
     }
 
     /**
-     * Redeem the coupon.
+     * Alias to `redeemCouponOr` with default `null`.
+     *
+     * @deprecated
      *
      * @param string|null $code
      * @param mixed|null  $rescue
