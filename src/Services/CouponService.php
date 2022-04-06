@@ -51,9 +51,7 @@ class CouponService implements CouponServiceContract
      */
     public function getCoupon(?string $code): ?CouponContract
     {
-        return $this->model
-            ->where($this->model->getCodeColumn(), $code)
-            ->first();
+        return $this->model->firstWhere($this->model->getCodeColumn(), $code);
     }
 
     /**
