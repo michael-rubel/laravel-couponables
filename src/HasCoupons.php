@@ -45,7 +45,25 @@ trait HasCoupons
     }
 
     /**
-     * Redeem the coupon.
+     * Verify the coupon or do something else on fail.
+     *
+     * @param string|null $code
+     * @param mixed|null $callback
+     * @param bool $report
+     *
+     * @return mixed
+     */
+    public function verifyCouponOr(?string $code, mixed $callback = null, bool $report = false): mixed
+    {
+        return rescue(
+            callback: fn () => call($this)->verifyCoupon($code),
+            rescue: $callback,
+            report: $report
+        );
+    }
+
+    /**
+     * Alias to `verifyCouponOr` with predefined `null`.
      *
      * @param string|null $code
      * @param mixed|null  $rescue
@@ -55,15 +73,7 @@ trait HasCoupons
      */
     public function verifyOrNullifyCoupon(?string $code, mixed $rescue = null, bool $report = false): ?CouponContract
     {
-        if ($code) {
-            return rescue(
-                callback: fn () => call($this)->verifyCoupon($code),
-                rescue: $rescue,
-                report: $report
-            );
-        }
-
-        return null;
+        return $this->verifyCouponOr($code, $rescue, $report);
     }
 
     /**
@@ -84,6 +94,24 @@ trait HasCoupons
     }
 
     /**
+     * Redeem the coupon or do something else on fail.
+     *
+     * @param string|null $code
+     * @param mixed|null $callback
+     * @param bool $report
+     *
+     * @return mixed
+     */
+    public function redeemCouponOr(?string $code, mixed $callback = null, bool $report = false): mixed
+    {
+        return rescue(
+            callback: fn () => call($this)->redeemCoupon($code),
+            rescue: $callback,
+            report: $report
+        );
+    }
+
+    /**
      * Redeem the coupon.
      *
      * @param string|null $code
@@ -94,15 +122,7 @@ trait HasCoupons
      */
     public function redeemOrNullifyCoupon(?string $code, mixed $rescue = null, bool $report = false): ?CouponContract
     {
-        if ($code) {
-            return rescue(
-                callback: fn () => call($this)->redeemCoupon($code),
-                rescue: $rescue,
-                report: $report
-            );
-        }
-
-        return null;
+        return $this->redeemCouponOr($code, $rescue, $report);
     }
 
     /**
