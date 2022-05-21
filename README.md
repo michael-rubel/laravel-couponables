@@ -81,7 +81,25 @@ Or check if it's over the limit for the model:
 $model->isCouponOverLimit($code);
 ```
 
-### Available [coupon](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Models/Coupon.php) model API:
+### Seeding the database
+You can seed the coupons into the database simply using the model:
+```php
+Coupon::create([
+    'code'          => 'my-test-coupon',  // Coupon name to verify and redeem.
+    'value'         => 1000,              // The 'value' to perform calculations based on the coupon provided.
+    'type'          => 'percentage',      // The 'type' to point out calculation strategy.
+    'limit'         => 3,                 // Limit how many times the coupon can be applied by the model.
+    'quantity'      => 10,                // Limit how many coupons are available overall (this value will decrement)
+    'expires_at'    => now()->addMonth(), // Set expiration time for the coupon.
+    'redeemer_type' => 'App\Models\User', // Polymorphic model type. Can as well be morph-mapped value, i.e. 'users'
+    'redeemer_id'   => 1,                 // Model ID.
+    'data'          => 'json',            // JSON column to store any metadata you want for this particular coupon.
+]);
+```
+
+All the columns besides `code` are optional.
+
+### Available [Coupon](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Models/Coupon.php) model API:
 ```php
 public function isExpired(): bool;
 public function isNotExpired(): bool;
