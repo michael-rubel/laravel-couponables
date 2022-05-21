@@ -86,7 +86,7 @@ You can seed the coupons into the database simply using the model:
 ```php
 Coupon::create([
     'code'          => 'my-test-coupon',  // Coupon name to verify and redeem.
-    'value'         => 1000,              // The 'value' to perform calculations based on the coupon provided.
+    'value'         => 50,                // The 'value' to perform calculations based on the coupon provided.
     'type'          => 'percentage',      // The 'type' to point out calculation strategy.
     'limit'         => 3,                 // Limit how many times the coupon can be applied by the model.
     'quantity'      => 10,                // Limit how many coupons are available overall (this value will decrement)
