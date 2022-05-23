@@ -19,7 +19,7 @@
         "php": "^8.0|^8.1",
         "laravel/framework": "^8.71|^9.0",
         "spatie/laravel-package-tools": "^1.10",
-        "michael-rubel/laravel-enhanced-container": "^6.4|^8.0"
+        "michael-rubel/laravel-enhanced-container": "^6.3|^7.2|^8.0"
     },
     "require-dev": {
         "nunomaduro/collision": "^5.10|^6.0",
