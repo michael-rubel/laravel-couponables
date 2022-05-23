@@ -18,6 +18,7 @@ parameters:
         - '#Call to an undefined method MichaelRubel\\EnhancedContainer\\Core\\CallProxy(.*)#'
         - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model(.*)#'
         - '#Cannot call method (.*) on mixed\.#'
+        - '#Method MichaelRubel\\Couponables\\Services\\CouponService\:\:verifyCoupon\(\) should return MichaelRubel\\Couponables\\Models\\Contracts\\CouponContract but returns mixed\.#'
 
     level: max
 
