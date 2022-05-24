@@ -25,6 +25,11 @@ class CouponService implements CouponServiceContract
     /**
      * @var CallProxy
      */
+    protected CallProxy $service;
+
+    /**
+     * @var CallProxy
+     */
     protected CallProxy $model;
 
     /**
@@ -38,8 +43,9 @@ class CouponService implements CouponServiceContract
      */
     public function __construct(CouponContract $model, CouponPivotContract $pivot)
     {
-        $this->model = call($model);
-        $this->pivot = call($pivot);
+        $this->service = call($this);
+        $this->model   = call($model);
+        $this->pivot   = call($pivot);
     }
 
     /**
@@ -79,11 +85,11 @@ class CouponService implements CouponServiceContract
             throw new OverQuantityException;
         }
 
-        if ($this->isOverLimit($coupon, $redeemer, $code)) {
+        if ($this->service->isOverLimit($coupon, $redeemer, $code)) {
             throw new OverLimitException;
         }
 
-        if (! $this->isAllowedToRedeem($coupon, $redeemer)) {
+        if (! $this->service->isAllowedToRedeem($coupon, $redeemer)) {
             throw new NotAllowedToRedeemException;
         }
 
@@ -120,7 +126,7 @@ class CouponService implements CouponServiceContract
      *
      * @return bool
      */
-    protected function isOverLimit(CallProxy $coupon, Model $redeemer, ?string $code): bool
+    public function isOverLimit(CallProxy $coupon, Model $redeemer, ?string $code): bool
     {
         return ($coupon->isDisposable() && call($redeemer)->isCouponRedeemed($code))
             || $coupon->isOverLimitFor($redeemer);
@@ -133,7 +139,7 @@ class CouponService implements CouponServiceContract
      * @return bool
      * @throws NotAllowedToRedeemException
      */
-    protected function isAllowedToRedeem(CallProxy $coupon, Model $redeemer): bool
+    public function isAllowedToRedeem(CallProxy $coupon, Model $redeemer): bool
     {
         if ($coupon->isMorphColumnsFilled() && ! $coupon->redeemer()?->is($redeemer)) {
             return false;

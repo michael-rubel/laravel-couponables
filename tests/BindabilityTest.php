@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Hash;
 use MichaelRubel\Couponables\Exceptions\InvalidCouponException;
 use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 use MichaelRubel\Couponables\Models\Coupon;
+use MichaelRubel\Couponables\Services\Contracts\CouponServiceContract;
 use MichaelRubel\Couponables\Tests\Stubs\Models\User;
 
 class BindabilityTest extends TestCase
@@ -14,6 +15,11 @@ class BindabilityTest extends TestCase
      * @var User
      */
     private User $user;
+
+    /**
+     * @var Coupon
+     */
+    private Coupon $coupon;
 
     /**
      * @var void
@@ -28,7 +34,7 @@ class BindabilityTest extends TestCase
             'password' => Hash::make('pass'),
         ]);
 
-        Coupon::create([
+        $this->coupon = Coupon::create([
             'code'     => 'bound-coupon',
             'quantity' => 2,
             'limit'    => 3,
@@ -86,5 +92,27 @@ class BindabilityTest extends TestCase
 
         $coupon = $this->user->redeemCoupon('bound-coupon');
         $this->assertSame(0, $coupon->quantity);
+    }
+
+    /** @test */
+    public function testCanBindServiceMethods()
+    {
+        $service = call(CouponServiceContract::class);
+
+        bind(CouponServiceContract::class)->method('verifyCoupon', fn () => true);
+
+        $this->assertTrue($service->verifyCoupon($this->coupon, $this->user));
+
+        bind(CouponServiceContract::class)->method('applyCoupon', fn () => true);
+
+        $this->assertTrue($service->applyCoupon($this->coupon, $this->user));
+
+        bind(CouponServiceContract::class)->method('isOverLimit', fn () => true);
+
+        $this->assertTrue($service->isOverLimit());
+
+        bind(CouponServiceContract::class)->method('isAllowedToRedeem', fn () => true);
+
+        $this->assertTrue($service->isAllowedToRedeem());
     }
 }
