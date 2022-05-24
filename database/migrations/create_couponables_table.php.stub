@@ -26,6 +26,7 @@ return new class extends Migration
                 )
             );
             $table->timestamp('redeemed_at');
+            $table->nullableMorphs('redeemed');
         });
     }
 
