@@ -10,9 +10,43 @@ use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 use MichaelRubel\Couponables\Models\Contracts\CouponPivotContract;
 use MichaelRubel\Couponables\Services\Contracts\CouponServiceContract;
 use MichaelRubel\EnhancedContainer\Call;
+use MichaelRubel\EnhancedContainer\Core\CallProxy;
 
 trait HasCoupons
 {
+    /**
+     * @var CallProxy
+     */
+    protected static CallProxy $bindable;
+
+    /**
+     * @var CallProxy
+     */
+    protected static CallProxy $bindableCoupon;
+
+    /**
+     * @var CallProxy
+     */
+    protected static CallProxy $bindableService;
+
+    /**
+     * @var CallProxy
+     */
+    protected static CallProxy $bindablePivot;
+
+    /**
+     * Initialize the method binding objects.
+     *
+     * @return void
+     */
+    public function initializeHasCoupons(): void
+    {
+        self::$bindable        = call($this);
+        self::$bindableCoupon  = call(CouponContract::class);
+        self::$bindablePivot   = call(CouponPivotContract::class);
+        self::$bindableService = call(CouponServiceContract::class);
+    }
+
     /**
      * Polymorphic relation to the coupons.
      *
@@ -20,11 +54,10 @@ trait HasCoupons
      */
     public function coupons(): MorphToMany
     {
-        return $this->morphToMany(app(CouponContract::class), Str::singular(
-            config('couponables.pivot_table', 'couponables')
-        ))->withPivot(
-            call(CouponPivotContract::class)->getRedeemedAtColumn()
-        );
+        return $this->morphToMany(
+            self::$bindableCoupon->getInternal(Call::INSTANCE),
+            Str::singular(config('couponables.pivot_table', 'couponables'))
+        )->withPivot(self::$bindablePivot->getRedeemedAtColumn());
     }
 
     /**
@@ -36,10 +69,7 @@ trait HasCoupons
      */
     public function verifyCoupon(?string $code): CouponContract
     {
-        $service = call(CouponServiceContract::class);
-        $proxy   = call($service->verifyCoupon($code, $this));
-
-        return $proxy->getInternal(Call::INSTANCE);
+        return self::$bindableService->verifyCoupon($code, $this);
     }
 
     /**
@@ -54,7 +84,7 @@ trait HasCoupons
     public function verifyCouponOr(?string $code, mixed $callback = null, bool $report = false): mixed
     {
         return rescue(
-            callback: fn () => call($this)->verifyCoupon($code),
+            callback: fn () => self::$bindable->verifyCoupon($code),
             rescue: $callback,
             report: $report
         );
@@ -69,12 +99,9 @@ trait HasCoupons
      */
     public function redeemCoupon(?string $code): CouponContract
     {
-        $service = call(CouponServiceContract::class);
-        $proxy   = call($service->verifyCoupon($code, $this));
+        $coupon = self::$bindableService->verifyCoupon($code, $this);
 
-        $coupon = $proxy->getInternal(Call::INSTANCE);
-
-        return $service->applyCoupon($coupon, $this);
+        return self::$bindableService->applyCoupon($coupon, $this);
     }
 
     /**
@@ -89,7 +116,7 @@ trait HasCoupons
     public function redeemCouponOr(?string $code, mixed $callback = null, bool $report = false): mixed
     {
         return rescue(
-            callback: fn () => call($this)->redeemCoupon($code),
+            callback: fn () => self::$bindable->redeemCoupon($code),
             rescue: $callback,
             report: $report
         );
@@ -104,8 +131,7 @@ trait HasCoupons
      */
     public function isCouponRedeemed(string $code): bool
     {
-        $column = call(CouponContract::class)
-            ->getCodeColumn();
+        $column = self::$bindableCoupon->getCodeColumn();
 
         return $this->coupons()
             ->where($column, $code)
@@ -121,7 +147,7 @@ trait HasCoupons
      */
     public function isCouponAlreadyUsed(?string $code): bool
     {
-        return call($this)->isCouponRedeemed($code);
+        return self::$bindable->isCouponRedeemed($code);
     }
 
     /**
@@ -134,8 +160,7 @@ trait HasCoupons
      */
     public function isCouponOverLimit(?string $code): bool
     {
-        $service = call(CouponServiceContract::class);
-        $coupon  = $service->getCoupon($code);
+        $coupon = self::$bindableService->getCoupon($code);
 
         return ! is_null($coupon) && call($coupon)->isOverLimitFor($this);
     }
