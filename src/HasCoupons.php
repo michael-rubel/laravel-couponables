@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace MichaelRubel\Couponables;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Str;
-use MichaelRubel\Couponables\Exceptions\CouponException;
 use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 use MichaelRubel\Couponables\Models\Contracts\CouponPivotContract;
 use MichaelRubel\Couponables\Services\Contracts\CouponServiceContract;
