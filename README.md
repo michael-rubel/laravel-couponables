@@ -91,7 +91,7 @@ Coupon::create([
     'limit'         => 3,                 // Limit how many times the coupon can be applied by the model.
     'quantity'      => 10,                // Limit how many coupons are available overall (this value will decrement)
     'expires_at'    => now()->addMonth(), // Set expiration time for the coupon.
-    'redeemer_type' => 'App\Models\User', // Polymorphic model type. Can as well be morph-mapped value, i.e. 'users'
+    'redeemer_type' => User::class,       // Polymorphic model type. Can as well be morph-mapped value, i.e. 'users'
     'redeemer_id'   => 1,                 // Model ID.
     'data'          => 'json',            // JSON column to store any metadata you want for this particular coupon.
 ]);
