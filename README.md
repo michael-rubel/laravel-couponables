@@ -120,7 +120,6 @@ If you go event-driven, you can handle package events:
 
 ### Roadmap
 - More events to listen for;
-- `redeemBy` method, `redeemed` morphs;
 - Seeding based on the specified model;
 - Seeding console command;
 - More examples of usage;
