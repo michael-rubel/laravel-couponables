@@ -78,4 +78,13 @@ trait DefinesColumns
         return ! is_null($this->{$this->getRedeemerTypeColumn()})
             && ! is_null($this->{$this->getRedeemerIdColumn()});
     }
+
+    /**
+     * @return bool
+     */
+    public function isOnlyRedeemerTypeFilled(): bool
+    {
+        return ! is_null($this->{$this->getRedeemerTypeColumn()})
+            && is_null($this->{$this->getRedeemerIdColumn()});
+    }
 }
