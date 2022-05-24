@@ -83,11 +83,7 @@ class CouponService implements CouponServiceContract
             throw new OverLimitException;
         }
 
-        if ($coupon->isOnlyRedeemerTypeFilled() && ! $coupon->isSameRedeemerModel($redeemer)) {
-            throw new NotAllowedToRedeemException;
-        }
-
-        if ($coupon->isMorphColumnsFilled() && ! $coupon->redeemer()?->is($redeemer)) {
+        if (! $this->isAllowedToRedeem($coupon, $redeemer)) {
             throw new NotAllowedToRedeemException;
         }
 
@@ -118,15 +114,35 @@ class CouponService implements CouponServiceContract
     }
 
     /**
-     * @param mixed       $coupon
+     * @param CallProxy   $coupon
      * @param Model       $redeemer
      * @param string|null $code
      *
      * @return bool
      */
-    protected function isOverLimit(mixed $coupon, Model $redeemer, ?string $code): bool
+    protected function isOverLimit(CallProxy $coupon, Model $redeemer, ?string $code): bool
     {
         return ($coupon->isDisposable() && call($redeemer)->isCouponRedeemed($code))
             || $coupon->isOverLimitFor($redeemer);
+    }
+
+    /**
+     * @param CallProxy $coupon
+     * @param Model     $redeemer
+     *
+     * @return bool
+     * @throws NotAllowedToRedeemException
+     */
+    protected function isAllowedToRedeem(CallProxy $coupon, Model $redeemer): bool
+    {
+        if ($coupon->isMorphColumnsFilled() && ! $coupon->redeemer()?->is($redeemer)) {
+            return false;
+        }
+
+        if ($coupon->isOnlyRedeemerTypeFilled() && ! $coupon->isSameRedeemerModel($redeemer)) {
+            return false;
+        }
+
+        return true;
     }
 }

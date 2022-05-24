@@ -51,9 +51,7 @@ class Coupon extends Model implements CouponContract
      */
     public function redeemer(): ?Model
     {
-        return $this->isMorphColumnsFilled()
-            ? $this->morphTo()->first()
-            : null;
+        return $this->morphTo()->first();
     }
 
     /**
