@@ -15,6 +15,7 @@ use MichaelRubel\Couponables\Exceptions\OverLimitException;
 use MichaelRubel\Couponables\Exceptions\OverQuantityException;
 use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 use MichaelRubel\Couponables\Models\Coupon;
+use MichaelRubel\Couponables\Tests\Stubs\Models\FakeCoupon;
 use MichaelRubel\Couponables\Tests\Stubs\Models\User;
 
 class CouponsTest extends TestCase
@@ -128,6 +129,32 @@ class CouponsTest extends TestCase
         ]);
 
         $this->user->redeemCoupon('alien-coupon');
+    }
+
+    /** @test */
+    public function testCanRedeemCouponByTheModelWithoutMorphId()
+    {
+        Coupon::create([
+            'code'          => 'same-model-coupon',
+            'redeemer_type' => $this->user::class,
+        ]);
+
+        $coupon = $this->user->redeemCoupon('same-model-coupon');
+
+        $this->assertInstanceOf(Coupon::class, $coupon);
+    }
+
+    /** @test */
+    public function testCannotRedeemCouponByTheAnotherModelWithoutMorphId()
+    {
+        $this->expectException(NotAllowedToRedeemException::class);
+
+        Coupon::create([
+            'code'          => 'another-model-coupon',
+            'redeemer_type' => FakeCoupon::class,
+        ]);
+
+        $this->user->redeemCoupon('another-model-coupon');
     }
 
     /** @test */
