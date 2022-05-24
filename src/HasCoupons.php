@@ -63,22 +63,6 @@ trait HasCoupons
     }
 
     /**
-     * Alias to `verifyCouponOr` with default `null`.
-     *
-     * @deprecated
-     *
-     * @param string|null $code
-     * @param mixed|null  $rescue
-     * @param bool        $report
-     *
-     * @return CouponContract|null
-     */
-    public function verifyOrNullifyCoupon(?string $code, mixed $rescue = null, bool $report = false): ?CouponContract
-    {
-        return $this->verifyCouponOr($code, $rescue, $report);
-    }
-
-    /**
      * Use the coupon.
      *
      * @param string|null $code
@@ -111,22 +95,6 @@ trait HasCoupons
             rescue: $callback,
             report: $report
         );
-    }
-
-    /**
-     * Alias to `redeemCouponOr` with default `null`.
-     *
-     * @deprecated
-     *
-     * @param string|null $code
-     * @param mixed|null  $rescue
-     * @param bool        $report
-     *
-     * @return CouponContract|null
-     */
-    public function redeemOrNullifyCoupon(?string $code, mixed $rescue = null, bool $report = false): ?CouponContract
-    {
-        return $this->redeemCouponOr($code, $rescue, $report);
     }
 
     /**
