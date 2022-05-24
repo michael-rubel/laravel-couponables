@@ -83,6 +83,10 @@ class CouponService implements CouponServiceContract
             throw new OverLimitException;
         }
 
+        if ($coupon->isOnlyRedeemerTypeFilled() && ! $coupon->isSameRedeemerModel($redeemer)) {
+            throw new NotAllowedToRedeemException;
+        }
+
         if ($coupon->isMorphColumnsFilled() && ! $coupon->redeemer()?->is($redeemer)) {
             throw new NotAllowedToRedeemException;
         }
