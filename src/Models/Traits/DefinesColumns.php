@@ -75,8 +75,8 @@ trait DefinesColumns
      */
     public function isMorphColumnsFilled(): bool
     {
-        return ! is_null($this->{$this->getRedeemerTypeColumn()})
-            && ! is_null($this->{$this->getRedeemerIdColumn()});
+        return ! is_null($this->{static::getRedeemerTypeColumn()})
+            && ! is_null($this->{static::getRedeemerIdColumn()});
     }
 
     /**
@@ -84,7 +84,7 @@ trait DefinesColumns
      */
     public function isOnlyRedeemerTypeFilled(): bool
     {
-        return ! is_null($this->{$this->getRedeemerTypeColumn()})
-            && is_null($this->{$this->getRedeemerIdColumn()});
+        return ! is_null($this->{static::getRedeemerTypeColumn()})
+            && is_null($this->{static::getRedeemerIdColumn()});
     }
 }
