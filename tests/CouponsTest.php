@@ -358,10 +358,10 @@ class CouponsTest extends TestCase
     {
         $this->be($this->user);
 
-        $null = $this->user->redeemOrNullifyCoupon(null);
+        $null = $this->user->redeemCouponOr(null);
         $this->assertNull($null);
 
-        $non_existing = $this->user->redeemOrNullifyCoupon('non-existing');
+        $non_existing = $this->user->redeemCouponOr('non-existing');
         $this->assertNull($non_existing);
     }
 
@@ -374,7 +374,7 @@ class CouponsTest extends TestCase
             'code' => 'existing-coupon',
         ]);
 
-        $coupon = $this->user->redeemOrNullifyCoupon('existing-coupon');
+        $coupon = $this->user->redeemCouponOr('existing-coupon');
 
         $this->assertInstanceOf(CouponContract::class, $coupon);
 
@@ -388,10 +388,10 @@ class CouponsTest extends TestCase
     {
         $this->be($this->user);
 
-        $null = $this->user->verifyOrNullifyCoupon(null);
+        $null = $this->user->verifyCouponOr(null);
         $this->assertNull($null);
 
-        $non_existing = $this->user->verifyOrNullifyCoupon('non-existing');
+        $non_existing = $this->user->verifyCouponOr('non-existing');
         $this->assertNull($non_existing);
     }
 
@@ -404,7 +404,7 @@ class CouponsTest extends TestCase
             'code' => 'existing-coupon',
         ]);
 
-        $coupon = $this->user->verifyOrNullifyCoupon('existing-coupon');
+        $coupon = $this->user->verifyCouponOr('existing-coupon');
 
         $this->assertInstanceOf(CouponContract::class, $coupon);
     }
