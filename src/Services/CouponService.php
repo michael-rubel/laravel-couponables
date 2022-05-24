@@ -25,17 +25,17 @@ class CouponService implements CouponServiceContract
     /**
      * @var CallProxy
      */
-    protected CallProxy $service;
+    public CallProxy $service;
 
     /**
      * @var CallProxy
      */
-    protected CallProxy $model;
+    public CallProxy $model;
 
     /**
      * @var CallProxy
      */
-    protected CallProxy $pivot;
+    public CallProxy $pivot;
 
     /**
      * @param CouponContract      $model
@@ -101,13 +101,16 @@ class CouponService implements CouponServiceContract
      *
      * @param CouponContract $coupon
      * @param Model          $redeemer
+     * @param Model|null     $redeemed
      *
      * @return CouponContract
      */
-    public function applyCoupon(CouponContract $coupon, Model $redeemer): CouponContract
+    public function applyCoupon(CouponContract $coupon, Model $redeemer, ?Model $redeemed): CouponContract
     {
         $redeemer->coupons()->attach($coupon, [
-            $this->pivot->getRedeemedAtColumn() => now(),
+            $this->pivot->getRedeemedAtColumn()   => now(),
+            $this->pivot->getRedeemedTypeColumn() => $redeemed?->getMorphClass(),
+            $this->pivot->getRedeemedIdColumn()   => $redeemed?->id,
         ]);
 
         if (! is_null($coupon->{$this->model->getQuantityColumn()})) {

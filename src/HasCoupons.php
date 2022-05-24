@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MichaelRubel\Couponables;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Str;
 use MichaelRubel\Couponables\Models\Contracts\CouponContract;
-use MichaelRubel\Couponables\Models\Contracts\CouponPivotContract;
 use MichaelRubel\Couponables\Services\Contracts\CouponServiceContract;
 use MichaelRubel\EnhancedContainer\Call;
 use MichaelRubel\EnhancedContainer\Core\CallProxy;
@@ -22,17 +22,7 @@ trait HasCoupons
     /**
      * @var CallProxy
      */
-    protected static CallProxy $bindableCoupon;
-
-    /**
-     * @var CallProxy
-     */
     protected static CallProxy $bindableService;
-
-    /**
-     * @var CallProxy
-     */
-    protected static CallProxy $bindablePivot;
 
     /**
      * Initialize the method binding objects.
@@ -42,8 +32,6 @@ trait HasCoupons
     public function initializeHasCoupons(): void
     {
         self::$bindable        = call($this);
-        self::$bindableCoupon  = call(CouponContract::class);
-        self::$bindablePivot   = call(CouponPivotContract::class);
         self::$bindableService = call(CouponServiceContract::class);
     }
 
@@ -55,9 +43,9 @@ trait HasCoupons
     public function coupons(): MorphToMany
     {
         return $this->morphToMany(
-            self::$bindableCoupon->getInternal(Call::INSTANCE),
+            self::$bindableService->model->getInternal(Call::INSTANCE),
             Str::singular(config('couponables.pivot_table', 'couponables'))
-        )->withPivot(self::$bindablePivot->getRedeemedAtColumn());
+        )->withPivot(self::$bindableService->pivot->getRedeemedAtColumn());
     }
 
     /**
@@ -94,14 +82,30 @@ trait HasCoupons
      * Use the coupon.
      *
      * @param string|null $code
+     * @param Model|null  $redeemed
      *
      * @return CouponContract
      */
-    public function redeemCoupon(?string $code): CouponContract
+    public function redeemCoupon(?string $code, ?Model $redeemed = null): CouponContract
     {
         $coupon = self::$bindableService->verifyCoupon($code, $this);
 
-        return self::$bindableService->applyCoupon($coupon, $this);
+        return self::$bindableService->applyCoupon($coupon, $this, $redeemed);
+    }
+
+    /**
+     * Redeem the code using model.
+     *
+     * @param Model       $model
+     * @param string|null $couponCode
+     *
+     * @return CouponContract
+     */
+    public function redeemBy(Model $model, ?string $couponCode): CouponContract
+    {
+        $coupon = self::$bindableService->verifyCoupon($couponCode, $model);
+
+        return self::$bindableService->applyCoupon($coupon, $model, $this);
     }
 
     /**
@@ -116,7 +120,7 @@ trait HasCoupons
     public function redeemCouponOr(?string $code, mixed $callback = null, bool $report = false): mixed
     {
         return rescue(
-            callback: fn () => self::$bindable->redeemCoupon($code),
+            callback: fn () => self::$bindable->redeemCoupon($code, null),
             rescue: $callback,
             report: $report
         );
@@ -131,7 +135,7 @@ trait HasCoupons
      */
     public function isCouponRedeemed(string $code): bool
     {
-        $column = self::$bindableCoupon->getCodeColumn();
+        $column = self::$bindableService->model->getCodeColumn();
 
         return $this->coupons()
             ->where($column, $code)
