@@ -1,49 +1,10 @@
 <?php
 
-namespace MichaelRubel\Couponables\Services\Contracts;
+declare(strict_types=1);
 
-use Illuminate\Database\Eloquent\Model;
-use MichaelRubel\Couponables\Exceptions\CouponExpiredException;
-use MichaelRubel\Couponables\Exceptions\InvalidCouponException;
-use MichaelRubel\Couponables\Exceptions\NotAllowedToRedeemException;
-use MichaelRubel\Couponables\Exceptions\OverLimitException;
-use MichaelRubel\Couponables\Exceptions\OverQuantityException;
-use MichaelRubel\Couponables\Models\Contracts\CouponContract;
+namespace MichaelRubel\Couponables\Services\Contracts;
 
 interface CouponServiceContract
 {
-    /**
-     * Get the coupon model by the code.
-     *
-     * @param string|null $code
-     *
-     * @return CouponContract|null
-     * @throws InvalidCouponException
-     */
-    public function getCoupon(?string $code): ?CouponContract;
-
-    /**
-     * Verify if promotional code is valid otherwise throw an exception.
-     *
-     * @param string $code
-     * @param Model  $redeemer
-     *
-     * @return CouponContract
-     * @throws OverQuantityException
-     * @throws OverLimitException
-     * @throws NotAllowedToRedeemException
-     * @throws CouponExpiredException
-     * @throws InvalidCouponException
-     */
-    public function verifyCoupon(string $code, Model $redeemer): CouponContract;
-
-    /**
-     * Apply the coupon.
-     *
-     * @param CouponContract $coupon
-     * @param Model          $redeemer
-     *
-     * @return CouponContract
-     */
-    public function applyCoupon(CouponContract $coupon, Model $redeemer): CouponContract;
+    //
 }
