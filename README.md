@@ -118,6 +118,13 @@ public function redeemer(): ?Model;
 If you go event-driven, you can handle package events:
 - [CouponRedeemed](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Events/CouponRedeemed.php)
 
+### Roadmap
+- More events to listen for;
+- `redeemBy` method, `redeemed` morphs;
+- Seeding based on the specified model;
+- Seeding console command;
+- More examples of usage;
+
 ### Extending package functionality
 Traits [DefinesColumns](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Models/Traits/DefinesColumns.php) and [DefinesPivotColumns](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Models/Traits/DefinesPivotColumns.php) contain the methods that define column names to use by the package. You can use a method binding to override the package's method behavior.
 
