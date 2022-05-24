@@ -100,19 +100,15 @@ class BindabilityTest extends TestCase
         $service = call(CouponServiceContract::class);
 
         bind(CouponServiceContract::class)->method('verifyCoupon', fn () => true);
-
         $this->assertTrue($service->verifyCoupon($this->coupon, $this->user));
 
         bind(CouponServiceContract::class)->method('applyCoupon', fn () => true);
-
         $this->assertTrue($service->applyCoupon($this->coupon, $this->user));
 
         bind(CouponServiceContract::class)->method('isOverLimit', fn () => true);
-
         $this->assertTrue($service->isOverLimit());
 
         bind(CouponServiceContract::class)->method('isAllowedToRedeem', fn () => true);
-
         $this->assertTrue($service->isAllowedToRedeem());
     }
 }
