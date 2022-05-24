@@ -11,4 +11,20 @@ trait DefinesPivotColumns
     {
         return 'redeemed_at';
     }
+
+    /**
+     * @return string
+     */
+    public function getRedeemedTypeColumn(): string
+    {
+        return 'redeemed_type';
+    }
+
+    /**
+     * @return string
+     */
+    public function getRedeemedIdColumn(): string
+    {
+        return 'redeemed_id';
+    }
 }
