@@ -8,6 +8,7 @@ use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 use MichaelRubel\Couponables\Models\Coupon;
 use MichaelRubel\Couponables\Services\Contracts\CouponServiceContract;
 use MichaelRubel\Couponables\Tests\Stubs\Models\User;
+use MichaelRubel\EnhancedContainer\Call;
 
 class BindabilityTest extends TestCase
 {
@@ -110,5 +111,47 @@ class BindabilityTest extends TestCase
 
         bind(CouponServiceContract::class)->method('isAllowedToRedeem', fn () => true);
         $this->assertTrue($service->isAllowedToRedeem());
+    }
+
+    /** @test */
+    public function testCanBindModelMethods()
+    {
+        $coupon = Coupon::create([
+            'code'          => 'test-bind',
+            'limit'         => 1,
+            'redeemer_type' => $this->user::class,
+        ]);
+
+        $this->user->redeemCoupon('test-bind');
+
+        $coupon->update([
+            'quantity'   => 0,
+            'expires_at' => now()->subDay(),
+        ]);
+
+        bind(CouponContract::class)->method()->getRedeemerTypeColumn(fn () => 'redeemer_type');
+        $this->assertTrue($coupon->isSameRedeemerModel($this->user));
+        bind(CouponContract::class)->method()->getRedeemerTypeColumn(fn () => 'test');
+        $this->assertFalse($coupon->isSameRedeemerModel($this->user));
+
+        bind(CouponContract::class)->method()->getExpiresAtColumn(fn () => 'expires_at');
+        $this->assertTrue($coupon->isExpired());
+        bind(CouponContract::class)->method()->getExpiresAtColumn(fn () => 'test');
+        $this->assertFalse($coupon->isExpired());
+
+        bind(CouponContract::class)->method()->getQuantityColumn(fn () => 'quantity');
+        $this->assertTrue($coupon->isOverQuantity());
+        bind(CouponContract::class)->method()->getQuantityColumn(fn () => 'test');
+        $this->assertFalse($coupon->isOverQuantity());
+
+        bind(CouponContract::class)->method()->getCodeColumn(fn () => 'code');
+        $this->assertTrue($coupon->isRedeemedBy($this->user));
+        bind(CouponContract::class)->method()->getCodeColumn(fn () => 'test');
+        $this->assertFalse($coupon->isRedeemedBy($this->user));
+
+        bind(CouponContract::class)->method()->getLimitColumn(fn () => 'limit');
+        $this->assertTrue($coupon->isDisposable());
+        bind(CouponContract::class)->method()->getLimitColumn(fn () => 'test');
+        $this->assertFalse($coupon->isDisposable());
     }
 }
