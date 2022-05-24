@@ -57,6 +57,16 @@ class Coupon extends Model implements CouponContract
     }
 
     /**
+     * @param Model $model
+     *
+     * @return bool
+     */
+    public function isSameRedeemerModel(Model $model): bool
+    {
+        return $this->{call($this)->getRedeemerTypeColumn()} === $model->getMorphClass();
+    }
+
+    /**
      * Check if code is expired.
      *
      * @return bool
