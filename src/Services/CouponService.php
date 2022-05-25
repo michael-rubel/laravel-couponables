@@ -6,7 +6,11 @@ namespace MichaelRubel\Couponables\Services;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Traits\Macroable;
+use MichaelRubel\Couponables\Events\CouponExpired;
+use MichaelRubel\Couponables\Events\CouponIsOverLimit;
+use MichaelRubel\Couponables\Events\CouponIsOverQuantity;
 use MichaelRubel\Couponables\Events\CouponRedeemed;
+use MichaelRubel\Couponables\Events\ModelNotAllowedToRedeem;
 use MichaelRubel\Couponables\Exceptions\CouponExpiredException;
 use MichaelRubel\Couponables\Exceptions\InvalidCouponException;
 use MichaelRubel\Couponables\Exceptions\NotAllowedToRedeemException;
@@ -78,18 +82,26 @@ class CouponService implements CouponServiceContract
         $coupon = call($this->getCoupon($code) ?? throw new InvalidCouponException);
 
         if ($coupon->isExpired()) {
+            event(new CouponExpired($coupon, $redeemer));
+
             throw new CouponExpiredException;
         }
 
         if ($coupon->isOverQuantity()) {
+            event(new CouponIsOverQuantity($coupon, $redeemer));
+
             throw new OverQuantityException;
         }
 
         if ($this->service->isOverLimit($coupon, $redeemer, $code)) {
+            event(new CouponIsOverLimit($coupon, $redeemer));
+
             throw new OverLimitException;
         }
 
         if (! $this->service->isAllowedToRedeem($coupon, $redeemer)) {
+            event(new ModelNotAllowedToRedeem($coupon, $redeemer));
+
             throw new NotAllowedToRedeemException;
         }
 
@@ -117,7 +129,7 @@ class CouponService implements CouponServiceContract
             $coupon->decrement($this->model->getQuantityColumn());
         }
 
-        event(new CouponRedeemed($this, $coupon));
+        event(new CouponRedeemed($coupon, $redeemer));
 
         return $coupon;
     }

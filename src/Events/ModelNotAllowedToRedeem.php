@@ -6,7 +6,7 @@ namespace MichaelRubel\Couponables\Events;
 
 use Illuminate\Queue\SerializesModels;
 
-class CouponRedeemed
+class ModelNotAllowedToRedeem
 {
     use SerializesModels;
 
