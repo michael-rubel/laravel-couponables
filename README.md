@@ -119,7 +119,6 @@ If you go event-driven, you can handle package events:
 - [CouponRedeemed](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Events/CouponRedeemed.php)
 
 ### Roadmap
-- More events to listen for;
 - Seeding based on the specified model;
 - Seeding console command;
 - More examples of usage;
