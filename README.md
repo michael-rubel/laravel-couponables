@@ -32,53 +32,9 @@ php artisan vendor:publish --tag="couponables-config"
 ```
 
 ## Usage
-After publishing migrations you can use trait in any of your models:
+After publishing migrations you can use a trait in the model you want as a redeemer:
 ```php
 use HasCoupons;
-```
-
-Seed your database with coupon codes using `Coupon` model, then verify the code using:
-```php
-$model->verifyCoupon($code);
-```
-
-And redeem the coupon when all set:
-```php
-$model->redeemCoupon($code);
-```
-
-Methods `verifyCoupon` and `redeemCoupon` throw an exception if something's wrong:
-
-```php
-CouponExpiredException      // Coupon is expired (`expires_at` column).
-InvalidCouponException      // Coupon is not found in the database.
-NotAllowedToRedeemException // Coupon is assigned to the specific model (`redeemer` morphs).
-OverLimitException          // Coupon is over the limit for the specific model (`limit` column).
-OverQuantityException       // Coupon is exhausted (`quantity` column).
-CouponException             // Generic exception for all cases.
-```
-
-If you want to bypass the exception and do something else:
-```php
-$model->verifyCouponOr($couponCode, function () {
-    // your action
-});
-```
-
-```php
-$model->redeemCouponOr($couponCode, function () {
-    // your action
-});
-```
-
-Check if this coupon is already redeemed by the model (at least one record exists in the `couponables` table):
-```php
-$model->isCouponRedeemed($code);
-```
-
-Or check if it's over the limit for the model:
-```php
-$model->isCouponOverLimit($code);
 ```
 
 ### Seeding the database
@@ -95,6 +51,55 @@ Coupon::create([
     'redeemer_id'   => 1,                 // Model ID.
     'data'          => 'json',            // JSON column to store any metadata you want for this particular coupon.
 ]);
+```
+
+Verify the code after seeding the database:
+```php
+$redeemer->verifyCoupon($code);
+```
+
+And redeem the coupon when all set:
+```php
+$redeemer->redeemCoupon($code);
+```
+
+Methods `verifyCoupon` and `redeemCoupon` throw an exception if something's wrong:
+
+```php
+CouponExpiredException      // Coupon is expired (`expires_at` column).
+InvalidCouponException      // Coupon is not found in the database.
+NotAllowedToRedeemException // Coupon is assigned to the specific model (`redeemer` morphs).
+OverLimitException          // Coupon is over the limit for the specific model (`limit` column).
+OverQuantityException       // Coupon is exhausted (`quantity` column).
+CouponException             // Generic exception for all cases.
+```
+
+If you want to bypass the exception and do something else:
+```php
+$redeemer->verifyCouponOr($couponCode, function () {
+    // your action
+});
+```
+
+```php
+$redeemer->redeemCouponOr($couponCode, function () {
+    // your action
+});
+```
+
+You can pass the model you want to be stored as `redeemed` in `couponables` table.
+```php
+$modelToRedeem->redeemBy($redeemer, $couponCode);
+```
+
+Check if this coupon is already redeemed by the model (at least one record exists in the `couponables` table):
+```php
+$model->isCouponAlreadyUsed($code);
+```
+
+Or check if it's over the limit for the model:
+```php
+$model->isCouponOverLimit($code);
 ```
 
 All the columns besides `code` are optional.
@@ -116,7 +121,13 @@ public function redeemer(): ?Model;
 
 ### Listeners
 If you go event-driven, you can handle package events:
+- [CouponVerified](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Events/CouponVerified.php)
 - [CouponRedeemed](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Events/CouponRedeemed.php)
+- [CouponExpired](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Events/CouponExpired.php)
+- [CouponIsOverLimit](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Events/CouponIsOverLimit.php)
+- [CouponIsOverQuantity](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Events/CouponIsOverQuantity.php)
+- [NotAllowedToRedeem](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Events/NotAllowedToRedeem.php)
+- [FailedToRedeemCoupon](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Events/FailedToRedeemCoupon.php)
 
 ### Roadmap
 - Seeding based on the specified model;
