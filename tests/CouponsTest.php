@@ -6,7 +6,13 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use MichaelRubel\Couponables\Events\CouponExpired;
+use MichaelRubel\Couponables\Events\CouponIsOverLimit;
+use MichaelRubel\Couponables\Events\CouponIsOverQuantity;
 use MichaelRubel\Couponables\Events\CouponRedeemed;
+use MichaelRubel\Couponables\Events\CouponVerified;
+use MichaelRubel\Couponables\Events\FailedToRedeemCoupon;
+use MichaelRubel\Couponables\Events\NotAllowedToRedeem;
 use MichaelRubel\Couponables\Exceptions\CouponException;
 use MichaelRubel\Couponables\Exceptions\CouponExpiredException;
 use MichaelRubel\Couponables\Exceptions\InvalidCouponException;
@@ -56,6 +62,7 @@ class CouponsTest extends TestCase
             'couponable_id' => $this->user->id,
         ]);
 
+        Event::assertDispatched(CouponVerified::class);
         Event::assertDispatched(CouponRedeemed::class);
     }
 
@@ -76,6 +83,7 @@ class CouponsTest extends TestCase
             'redeemed_id'     => 1,
         ]);
 
+        Event::assertDispatched(CouponVerified::class);
         Event::assertDispatched(CouponRedeemed::class);
     }
 
@@ -98,6 +106,9 @@ class CouponsTest extends TestCase
         ]);
 
         $this->assertTrue($this->user->isCouponAlreadyUsed('applied-code'));
+
+        Event::assertDispatched(CouponVerified::class);
+        Event::assertDispatched(CouponRedeemed::class);
     }
 
     /** @test */
@@ -119,6 +130,9 @@ class CouponsTest extends TestCase
         ]);
 
         $this->assertFalse($this->user->isCouponAlreadyUsed('applied-code'));
+
+        Event::assertDispatched(CouponVerified::class);
+        Event::assertDispatched(CouponRedeemed::class);
     }
 
     /** @test */
@@ -136,6 +150,9 @@ class CouponsTest extends TestCase
         $this->assertDatabaseHas('couponables', [
             'couponable_id' => $this->user->id,
         ]);
+
+        Event::assertDispatched(CouponVerified::class);
+        Event::assertDispatched(CouponRedeemed::class);
     }
 
     /** @test */
@@ -150,6 +167,8 @@ class CouponsTest extends TestCase
         ]);
 
         $this->user->redeemCoupon('alien-coupon');
+
+        Event::assertDispatched(NotAllowedToRedeem::class);
     }
 
     /** @test */
@@ -163,6 +182,9 @@ class CouponsTest extends TestCase
         $coupon = $this->user->redeemCoupon('same-model-coupon');
 
         $this->assertInstanceOf(Coupon::class, $coupon);
+
+        Event::assertDispatched(CouponVerified::class);
+        Event::assertDispatched(CouponRedeemed::class);
     }
 
     /** @test */
@@ -176,6 +198,8 @@ class CouponsTest extends TestCase
         ]);
 
         $this->user->redeemCoupon('another-model-coupon');
+
+        Event::assertDispatched(NotAllowedToRedeem::class);
     }
 
     /** @test */
@@ -189,6 +213,8 @@ class CouponsTest extends TestCase
         ]);
 
         $this->user->redeemCoupon('expired-coupon');
+
+        Event::assertDispatched(CouponExpired::class);
     }
 
     /** @test */
@@ -209,6 +235,8 @@ class CouponsTest extends TestCase
         ]);
 
         $this->user->redeemCoupon('disposable-coupon');
+
+        Event::assertDispatched(CouponIsOverLimit::class);
     }
 
     /** @test */
@@ -225,6 +253,8 @@ class CouponsTest extends TestCase
             5,
             fn () => $this->user->redeemCoupon('limited-coupon')
         );
+
+        Event::assertDispatched(CouponIsOverLimit::class);
     }
 
     /** @test */
@@ -264,6 +294,8 @@ class CouponsTest extends TestCase
         ]);
 
         $this->user->redeemCoupon('quantity-coupon');
+
+        Event::assertDispatched(CouponIsOverQuantity::class);
     }
 
     /** @test */
@@ -448,5 +480,25 @@ class CouponsTest extends TestCase
         });
 
         $this->assertNull($coupon);
+    }
+
+    /** @test */
+    public function testFailedToRedeemCaseIsHandled()
+    {
+        $this->expectException(\Exception::class);
+
+        Coupon::create([
+            'code' => 'test-code',
+        ]);
+
+        bind(User::class)
+            ->method()
+            ->coupons(
+                fn () => throw new \Exception('test exception')
+            );
+
+        $this->user->redeemCoupon('test-code');
+
+        Event::assertDispatched(FailedToRedeemCoupon::class);
     }
 }

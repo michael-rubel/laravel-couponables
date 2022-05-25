@@ -11,6 +11,7 @@ use MichaelRubel\Couponables\Events\CouponIsOverLimit;
 use MichaelRubel\Couponables\Events\CouponIsOverQuantity;
 use MichaelRubel\Couponables\Events\CouponRedeemed;
 use MichaelRubel\Couponables\Events\CouponVerified;
+use MichaelRubel\Couponables\Events\FailedToRedeemCoupon;
 use MichaelRubel\Couponables\Events\NotAllowedToRedeem;
 use MichaelRubel\Couponables\Exceptions\CouponExpiredException;
 use MichaelRubel\Couponables\Exceptions\InvalidCouponException;
@@ -122,15 +123,21 @@ class CouponService implements CouponServiceContract
      */
     public function applyCoupon(CouponContract $coupon, Model $redeemer, ?Model $redeemed): CouponContract
     {
-        $redeemer->coupons()->attach($coupon, [
-            $this->pivot->getRedeemedAtColumn()   => now(),
-            $this->pivot->getRedeemedTypeColumn() => $redeemed?->getMorphClass(),
-            $this->pivot->getRedeemedIdColumn()   => $redeemed?->id,
-        ]);
+        rescue(function () use ($coupon, $redeemer, $redeemed) {
+            call($redeemer)->coupons()->attach($coupon, [
+                $this->pivot->getRedeemedAtColumn()   => now(),
+                $this->pivot->getRedeemedTypeColumn() => $redeemed?->getMorphClass(),
+                $this->pivot->getRedeemedIdColumn()   => $redeemed?->id,
+            ]);
 
-        if (! is_null($coupon->{$this->model->getQuantityColumn()})) {
-            $coupon->decrement($this->model->getQuantityColumn());
-        }
+            if (! is_null($coupon->{$this->model->getQuantityColumn()})) {
+                $coupon->decrement($this->model->getQuantityColumn());
+            }
+        }, function ($e) use ($coupon, $redeemer, $redeemed) {
+            event(new FailedToRedeemCoupon($coupon, $redeemer, $redeemed));
+
+            throw $e;
+        });
 
         event(new CouponRedeemed($coupon, $redeemer));
 
