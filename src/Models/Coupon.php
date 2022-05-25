@@ -6,6 +6,7 @@ namespace MichaelRubel\Couponables\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use MichaelRubel\Couponables\Exceptions\NotAllowedToRedeemException;
 use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 use MichaelRubel\Couponables\Models\Traits\DefinesColumns;
 use MichaelRubel\EnhancedContainer\Core\CallProxy;
@@ -137,6 +138,20 @@ class Coupon extends Model implements CouponContract
     }
 
     /**
+     * Check if the code is reached its global limit.
+     *
+     * @param Model       $redeemer
+     * @param string|null $code
+     *
+     * @return bool
+     */
+    public function isOverLimit(Model $redeemer, ?string $code): bool
+    {
+        return (self::$bindable->isDisposable() && call($redeemer)->isCouponRedeemed($code))
+            || self::$bindable->isOverLimitFor($redeemer);
+    }
+
+    /**
      * Check if the code is reached its limit for the passed model.
      *
      * @param Model $redeemer
@@ -152,5 +167,25 @@ class Coupon extends Model implements CouponContract
             ->coupons()
             ->where($column, $this->{$column})
             ->count();
+    }
+
+    /**
+     * Check if the model is allowed to redeem.
+     *
+     * @param Model $redeemer
+     *
+     * @return bool
+     */
+    public function isAllowedToRedeem(Model $redeemer): bool
+    {
+        if (self::$bindable->isMorphColumnsFilled() && ! self::$bindable->redeemer()?->is($redeemer)) {
+            return false;
+        }
+
+        if (self::$bindable->isOnlyRedeemerTypeFilled() && ! self::$bindable->isSameRedeemerModel($redeemer)) {
+            return false;
+        }
+
+        return true;
     }
 }
