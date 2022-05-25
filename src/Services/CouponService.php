@@ -10,6 +10,7 @@ use MichaelRubel\Couponables\Events\CouponExpired;
 use MichaelRubel\Couponables\Events\CouponIsOverLimit;
 use MichaelRubel\Couponables\Events\CouponIsOverQuantity;
 use MichaelRubel\Couponables\Events\CouponRedeemed;
+use MichaelRubel\Couponables\Events\CouponVerified;
 use MichaelRubel\Couponables\Events\NotAllowedToRedeem;
 use MichaelRubel\Couponables\Exceptions\CouponExpiredException;
 use MichaelRubel\Couponables\Exceptions\InvalidCouponException;
@@ -104,6 +105,8 @@ class CouponService implements CouponServiceContract
 
             throw new NotAllowedToRedeemException;
         }
+
+        event(new CouponVerified($coupon, $redeemer));
 
         return $coupon->getInternal(Call::INSTANCE);
     }
