@@ -81,33 +81,34 @@ class CouponService implements CouponServiceContract
      */
     public function verifyCoupon(?string $code, Model $redeemer): CouponContract
     {
-        $coupon = call($this->getCoupon($code) ?? throw new InvalidCouponException);
+        $coupon   = call($this->getCoupon($code) ?? throw new InvalidCouponException);
+        $instance = $coupon->getInternal(Call::INSTANCE);
 
         if ($coupon->isExpired()) {
-            event(new CouponExpired($coupon, $redeemer));
+            event(new CouponExpired($instance, $redeemer));
 
             throw new CouponExpiredException;
         }
 
         if ($coupon->isOverQuantity()) {
-            event(new CouponIsOverQuantity($coupon, $redeemer));
+            event(new CouponIsOverQuantity($instance, $redeemer));
 
             throw new OverQuantityException;
         }
 
         if ($coupon->isOverLimit($redeemer, $code)) {
-            event(new CouponIsOverLimit($coupon, $redeemer));
+            event(new CouponIsOverLimit($instance, $redeemer));
 
             throw new OverLimitException;
         }
 
         if (! $coupon->isAllowedToRedeem($redeemer)) {
-            event(new NotAllowedToRedeem($coupon, $redeemer));
+            event(new NotAllowedToRedeem($instance, $redeemer));
 
             throw new NotAllowedToRedeemException;
         }
 
-        event(new CouponVerified($coupon, $redeemer));
+        event(new CouponVerified($instance, $redeemer));
 
         return $coupon->getInternal(Call::INSTANCE);
     }

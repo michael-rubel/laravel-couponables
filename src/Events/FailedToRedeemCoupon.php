@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace MichaelRubel\Couponables\Events;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Queue\SerializesModels;
+use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 
 class FailedToRedeemCoupon
 {
@@ -14,9 +16,9 @@ class FailedToRedeemCoupon
      * @return void
      */
     public function __construct(
-        private object $coupon,
-        private object $redeemer,
-        private ?object $triedToRedeem = null
+        public CouponContract $coupon,
+        public Model $redeemer,
+        private ?Model $triedToRedeem = null
     ) {
     }
 }
