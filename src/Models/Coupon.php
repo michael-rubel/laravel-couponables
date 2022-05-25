@@ -147,7 +147,7 @@ class Coupon extends Model implements CouponContract
      */
     public function isOverLimit(Model $redeemer, ?string $code): bool
     {
-        return (self::$bindable->isDisposable() && call($redeemer)->isCouponRedeemed($code))
+        return (self::$bindable->isDisposable() && call($redeemer)->isCouponAlreadyUsed($code))
             || self::$bindable->isOverLimitFor($redeemer);
     }
 

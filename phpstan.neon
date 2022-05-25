@@ -14,7 +14,7 @@ parameters:
         - '#Parameter \#1 \$coupon of class MichaelRubel\\Couponables\\Events\\(.*) constructor expects MichaelRubel\\Couponables\\Models\\Contracts\\CouponContract, mixed given\.#'
         - '#Access to an undefined property MichaelRubel\\Couponables\\Models\\Contracts\\CouponContract(.*)#'
         - '#Call to an undefined method MichaelRubel\\Couponables\\Models\\Contracts\\CouponContract(.*)#'
-        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:isCouponRedeemed\(\)\.#'
+        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:isCouponAlreadyUsed\(\)\.#'
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:coupons\(\)#'
         - '#Call to an undefined method MichaelRubel\\EnhancedContainer\\Core\\CallProxy(.*)#'
         - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model(.*)#'

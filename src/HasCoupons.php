@@ -127,22 +127,6 @@ trait HasCoupons
     }
 
     /**
-     * Check if the coupon is already redeemed by the model at least once.
-     *
-     * @param string $code
-     *
-     * @return bool
-     */
-    public function isCouponRedeemed(string $code): bool
-    {
-        $column = self::$bindableService->model->getCodeColumn();
-
-        return $this->coupons()
-            ->where($column, $code)
-            ->exists();
-    }
-
-    /**
      * Check if coupon with this code is already used.
      *
      * @param string|null $code
@@ -151,7 +135,11 @@ trait HasCoupons
      */
     public function isCouponAlreadyUsed(?string $code): bool
     {
-        return self::$bindable->isCouponRedeemed($code);
+        $column = self::$bindableService->model->getCodeColumn();
+
+        return $this->coupons()
+            ->where($column, $code)
+            ->exists();
     }
 
     /**
