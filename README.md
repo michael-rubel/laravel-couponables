@@ -53,6 +53,8 @@ Coupon::create([
 ]);
 ```
 
+All the columns besides `code` are optional.
+
 Verify the code after seeding the database:
 ```php
 $redeemer->verifyCoupon($code);
@@ -92,7 +94,7 @@ You can pass the model you want to be stored as `redeemed` in `couponables` tabl
 $modelToRedeem->redeemBy($redeemer, $couponCode);
 ```
 
-Check if this coupon is already redeemed by the model (at least one record exists in the `couponables` table):
+Check if this coupon is already used by the model (at least one record exists in the `couponables` table):
 ```php
 $model->isCouponAlreadyUsed($code);
 ```
@@ -101,8 +103,6 @@ Or check if it's over the limit for the model:
 ```php
 $model->isCouponOverLimit($code);
 ```
-
-All the columns besides `code` are optional.
 
 ### Available [Coupon](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Models/Coupon.php) model API:
 ```php
@@ -128,11 +128,6 @@ If you go event-driven, you can handle package events:
 - [CouponIsOverQuantity](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Events/CouponIsOverQuantity.php)
 - [NotAllowedToRedeem](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Events/NotAllowedToRedeem.php)
 - [FailedToRedeemCoupon](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Events/FailedToRedeemCoupon.php)
-
-### Roadmap
-- Seeding based on the specified model;
-- Seeding console command;
-- More examples of usage;
 
 ### Extending package functionality
 Traits [DefinesColumns](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Models/Traits/DefinesColumns.php) and [DefinesPivotColumns](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Models/Traits/DefinesPivotColumns.php) contain the methods that define column names to use by the package. You can use a method binding to override the package's method behavior.
