@@ -10,7 +10,7 @@ parameters:
         - '#Property MichaelRubel\\Couponables\\Services\\CouponService(.*)MichaelRubel\\EnhancedContainer\\Core\\CallProxy\) does not accept mixed\.#'
         - '#Parameter \#2 \$concrete of method Illuminate\\Contracts\\Container\\Container(.*) expects Closure\|string\|null, mixed given\.#'
         - '#Property Illuminate\\Database\\Eloquent\\Model\:\:\$table \(string\) does not accept mixed\.#'
-        - '#Property MichaelRubel\\Couponables\\Events\\CouponRedeemed(.*) is never read, only written\.#'
+        - '#Property MichaelRubel\\Couponables\\Events\\(.*) is never read, only written\.#'
         - '#Access to an undefined property MichaelRubel\\Couponables\\Models\\Contracts\\CouponContract(.*)#'
         - '#Call to an undefined method MichaelRubel\\Couponables\\Models\\Contracts\\CouponContract(.*)#'
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:isCouponRedeemed\(\)\.#'
