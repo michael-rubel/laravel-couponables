@@ -67,7 +67,7 @@ class CouponsTest extends TestCase
     }
 
     /** @test */
-    public function testCanRedeemCouponBySpecifiedModel()
+    public function testCanUseCouponByPassedModelInContextOfAnother()
     {
         Coupon::create(['code' => 'test-code']);
 
