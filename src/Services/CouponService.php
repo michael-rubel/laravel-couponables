@@ -10,7 +10,7 @@ use MichaelRubel\Couponables\Events\CouponExpired;
 use MichaelRubel\Couponables\Events\CouponIsOverLimit;
 use MichaelRubel\Couponables\Events\CouponIsOverQuantity;
 use MichaelRubel\Couponables\Events\CouponRedeemed;
-use MichaelRubel\Couponables\Events\ModelNotAllowedToRedeem;
+use MichaelRubel\Couponables\Events\NotAllowedToRedeem;
 use MichaelRubel\Couponables\Exceptions\CouponExpiredException;
 use MichaelRubel\Couponables\Exceptions\InvalidCouponException;
 use MichaelRubel\Couponables\Exceptions\NotAllowedToRedeemException;
@@ -100,7 +100,7 @@ class CouponService implements CouponServiceContract
         }
 
         if (! $this->service->isAllowedToRedeem($coupon, $redeemer)) {
-            event(new ModelNotAllowedToRedeem($coupon, $redeemer));
+            event(new NotAllowedToRedeem($coupon, $redeemer));
 
             throw new NotAllowedToRedeemException;
         }
