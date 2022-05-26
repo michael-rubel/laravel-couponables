@@ -19,7 +19,7 @@ trait GeneratesCoupons
      *
      * @return Collection
      */
-    public function generateCouponCodes(int $times = 5, int $length = 7): Collection
+    public function generateCoupons(int $times = 5, int $length = 7): Collection
     {
         return Collection::times($times, fn () => $this->model->create([
             $this->model->getCodeColumn() => Str::random($length),

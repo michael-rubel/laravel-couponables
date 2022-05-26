@@ -26,6 +26,7 @@ parameters:
         - '#Cannot call method update\(\) on Illuminate\\Database\\Eloquent\\Model\|null\.#'
         - '#Parameter \#1 \$related of method Illuminate\\Database\\Eloquent\\Model\:\:hasMany\(\) expects string, MichaelRubel\\Couponables\\Models\\Contracts\\CouponPivotContract given\.#'
         - '#Parameter \#1 \$related of method Illuminate\\Database\\Eloquent\\Model\:\:belongsTo\(\) expects string, mixed given\.#'
+        - '#Unable to resolve the template type TValue in call to function collect#'
 
     level: max
 
