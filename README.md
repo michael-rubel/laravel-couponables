@@ -79,17 +79,17 @@ Coupon::create([
 #### Seeding records with random codes
 ```php
 app()
-    ->make(CouponServiceContract::class)
-    ->generateCoupons(times: 10, length: 7)
+  ->make(CouponServiceContract::class)
+  ->generateCoupons(times: 10, length: 7)
 ```
 
 #### Adding coupons to redeem only by specified model
 ```php
 app()
-    ->make(CouponServiceContract::class)
-    ->generateCouponFor($redeemer, 'my-test-code', [
-        // here you can pass parameters from the list above
-    ])
+  ->make(CouponServiceContract::class)
+  ->generateCouponFor($redeemer, 'my-test-code', [
+      // here you can pass parameters from the list above
+  ])
 ```
 
 - Note: These generators will only fill the `code` column, and `redeemer` morphs in the case of `generateCouponFor`. All other columns you need to fill manually.
@@ -110,8 +110,8 @@ $redeemer->redeemCoupon($code);
 Redeem the coupon in context of another model:
 ```php
 $redeemer
-    ->redeemCoupon($code)
-    ->for($course);
+  ->redeemCoupon($code)
+  ->for($course);
 ```
 
 Combined `redeemCoupon` and `for` behavior (assuming the `$course` includes `HasCoupons` trait):
