@@ -51,4 +51,9 @@ interface CouponContract
      * @return string
      */
     public function getRedeemerIdColumn(): string;
+
+    /**
+     * @return string
+     */
+    public function getDataColumn(): string;
 }
