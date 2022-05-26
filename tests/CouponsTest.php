@@ -21,6 +21,7 @@ use MichaelRubel\Couponables\Exceptions\OverLimitException;
 use MichaelRubel\Couponables\Exceptions\OverQuantityException;
 use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 use MichaelRubel\Couponables\Models\Coupon;
+use MichaelRubel\Couponables\Services\Contracts\CouponServiceContract;
 use MichaelRubel\Couponables\Tests\Stubs\Models\Course;
 use MichaelRubel\Couponables\Tests\Stubs\Models\FakeCoupon;
 use MichaelRubel\Couponables\Tests\Stubs\Models\User;
@@ -523,5 +524,32 @@ class CouponsTest extends TestCase
         $this->user->redeemCoupon('test-code');
 
         Event::assertDispatched(FailedToRedeemCoupon::class);
+    }
+
+    /** @test */
+    public function testCanGenerateCoupons()
+    {
+        $service = app(CouponServiceContract::class);
+        $coupons = $service->generateCoupons(10);
+
+        $this->assertInstanceOf(Collection::class, $coupons);
+        $this->assertDatabaseCount('coupons', 10);
+    }
+
+    /** @test */
+    public function testCanGenerateCouponForSpecifiedRedeemer()
+    {
+        $service = app(CouponServiceContract::class);
+
+        $service->generateCouponFor($this->user, 'test-code', [
+            'value' => 100,
+        ]);
+
+        $this->assertDatabaseHas('coupons', [
+            'code'          => 'test-code',
+            'value'         => 100,
+            'redeemer_type' => $this->user::class,
+            'redeemer_id'   => $this->user->id,
+        ]);
     }
 }

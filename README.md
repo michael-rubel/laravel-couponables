@@ -12,8 +12,12 @@ This package provides polymorphic coupon functionality for your Laravel applicat
 
 The package requires PHP `^8.x` and Laravel `^8.71` or `^9.0`.
 
+---
+
 ## #StandWithUkraine
 [![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://github.com/vshymanskyy/StandWithUkraine/blob/main/docs/README.md)
+
+---
 
 ## Installation
 Install the package using composer:
@@ -31,11 +35,15 @@ Publish the config file:
 php artisan vendor:publish --tag="couponables-config"
 ```
 
+---
+
 ## Usage
-After publishing migrations, apply a trait in the model you want to use as a redeemer:
+After publishing migrations, apply a trait in the model you want to use as a `$redeemer`:
 ```php
 use HasCoupons;
 ```
+
+---
 
 ### Adding coupons
 You can add coupons to your database using Artisan command:
@@ -43,7 +51,7 @@ You can add coupons to your database using Artisan command:
 php artisan make:coupon YourCouponCode
 ```
 
-Optional values for the command:
+Optionally, you can pass the next arguments:
 ```php
 '--value'         // The 'value' to perform calculations based on the coupon provided
 '--type'          // The 'type' to point out calculation strategy
@@ -55,7 +63,38 @@ Optional values for the command:
 '--data'          // JSON column to store any metadata you want for this particular coupon
 ```
 
-All the columns besides `code` are optional.
+#### Adding coupons using model
+You can as well generate coupons simply using model:
+```php
+Coupon::create([
+    'code'  => '...',
+    'value' => '...',
+    ...
+])
+```
+
+---
+
+### Generators
+#### Seeding records with random codes
+```php
+app()
+    ->make(CouponServiceContract::class)
+    ->generateCoupons(times: 10, length: 7)
+```
+
+#### Adding coupons to redeem only by specified model
+```php
+app()
+    ->make(CouponServiceContract::class)
+    ->generateCouponFor($redeemer, 'my-test-code', [
+        // here you can pass parameters from the list above
+    ])
+```
+
+- Note: These generators will only fill the `code` column, and `redeemer` morphs in the case of `generateCouponFor`. All other columns you need to fill manually.
+
+---
 
 ### Basic operations
 Verify the coupon code:
@@ -75,12 +114,12 @@ $redeemer
     ->for($course);
 ```
 
-Combined `redeemCoupon` and `for` behavior:
+Combined `redeemCoupon` and `for` behavior (assuming the `$course` includes `HasCoupons` trait):
 ```php
-$modelToRedeem->redeemBy($redeemer, $code);
+$course->redeemBy($redeemer, $code);
 ```
 
-Methods `verifyCoupon` and `redeemCoupon` will throw an exception if something's wrong:
+If something's going wrong, methods `verifyCoupon` and `redeemCoupon` will throw an exception:
 
 ```php
 CouponExpiredException      // Coupon is expired (`expires_at` column).

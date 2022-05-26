@@ -21,12 +21,13 @@ use MichaelRubel\Couponables\Exceptions\OverQuantityException;
 use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 use MichaelRubel\Couponables\Models\Contracts\CouponPivotContract;
 use MichaelRubel\Couponables\Services\Contracts\CouponServiceContract;
+use MichaelRubel\Couponables\Traits\Concerns\GeneratesCoupons;
 use MichaelRubel\EnhancedContainer\Call;
 use MichaelRubel\EnhancedContainer\Core\CallProxy;
 
 class CouponService implements CouponServiceContract
 {
-    use Macroable;
+    use Macroable, GeneratesCoupons;
 
     /**
      * @var CallProxy

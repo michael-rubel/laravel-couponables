@@ -3,7 +3,7 @@
 namespace MichaelRubel\Couponables\Tests\Stubs\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use MichaelRubel\Couponables\HasCoupons;
+use MichaelRubel\Couponables\Traits\HasCoupons;
 
 class Course extends Model
 {
