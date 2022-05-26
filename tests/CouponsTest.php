@@ -88,6 +88,29 @@ class CouponsTest extends TestCase
     }
 
     /** @test */
+    public function testCanUseWithRedeemedMethodChained()
+    {
+        Coupon::create(['code' => 'test-code']);
+
+        $course = new Course(['id' => 1]);
+
+        $redeemed = $this->user
+            ->redeemCoupon('test-code')
+            ->for($course);
+
+        $this->assertInstanceOf(Coupon::class, $redeemed);
+        $this->assertDatabaseHas('couponables', [
+            'couponable_type' => $this->user::class,
+            'couponable_id'   => $this->user->id,
+            'redeemed_type'   => Course::class,
+            'redeemed_id'     => 1,
+        ]);
+
+        Event::assertDispatched(CouponVerified::class);
+        Event::assertDispatched(CouponRedeemed::class);
+    }
+
+    /** @test */
     public function testIsThatCouponCodeAlreadyApplied()
     {
         Coupon::create([
