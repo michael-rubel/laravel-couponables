@@ -102,7 +102,7 @@ class CouponService implements CouponServiceContract
             throw new OverLimitException;
         }
 
-        if (! $coupon->isAllowedToRedeem($redeemer)) {
+        if (! $coupon->isAllowedToRedeemBy($redeemer)) {
             event(new NotAllowedToRedeem($instance, $redeemer));
 
             throw new NotAllowedToRedeemException;

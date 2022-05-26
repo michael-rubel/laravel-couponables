@@ -20,7 +20,7 @@ parameters:
         - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model(.*)#'
         - '#Cannot call method (.*) on mixed\.#'
         - '#Method MichaelRubel\\Couponables\\Services\\CouponService\:\:verifyCoupon\(\) should return MichaelRubel\\Couponables\\Models\\Contracts\\CouponContract but returns mixed\.#'
-        - '#Method MichaelRubel\\Couponables\\Models\\Coupon\:\:isAllowedToRedeem\(\) should return bool but returns bool\|MichaelRubel\\EnhancedContainer\\Core\\CallProxy\.#'
+        - '#Method MichaelRubel\\Couponables\\Models\\Coupon\:\:isAllowedToRedeemBy\(\) should return bool but returns bool\|MichaelRubel\\EnhancedContainer\\Core\\CallProxy\.#'
         - '#Cannot call method (.*) on bool\|MichaelRubel\\EnhancedContainer\\Core\\CallProxy\.#'
         - '#Method MichaelRubel\\Couponables\\Models\\Coupon\:\:for\(\) should return MichaelRubel\\Couponables\\Models\\Contracts\\CouponContract but returns Illuminate\\Database\\Eloquent\\Model\|null\.#'
         - '#Cannot call method update\(\) on Illuminate\\Database\\Eloquent\\Model\|null\.#'

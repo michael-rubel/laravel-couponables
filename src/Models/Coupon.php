@@ -159,7 +159,7 @@ class Coupon extends Model implements CouponContract
      *
      * @return bool
      */
-    public function isAllowedToRedeem(Model $redeemer): bool
+    public function isAllowedToRedeemBy(Model $redeemer): bool
     {
         return with(self::$bindable, function ($coupon) use ($redeemer) {
             if ($coupon->isMorphColumnsFilled() && ! $coupon->redeemer()?->is($redeemer)) {
