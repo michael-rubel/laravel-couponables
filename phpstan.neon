@@ -22,6 +22,10 @@ parameters:
         - '#Method MichaelRubel\\Couponables\\Services\\CouponService\:\:verifyCoupon\(\) should return MichaelRubel\\Couponables\\Models\\Contracts\\CouponContract but returns mixed\.#'
         - '#Method MichaelRubel\\Couponables\\Models\\Coupon\:\:isAllowedToRedeem\(\) should return bool but returns bool\|MichaelRubel\\EnhancedContainer\\Core\\CallProxy\.#'
         - '#Cannot call method (.*) on bool\|MichaelRubel\\EnhancedContainer\\Core\\CallProxy\.#'
+        - '#Method MichaelRubel\\Couponables\\Models\\Coupon\:\:for\(\) should return MichaelRubel\\Couponables\\Models\\Contracts\\CouponContract but returns Illuminate\\Database\\Eloquent\\Model\|null\.#'
+        - '#Cannot call method update\(\) on Illuminate\\Database\\Eloquent\\Model\|null\.#'
+        - '#Parameter \#1 \$related of method Illuminate\\Database\\Eloquent\\Model\:\:hasMany\(\) expects string, MichaelRubel\\Couponables\\Models\\Contracts\\CouponPivotContract given\.#'
+        - '#Parameter \#1 \$related of method Illuminate\\Database\\Eloquent\\Model\:\:belongsTo\(\) expects string, mixed given\.#'
 
     level: max
 
