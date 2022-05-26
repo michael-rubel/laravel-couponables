@@ -42,10 +42,14 @@ trait HasCoupons
      */
     public function coupons(): MorphToMany
     {
-        return $this->morphToMany(
-            self::$bindableService->model->getInternal(Call::INSTANCE),
+        return with(self::$bindableService, fn ($service) => $this->morphToMany(
+            $service->model->getInternal(Call::INSTANCE),
             Str::singular(config('couponables.pivot_table', 'couponables'))
-        )->withPivot(self::$bindableService->pivot->getRedeemedAtColumn());
+        )->withPivot([
+            $service->pivot->getRedeemedAtColumn(),
+            $service->pivot->getRedeemedTypeColumn(),
+            $service->pivot->getRedeemedIdColumn(),
+        ]));
     }
 
     /**
