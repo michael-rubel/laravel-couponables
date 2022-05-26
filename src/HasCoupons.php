@@ -119,9 +119,9 @@ trait HasCoupons
     public function verifyCouponOr(?string $code, mixed $callback = null): mixed
     {
         return rescue(
-            callback: fn () => self::$bindable->verifyCoupon($code),
-            rescue: $callback,
-            report: false
+            fn () => self::$bindable->verifyCoupon($code),
+            $callback,
+            false
         );
     }
 
@@ -136,9 +136,9 @@ trait HasCoupons
     public function redeemCouponOr(?string $code, mixed $callback = null): mixed
     {
         return rescue(
-            callback: fn () => self::$bindable->redeemCoupon($code, null),
-            rescue: $callback,
-            report: false
+            fn () => self::$bindable->redeemCoupon($code, null),
+            $callback,
+            false
         );
     }
 
