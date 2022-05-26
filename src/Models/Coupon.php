@@ -7,12 +7,17 @@ namespace MichaelRubel\Couponables\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use MichaelRubel\Couponables\Models\Contracts\CouponContract;
+use MichaelRubel\Couponables\Models\Traits\DefinesColumnChecks;
 use MichaelRubel\Couponables\Models\Traits\DefinesColumns;
+use MichaelRubel\Couponables\Models\Traits\DefinesModelRelations;
 use MichaelRubel\EnhancedContainer\Core\CallProxy;
 
 class Coupon extends Model implements CouponContract
 {
-    use HasFactory, DefinesColumns;
+    use HasFactory,
+        DefinesColumns,
+        DefinesColumnChecks,
+        DefinesModelRelations;
 
     /**
      * The attributes that aren't mass assignable.
@@ -53,26 +58,6 @@ class Coupon extends Model implements CouponContract
     }
 
     /**
-     * The only model allowed to redeem the code if assigned.
-     *
-     * @return Model|null
-     */
-    public function redeemer(): ?Model
-    {
-        return $this->morphTo()->first();
-    }
-
-    /**
-     * @param Model $model
-     *
-     * @return bool
-     */
-    public function isSameRedeemerModel(Model $model): bool
-    {
-        return $this->{self::$bindable->getRedeemerTypeColumn()} === $model->getMorphClass();
-    }
-
-    /**
      * Check if code is expired.
      *
      * @return bool
@@ -104,24 +89,6 @@ class Coupon extends Model implements CouponContract
         $quantity = $this->{self::$bindable->getQuantityColumn()};
 
         return ! is_null($quantity) && $quantity <= 0;
-    }
-
-    /**
-     * Check if coupon is already redeemed by the model.
-     *
-     * @param Model $redeemer
-     *
-     * @return bool
-     */
-    public function isRedeemedBy(Model $redeemer): bool
-    {
-        $column = self::$bindable->getCodeColumn();
-        $code   = $this->{$column};
-
-        return ! is_null($code) && $redeemer
-            ->coupons()
-            ->where($column, $code)
-            ->exists();
     }
 
     /**
@@ -169,6 +136,23 @@ class Coupon extends Model implements CouponContract
     }
 
     /**
+     * Check if coupon is already redeemed by the model.
+     *
+     * @param Model $redeemer
+     *
+     * @return bool
+     */
+    public function isRedeemedBy(Model $redeemer): bool
+    {
+        $column = self::$bindable->getCodeColumn();
+
+        return ! is_null($this->{$column}) && $redeemer
+            ->coupons()
+            ->where($column, $this->{$column})
+            ->exists();
+    }
+
+    /**
      * Check if the model is allowed to redeem.
      *
      * @param Model $redeemer
@@ -187,6 +171,27 @@ class Coupon extends Model implements CouponContract
             }
 
             return true;
+        });
+    }
+
+    /**
+     * Assign the model to the latest redeemed coupon.
+     *
+     * @param Model $redeemed
+     *
+     * @return CouponContract
+     */
+    public function for(Model $redeemed): CouponContract
+    {
+        return with($this->couponables()->first(), function ($couponable) use ($redeemed) {
+            $morphValues = transform($couponable, fn ($bindable) => [
+                $bindable->getRedeemedTypeColumn() => $redeemed->getMorphClass(),
+                $bindable->getRedeemedIdColumn()   => $redeemed->id,
+            ]);
+
+            $couponable->update($morphValues);
+
+            return $this;
         });
     }
 }
