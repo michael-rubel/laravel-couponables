@@ -32,13 +32,13 @@ php artisan vendor:publish --tag="couponables-config"
 ```
 
 ## Usage
-After publishing migrations you can use a trait in the model you want as a redeemer:
+After publishing migrations, apply a trait in the model you want to use as a redeemer:
 ```php
 use HasCoupons;
 ```
 
 ### Seeding the database
-You can seed the coupons into the database simply using the model:
+You can seed the coupons simply using the model:
 ```php
 Coupon::create([
     'code'          => 'my-test-coupon',  // Coupon name to verify and redeem.
@@ -55,17 +55,30 @@ Coupon::create([
 
 All the columns besides `code` are optional.
 
-Verify the code after seeding the database:
+### Basic operations
+Verify the coupon code:
 ```php
 $redeemer->verifyCoupon($code);
 ```
 
-And redeem the coupon when all set:
+Redeem the coupon:
 ```php
 $redeemer->redeemCoupon($code);
 ```
 
-Methods `verifyCoupon` and `redeemCoupon` throw an exception if something's wrong:
+Redeem the coupon in context of the another model:
+```php
+$redeemer
+    ->redeemCoupon($code)
+    ->for($course);
+```
+
+Combined `redeemCoupon` and `for` behavior:
+```php
+$modelToRedeem->redeemBy($redeemer, $code);
+```
+
+Methods `verifyCoupon` and `redeemCoupon` will throw an exception if something's wrong:
 
 ```php
 CouponExpiredException      // Coupon is expired (`expires_at` column).
@@ -78,33 +91,29 @@ CouponException             // Generic exception for all cases.
 
 If you want to bypass the exception and do something else:
 ```php
-$redeemer->verifyCouponOr($couponCode, function () {
+$redeemer->verifyCouponOr($code, function () {
     // your action
 });
 ```
 
 ```php
-$redeemer->redeemCouponOr($couponCode, function () {
+$redeemer->redeemCouponOr($code, function () {
     // your action
 });
 ```
 
-You can pass the model you want to be stored as `redeemed` in `couponables` table.
+### [Redeemer](https://github.com/michael-rubel/laravel-couponables/blob/main/src/HasCoupons.php) checks
+Check if this coupon is already used by the model:
 ```php
-$modelToRedeem->redeemBy($redeemer, $couponCode);
+$redeemer->isCouponAlreadyUsed($code);
 ```
 
-Check if this coupon is already used by the model (at least one record exists in the `couponables` table):
+Check if the coupon is over the limit for the model:
 ```php
-$model->isCouponAlreadyUsed($code);
+$redeemer->isCouponOverLimit($code);
 ```
 
-Or check if it's over the limit for the model:
-```php
-$model->isCouponOverLimit($code);
-```
-
-### Available [Coupon](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Models/Coupon.php) model API:
+### [Coupon](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Models/Coupon.php) checks
 ```php
 public function isExpired(): bool;
 public function isNotExpired(): bool;
