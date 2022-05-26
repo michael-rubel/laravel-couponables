@@ -4,6 +4,7 @@ namespace MichaelRubel\Couponables\Tests;
 
 use Illuminate\Support\Facades\Hash;
 use MichaelRubel\Couponables\Models\Coupon;
+use MichaelRubel\Couponables\Models\Couponable;
 use MichaelRubel\Couponables\Tests\Stubs\Models\User;
 
 class BasicOperationsTest extends TestCase
@@ -91,5 +92,22 @@ class BasicOperationsTest extends TestCase
             '1000',
             $coupon->{$coupon->getValueColumn()}
         );
+    }
+
+    /** @test */
+    public function testCanGetCouponFromCouponable()
+    {
+        $coupon = Coupon::create([
+            'code' => 'coupon',
+        ]);
+
+        $couponable = Couponable::create([
+            'coupon_id'       => $coupon->id,
+            'couponable_type' => $coupon::class,
+            'couponable_id'   => $coupon->id,
+            'redeemed_at'     => now(),
+        ]);
+
+        $this->assertInstanceOf(Coupon::class, $couponable->coupon);
     }
 }
