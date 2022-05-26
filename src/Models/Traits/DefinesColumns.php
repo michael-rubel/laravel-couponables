@@ -69,4 +69,12 @@ trait DefinesColumns
     {
         return 'redeemer_id';
     }
+
+    /**
+     * @return string
+     */
+    public function getDataColumn(): string
+    {
+        return 'data';
+    }
 }
