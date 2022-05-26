@@ -66,7 +66,7 @@ Redeem the coupon:
 $redeemer->redeemCoupon($code);
 ```
 
-Redeem the coupon in context of the another model:
+Redeem the coupon in context of another model:
 ```php
 $redeemer
     ->redeemCoupon($code)
