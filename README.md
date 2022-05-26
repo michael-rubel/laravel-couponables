@@ -37,20 +37,22 @@ After publishing migrations, apply a trait in the model you want to use as a red
 use HasCoupons;
 ```
 
-### Seeding the database
-You can seed the coupons simply using the model:
+### Adding coupons
+You can add coupons to your database using Artisan command:
+```bash
+php artisan make:coupon YourCouponCode
+```
+
+Optional values for the command:
 ```php
-Coupon::create([
-    'code'          => 'my-test-coupon',  // Coupon name to verify and redeem.
-    'value'         => 50,                // The 'value' to perform calculations based on the coupon provided.
-    'type'          => 'percentage',      // The 'type' to point out calculation strategy.
-    'limit'         => 3,                 // Limit how many times the coupon can be applied by the model.
-    'quantity'      => 10,                // Limit how many coupons are available overall (this value will decrement)
-    'expires_at'    => now()->addMonth(), // Set expiration time for the coupon.
-    'redeemer_type' => User::class,       // Polymorphic model type. Can as well be morph-mapped value, i.e. 'users'
-    'redeemer_id'   => 1,                 // Model ID.
-    'data'          => 'json',            // JSON column to store any metadata you want for this particular coupon.
-]);
+'--value'         // The 'value' to perform calculations based on the coupon provided
+'--type'          // The 'type' to point out calculation strategy
+'--limit'         // Limit how many times the coupon can be applied by the model
+'--quantity'      // Limit how many coupons are available overall (this value will decrement)
+'--expires_at'    // Set expiration time for the coupon
+'--redeemer_type' // Polymorphic model type. Can as well be morph-mapped value, i.e. 'users'
+'--redeemer_id'   // Redeemer model ID
+'--data'          // JSON column to store any metadata you want for this particular coupon
 ```
 
 All the columns besides `code` are optional.

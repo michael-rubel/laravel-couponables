@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MichaelRubel\Couponables;
 
+use MichaelRubel\Couponables\Commands\MakeCouponCommand;
 use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 use MichaelRubel\Couponables\Models\Contracts\CouponPivotContract;
 use MichaelRubel\Couponables\Models\Coupon;
@@ -31,7 +32,7 @@ class CouponableServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_coupons_table',
                 'create_couponables_table',
-            ]);
+            ])->hasCommand(MakeCouponCommand::class);
     }
 
     /**
