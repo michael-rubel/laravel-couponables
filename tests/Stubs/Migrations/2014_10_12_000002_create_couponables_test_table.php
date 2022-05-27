@@ -24,6 +24,7 @@ return new class extends Migration
                 Str::singular('couponable_tests')
             );
             $table->timestamp('used_at');
+            $table->timestamps();
         });
     }
 
