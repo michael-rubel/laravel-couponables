@@ -27,4 +27,20 @@ trait DefinesPivotColumns
     {
         return 'redeemed_id';
     }
+
+    /**
+     * @return string
+     */
+    public function getCreatedAtColumn(): string
+    {
+        return 'created_at';
+    }
+
+    /**
+     * @return string
+     */
+    public function getUpdatedAtColumn(): string
+    {
+        return 'updated_at';
+    }
 }
