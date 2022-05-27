@@ -70,7 +70,7 @@ Coupon::create([
     'code'  => '...',
     'value' => '...',
     ...
-])
+]);
 ```
 
 ---
@@ -80,7 +80,7 @@ Coupon::create([
 ```php
 app()
   ->make(CouponServiceContract::class)
-  ->generateCoupons(times: 10, length: 7)
+  ->generateCoupons(times: 10, length: 7);
 ```
 
 #### Adding coupons to redeem only by specified model
@@ -89,7 +89,7 @@ app()
   ->make(CouponServiceContract::class)
   ->generateCouponFor($redeemer, 'my-test-code', [
       // here you can pass parameters from the list above
-  ])
+  ]);
 ```
 
 - Note: These generators will only fill the `code` column, and `redeemer` morphs in the case of `generateCouponFor`. All other columns you need to fill manually.
