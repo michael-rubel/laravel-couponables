@@ -46,9 +46,11 @@ trait HasCoupons
             $service->model->getInternal(Call::INSTANCE),
             Str::singular(config('couponables.pivot_table', 'couponables'))
         )->withPivot([
-            $service->pivot->getRedeemedAtColumn(),
             $service->pivot->getRedeemedTypeColumn(),
             $service->pivot->getRedeemedIdColumn(),
+            $service->pivot->getRedeemedAtColumn(),
+            $service->pivot->getCreatedAtColumn(),
+            $service->pivot->getUpdatedAtColumn(),
         ]));
     }
 
