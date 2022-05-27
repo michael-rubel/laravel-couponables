@@ -7,6 +7,7 @@ namespace MichaelRubel\Couponables\Models\Traits;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use MichaelRubel\Couponables\Models\Contracts\CouponPivotContract;
+use MichaelRubel\EnhancedContainer\Call;
 
 trait DefinesModelRelations
 {
@@ -17,9 +18,11 @@ trait DefinesModelRelations
      */
     public function couponables(): HasMany
     {
+        $pivot = call(CouponPivotContract::class);
+
         return $this
-            ->hasMany(app(CouponPivotContract::class))
-            ->latest();
+            ->hasMany($pivot->getInternal(Call::INSTANCE))
+            ->orderBy($pivot->getRedeemedAtColumn(), 'desc');
     }
 
     /**
