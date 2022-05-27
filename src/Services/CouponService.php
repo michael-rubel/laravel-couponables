@@ -127,9 +127,10 @@ class CouponService implements CouponServiceContract
     {
         rescue(function () use ($coupon, $redeemer, $redeemed) {
             call($redeemer)->coupons()->attach($coupon, [
-                $this->pivot->getRedeemedAtColumn()   => now(),
                 $this->pivot->getRedeemedTypeColumn() => $redeemed?->getMorphClass(),
                 $this->pivot->getRedeemedIdColumn()   => $redeemed?->id,
+                $this->pivot->getRedeemedAtColumn()   => now(),
+                $this->pivot->getCreatedAtColumn()    => now(),
             ]);
 
             if (! is_null($coupon->{$this->model->getQuantityColumn()})) {
