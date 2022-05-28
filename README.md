@@ -83,6 +83,8 @@ app()
   ->generateCoupons(times: 10, length: 7);
 ```
 
+- Note: This will only fill the `code` column.
+
 #### Adding coupons to redeem only by specified model
 ```php
 app()
@@ -91,8 +93,6 @@ app()
       // here you can pass parameters from the list above
   ]);
 ```
-
-- Note: These generators will only fill the `code` column, and `redeemer` morphs in the case of `generateCouponFor`. All other columns you need to fill manually.
 
 ---
 
