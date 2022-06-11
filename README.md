@@ -45,7 +45,7 @@ use HasCoupons;
 
 ---
 
-### Adding coupons
+### Artisan command
 You can add coupons to your database using Artisan command:
 ```bash
 php artisan make:coupon YourCouponCode
@@ -64,34 +64,13 @@ Optionally, you can pass the next arguments:
 ```
 
 #### Adding coupons using model
-You can as well generate coupons simply using model:
+You can as well add coupons simply using model:
 ```php
 Coupon::create([
     'code'  => '...',
     'value' => '...',
     ...
 ]);
-```
-
----
-
-### Generators
-#### Seeding records with random codes
-```php
-app()
-  ->make(CouponServiceContract::class)
-  ->generateCoupons(times: 10, length: 7);
-```
-
-- Note: This will only fill the `code` column.
-
-#### Adding coupons to redeem only by specified model
-```php
-app()
-  ->make(CouponServiceContract::class)
-  ->generateCouponFor($redeemer, 'my-test-code', [
-      // here you can pass parameters from the list above
-  ]);
 ```
 
 ---
@@ -178,6 +157,27 @@ If you go event-driven, you can handle package events:
 - [CouponIsOverQuantity](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Events/CouponIsOverQuantity.php)
 - [NotAllowedToRedeem](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Events/NotAllowedToRedeem.php)
 - [FailedToRedeemCoupon](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Events/FailedToRedeemCoupon.php)
+
+### Generators
+#### Seeding records with random codes
+```php
+app()
+  ->make(CouponServiceContract::class)
+  ->generateCoupons(times: 10, length: 7);
+```
+
+- Note: This will only fill the `code` column.
+
+#### Adding coupons to redeem only by specified model
+```php
+app()
+  ->make(CouponServiceContract::class)
+  ->generateCouponFor($redeemer, 'my-test-code', [
+      // here you can pass parameters from the list above
+  ]);
+```
+
+---
 
 ### Extending package functionality
 Traits [DefinesColumns](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Models/Traits/DefinesColumns.php) and [DefinesPivotColumns](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Models/Traits/DefinesPivotColumns.php) contain the methods that define column names to use by the package. You can use a method binding to override the package's method behavior.
