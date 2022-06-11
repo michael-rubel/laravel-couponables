@@ -158,6 +158,8 @@ If you go event-driven, you can handle package events:
 - [NotAllowedToRedeem](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Events/NotAllowedToRedeem.php)
 - [FailedToRedeemCoupon](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Events/FailedToRedeemCoupon.php)
 
+---
+
 ### Generators
 #### Seeding records with random codes
 ```php
