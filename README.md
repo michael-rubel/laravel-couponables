@@ -163,20 +163,16 @@ If you go event-driven, you can handle package events:
 ### Generators
 #### Seeding records with random codes
 ```php
-app()
-  ->make(CouponServiceContract::class)
-  ->generateCoupons(times: 10, length: 7);
+app(CouponServiceContract::class)->generateCoupons(times: 10, length: 7);
 ```
 
 - Note: This will only fill the `code` column.
 
 #### Adding coupons to redeem only by specified model
 ```php
-app()
-  ->make(CouponServiceContract::class)
-  ->generateCouponFor($redeemer, 'my-test-code', [
-      // here you can pass parameters from the list above
-  ]);
+app(CouponServiceContract::class)->generateCouponFor($redeemer, 'my-test-code', [
+  // here you can pass parameters from the list above
+]);
 ```
 
 ---
