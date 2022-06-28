@@ -3,18 +3,9 @@
 namespace MichaelRubel\Couponables\Tests;
 
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use MichaelRubel\Couponables\CouponableServiceProvider;
-use MichaelRubel\Couponables\Events\CouponRedeemed;
-use MichaelRubel\Couponables\Exceptions\CouponExpiredException;
-use MichaelRubel\Couponables\Exceptions\InvalidCouponException;
-use MichaelRubel\Couponables\Exceptions\NotAllowedToRedeemException;
-use MichaelRubel\Couponables\Exceptions\OverLimitException;
-use MichaelRubel\Couponables\Exceptions\OverQuantityException;
-use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 use MichaelRubel\Couponables\Models\Contracts\CouponPivotContract;
-use MichaelRubel\Couponables\Models\Coupon;
 use MichaelRubel\Couponables\Tests\Stubs\Models\FakeCoupon;
 use MichaelRubel\Couponables\Tests\Stubs\Models\FakeCouponable;
 use MichaelRubel\Couponables\Tests\Stubs\Models\User;

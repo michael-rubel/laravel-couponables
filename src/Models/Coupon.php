@@ -46,7 +46,7 @@ class Coupon extends Model implements CouponContract
     protected static CallProxy $bindable;
 
     /**
-     * @param array $attributes
+     * @param  array  $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -106,8 +106,8 @@ class Coupon extends Model implements CouponContract
     /**
      * Check if the code is reached its global limit.
      *
-     * @param Model       $redeemer
-     * @param string|null $code
+     * @param  Model  $redeemer
+     * @param  string|null  $code
      *
      * @return bool
      */
@@ -120,14 +120,14 @@ class Coupon extends Model implements CouponContract
     /**
      * Check if the code is reached its limit for the passed model.
      *
-     * @param Model $redeemer
+     * @param  Model  $redeemer
      *
      * @return bool
      */
     public function isOverLimitFor(Model $redeemer): bool
     {
         $column = self::$bindable->getCodeColumn();
-        $limit  = $this->{self::$bindable->getLimitColumn()};
+        $limit = $this->{self::$bindable->getLimitColumn()};
 
         return ! is_null($limit) && $limit <= $redeemer
             ->coupons()
@@ -138,7 +138,7 @@ class Coupon extends Model implements CouponContract
     /**
      * Check if coupon is already redeemed by the model.
      *
-     * @param Model $redeemer
+     * @param  Model  $redeemer
      *
      * @return bool
      */
@@ -155,7 +155,7 @@ class Coupon extends Model implements CouponContract
     /**
      * Check if the model is allowed to redeem.
      *
-     * @param Model $redeemer
+     * @param  Model  $redeemer
      *
      * @return bool
      */
@@ -177,7 +177,7 @@ class Coupon extends Model implements CouponContract
     /**
      * Assign the model to the latest redeemed coupon.
      *
-     * @param Model $redeemed
+     * @param  Model  $redeemed
      *
      * @return CouponContract
      */

@@ -27,7 +27,7 @@ trait DefinesColumnChecks
     }
 
     /**
-     * @param Model $model
+     * @param  Model  $model
      *
      * @return bool
      */

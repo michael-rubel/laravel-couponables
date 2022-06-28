@@ -8,7 +8,6 @@ use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 use MichaelRubel\Couponables\Models\Coupon;
 use MichaelRubel\Couponables\Services\Contracts\CouponServiceContract;
 use MichaelRubel\Couponables\Tests\Stubs\Models\User;
-use MichaelRubel\EnhancedContainer\Call;
 
 class BindabilityTest extends TestCase
 {
