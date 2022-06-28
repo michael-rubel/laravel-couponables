@@ -31,7 +31,7 @@ trait HasCoupons
      */
     public function initializeHasCoupons(): void
     {
-        self::$bindable        = call($this);
+        self::$bindable = call($this);
         self::$bindableService = call(CouponServiceContract::class);
     }
 
@@ -57,7 +57,7 @@ trait HasCoupons
     /**
      * Check if coupon with this code is already used.
      *
-     * @param string|null $code
+     * @param  string|null  $code
      *
      * @return bool
      */
@@ -73,10 +73,9 @@ trait HasCoupons
     /**
      * Check if the coupon is over limit for the model.
      *
-     * @param string|null $code
+     * @param  string|null  $code
      *
      * @return bool
-     *
      */
     public function isCouponOverLimit(?string $code): bool
     {
@@ -88,7 +87,7 @@ trait HasCoupons
     /**
      * Verify if the coupon is valid.
      *
-     * @param string|null $code
+     * @param  string|null  $code
      *
      * @return CouponContract
      */
@@ -100,8 +99,8 @@ trait HasCoupons
     /**
      * Verify and use the coupon.
      *
-     * @param string|null $code
-     * @param Model|null  $redeemed
+     * @param  string|null  $code
+     * @param  Model|null  $redeemed
      *
      * @return CouponContract
      */
@@ -117,8 +116,8 @@ trait HasCoupons
     /**
      * Verify the coupon or do something else on fail.
      *
-     * @param string|null $code
-     * @param mixed|null  $callback
+     * @param  string|null  $code
+     * @param  mixed|null  $callback
      *
      * @return mixed
      */
@@ -134,8 +133,8 @@ trait HasCoupons
     /**
      * Redeem the coupon or do something else on fail.
      *
-     * @param string|null $code
-     * @param mixed|null  $callback
+     * @param  string|null  $code
+     * @param  mixed|null  $callback
      *
      * @return mixed
      */
@@ -151,8 +150,8 @@ trait HasCoupons
     /**
      * Redeem the code using model.
      *
-     * @param Model       $model
-     * @param string|null $couponCode
+     * @param  Model  $model
+     * @param  string|null  $couponCode
      *
      * @return CouponContract
      */

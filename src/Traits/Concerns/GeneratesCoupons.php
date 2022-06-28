@@ -14,8 +14,8 @@ trait GeneratesCoupons
     /**
      * Generate the coupon codes.
      *
-     * @param int $times
-     * @param int $length
+     * @param  int  $times
+     * @param  int  $length
      *
      * @return Collection
      */
@@ -29,9 +29,9 @@ trait GeneratesCoupons
     /**
      * Generate the coupon code to redeem only by the specified model.
      *
-     * @param Model  $redeemer
-     * @param string $code
-     * @param array  $attributes
+     * @param  Model  $redeemer
+     * @param  string  $code
+     * @param  array  $attributes
      *
      * @return CouponContract
      */
