@@ -51,8 +51,8 @@ class CouponService implements CouponServiceContract
     public function __construct(CouponContract $model, CouponPivotContract $pivot)
     {
         $this->service = call($this);
-        $this->model = call($model);
-        $this->pivot = call($pivot);
+        $this->model   = call($model);
+        $this->pivot   = call($pivot);
     }
 
     /**
@@ -82,7 +82,7 @@ class CouponService implements CouponServiceContract
      */
     public function verifyCoupon(?string $code, Model $redeemer): CouponContract
     {
-        $coupon = call($this->getCoupon($code) ?? throw new InvalidCouponException);
+        $coupon   = call($this->getCoupon($code) ?? throw new InvalidCouponException);
         $instance = $coupon->getInternal(Call::INSTANCE);
 
         if ($coupon->isExpired()) {

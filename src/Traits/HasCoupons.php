@@ -31,7 +31,7 @@ trait HasCoupons
      */
     public function initializeHasCoupons(): void
     {
-        self::$bindable = call($this);
+        self::$bindable        = call($this);
         self::$bindableService = call(CouponServiceContract::class);
     }
 

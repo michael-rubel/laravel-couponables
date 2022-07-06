@@ -127,7 +127,7 @@ class Coupon extends Model implements CouponContract
     public function isOverLimitFor(Model $redeemer): bool
     {
         $column = self::$bindable->getCodeColumn();
-        $limit = $this->{self::$bindable->getLimitColumn()};
+        $limit  = $this->{self::$bindable->getLimitColumn()};
 
         return ! is_null($limit) && $limit <= $redeemer
             ->coupons()

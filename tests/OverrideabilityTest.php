@@ -66,7 +66,7 @@ class OverrideabilityTest extends TestCase
         ]);
 
         $redeemed_at = app(CouponPivotContract::class)->getRedeemedAtColumn();
-        $now = now();
+        $now         = now();
 
         $this->user->coupons()->syncWithPivotValues($coupon->id, [
             $redeemed_at => $now,
