@@ -4,6 +4,10 @@
     "Laravel/laravel_phpdoc_separation": false,
     "concat_space": {
       "spacing": "one"
+    },
+    "binary_operator_spaces": {
+      "default": "single_space",
+      "operators": {"=>": null, "=": "align_single_space_minimal"}
     }
   }
 }
