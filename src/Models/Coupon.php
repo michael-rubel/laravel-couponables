@@ -100,7 +100,7 @@ class Coupon extends Model implements CouponContract
     {
         $limit = $this->{self::$bindable->getLimitColumn()};
 
-        return ! is_null($limit) && single($limit);
+        return ! is_null($limit) && $limit == 1;
     }
 
     /**
