@@ -562,8 +562,17 @@ class CouponsTest extends TestCase
             'redeemer_id'   => $this->user->id,
         ]);
 
-        $coupon = Coupon::with('redeemer')->first();
+        Coupon::create([
+            'code'          => 'redeemer-coupon2',
+            'redeemer_type' => $this->user::class,
+            'redeemer_id'   => $this->user->id,
+        ]);
 
-        $this->assertInstanceOf($this->user::class, $coupon->redeemer);
+        $coupons = Coupon::with('redeemer')->get();
+
+        $coupons->each(function (Coupon $coupon) {
+            $this->assertInstanceOf($this->user::class, $coupon->redeemer);
+            $this->assertSame($this->user->id, $coupon->redeemer->id);
+        });
     }
 }
