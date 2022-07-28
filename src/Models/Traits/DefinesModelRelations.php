@@ -6,6 +6,7 @@ namespace MichaelRubel\Couponables\Models\Traits;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use MichaelRubel\Couponables\Models\Contracts\CouponPivotContract;
 use MichaelRubel\EnhancedContainer\Call;
 
@@ -28,10 +29,10 @@ trait DefinesModelRelations
     /**
      * The only model allowed to redeem the coupon.
      *
-     * @return Model|null
+     * @return MorphTo
      */
-    public function redeemer(): ?Model
+    public function redeemer(): MorphTo
     {
-        return $this->morphTo()->first();
+        return $this->morphTo();
     }
 }
