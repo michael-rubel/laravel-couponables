@@ -76,4 +76,20 @@ class OverrideabilityTest extends TestCase
 
         $this->assertStringContainsString($fakePivotModel->{$redeemed_at}, $now->toDateTimeString());
     }
+
+    /** @test */
+    public function testCanOverrideConstructor()
+    {
+        $coupon = FakeCoupon::create([
+            'code'          => 'fake-coupon',
+            'redeemer_type' => User::class,
+            'redeemer_id'   => 1,
+        ]);
+
+        $user = app(User::class);
+
+        $this->assertFalse(
+            $coupon->isAllowedToRedeemBy($user)
+        );
+    }
 }

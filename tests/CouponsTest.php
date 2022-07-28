@@ -160,7 +160,7 @@ class CouponsTest extends TestCase
     }
 
     /** @test */
-    public function testCanRedeemCouponToUseOnlyForSpecificModel()
+    public function testCanRedeemCouponWhenSpecificModelAssigned()
     {
         Coupon::create([
             'code'          => 'redeemer-coupon',
@@ -224,6 +224,20 @@ class CouponsTest extends TestCase
         $this->user->redeemCoupon('another-model-coupon');
 
         Event::assertDispatched(NotAllowedToRedeem::class);
+    }
+
+    /** @test */
+    public function testCannotVerifyCouponWhenWrongModelAssigned()
+    {
+        Coupon::create([
+            'code'          => 'redeemer-coupon',
+            'redeemer_type' => User::class,
+            'redeemer_id'   => 7,
+        ]);
+
+        $this->expectException(NotAllowedToRedeemException::class);
+
+        $this->user->verifyCoupon('redeemer-coupon');
     }
 
     /** @test */
