@@ -552,4 +552,27 @@ class CouponsTest extends TestCase
             'redeemer_id'   => $this->user->id,
         ]);
     }
+
+    /** @test */
+    public function testCanRetrieveRedeemerUsingEagerLoading()
+    {
+        Coupon::create([
+            'code'          => 'redeemer-coupon',
+            'redeemer_type' => $this->user::class,
+            'redeemer_id'   => $this->user->id,
+        ]);
+
+        Coupon::create([
+            'code'          => 'redeemer-coupon2',
+            'redeemer_type' => $this->user::class,
+            'redeemer_id'   => $this->user->id,
+        ]);
+
+        $coupons = Coupon::with('redeemer')->get();
+
+        $coupons->each(function (Coupon $coupon) {
+            $this->assertInstanceOf($this->user::class, $coupon->redeemer);
+            $this->assertSame($this->user->id, $coupon->redeemer->id);
+        });
+    }
 }
