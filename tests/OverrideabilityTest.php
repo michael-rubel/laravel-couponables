@@ -86,10 +86,15 @@ class OverrideabilityTest extends TestCase
             'redeemer_id'   => 1,
         ]);
 
-        $user = app(User::class);
+        $secondUser = User::create([
+            'name'     => 'Tester',
+            'email'    => 'test@test.com',
+            'password' => 'test',
+            'id'       => 2,
+        ]);
 
         $this->assertFalse(
-            $coupon->isAllowedToRedeemBy($user)
+            $coupon->isAllowedToRedeemBy($secondUser)
         );
     }
 }
