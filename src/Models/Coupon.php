@@ -54,7 +54,7 @@ class Coupon extends Model implements CouponContract
 
         $this->table = config('couponables.table', 'coupons');
 
-        self::$bindable = call($this);
+        static::$bindable = call($this);
     }
 
     /**
@@ -64,7 +64,7 @@ class Coupon extends Model implements CouponContract
      */
     public function isExpired(): bool
     {
-        $expires_at = $this->{self::$bindable->getExpiresAtColumn()};
+        $expires_at = $this->{static::$bindable->getExpiresAtColumn()};
 
         return $expires_at && now()->gte($expires_at);
     }
@@ -76,7 +76,7 @@ class Coupon extends Model implements CouponContract
      */
     public function isNotExpired(): bool
     {
-        return ! self::$bindable->isExpired();
+        return ! static::$bindable->isExpired();
     }
 
     /**
@@ -86,7 +86,7 @@ class Coupon extends Model implements CouponContract
      */
     public function isOverQuantity(): bool
     {
-        $quantity = $this->{self::$bindable->getQuantityColumn()};
+        $quantity = $this->{static::$bindable->getQuantityColumn()};
 
         return ! is_null($quantity) && $quantity <= 0;
     }
@@ -98,7 +98,7 @@ class Coupon extends Model implements CouponContract
      */
     public function isDisposable(): bool
     {
-        $limit = $this->{self::$bindable->getLimitColumn()};
+        $limit = $this->{static::$bindable->getLimitColumn()};
 
         return ! is_null($limit) && $limit == 1;
     }
@@ -113,8 +113,8 @@ class Coupon extends Model implements CouponContract
      */
     public function isOverLimit(Model $redeemer, ?string $code): bool
     {
-        return (self::$bindable->isDisposable() && call($redeemer)->isCouponAlreadyUsed($code))
-            || self::$bindable->isOverLimitFor($redeemer);
+        return (static::$bindable->isDisposable() && call($redeemer)->isCouponAlreadyUsed($code))
+            || static::$bindable->isOverLimitFor($redeemer);
     }
 
     /**
@@ -126,8 +126,8 @@ class Coupon extends Model implements CouponContract
      */
     public function isOverLimitFor(Model $redeemer): bool
     {
-        $column = self::$bindable->getCodeColumn();
-        $limit  = $this->{self::$bindable->getLimitColumn()};
+        $column = static::$bindable->getCodeColumn();
+        $limit  = $this->{static::$bindable->getLimitColumn()};
 
         return ! is_null($limit) && $limit <= $redeemer
             ->coupons()
@@ -144,7 +144,7 @@ class Coupon extends Model implements CouponContract
      */
     public function isRedeemedBy(Model $redeemer): bool
     {
-        $column = self::$bindable->getCodeColumn();
+        $column = static::$bindable->getCodeColumn();
 
         return ! is_null($this->{$column}) && $redeemer
             ->coupons()
@@ -161,7 +161,7 @@ class Coupon extends Model implements CouponContract
      */
     public function isAllowedToRedeemBy(Model $redeemer): bool
     {
-        return with(self::$bindable, function ($coupon) use ($redeemer) {
+        return with(static::$bindable, function ($coupon) use ($redeemer) {
             if ($coupon->isMorphColumnsFilled() && ! $coupon->redeemer()?->is($redeemer)) {
                 return false;
             }
