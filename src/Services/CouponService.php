@@ -82,7 +82,8 @@ class CouponService implements CouponServiceContract
      */
     public function verifyCoupon(?string $code, Model $redeemer): CouponContract
     {
-        $coupon   = call($this->getCoupon($code) ?? throw new InvalidCouponException);
+        $coupon = call($this->getCoupon($code) ?? throw new InvalidCouponException);
+
         $instance = $coupon->getInternal(Call::INSTANCE);
 
         if ($coupon->isExpired()) {
@@ -111,7 +112,7 @@ class CouponService implements CouponServiceContract
 
         event(new CouponVerified($instance, $redeemer));
 
-        return $coupon->getInternal(Call::INSTANCE);
+        return $instance;
     }
 
     /**
