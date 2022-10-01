@@ -41,8 +41,10 @@ trait GeneratesCoupons
             $this->model->getCodeColumn()         => $code,
             $this->model->getRedeemerTypeColumn() => $redeemer->getMorphClass(),
             $this->model->getRedeemerIdColumn()   => $redeemer->id,
-        ])->merge($attributes)->toArray();
+        ]);
 
-        return $this->model->create($fields);
+        return $this->model->create(
+            $fields->merge($attributes)->toArray()
+        );
     }
 }
