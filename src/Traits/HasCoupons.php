@@ -123,7 +123,7 @@ trait HasCoupons
      */
     public function verifyCouponOr(?string $code, mixed $callback = null): mixed
     {
-        return rescue(function () use ($code, $callback) {
+        return rescue(function () use ($code) {
             return static::$bindable->verifyCoupon($code);
         }, $callback, report: false);
     }
@@ -138,7 +138,7 @@ trait HasCoupons
      */
     public function redeemCouponOr(?string $code, mixed $callback = null): mixed
     {
-        return rescue(function () use ($code, $callback) {
+        return rescue(function () use ($code) {
             return static::$bindable->redeemCoupon($code, null);
         }, $callback, report: false);
     }
