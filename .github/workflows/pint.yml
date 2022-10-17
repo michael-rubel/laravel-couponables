@@ -1,4 +1,4 @@
-name: "Laravel Pint"
+name: "pint"
 
 on:
     push:
@@ -8,7 +8,6 @@ on:
 
 jobs:
   pint:
-    name: "Running Laravel Pint check"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
