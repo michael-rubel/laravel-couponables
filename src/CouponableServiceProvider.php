@@ -18,6 +18,11 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 class CouponableServiceProvider extends PackageServiceProvider
 {
     /**
+     * @var Package
+     */
+    public Package $package;
+
+    /**
      * Configure the package.
      *
      * @param  Package  $package
@@ -26,7 +31,7 @@ class CouponableServiceProvider extends PackageServiceProvider
      */
     public function configurePackage(Package $package): void
     {
-        $package
+        $this->package = $package
             ->name('laravel-couponables')
             ->hasConfigFile()
             ->hasMigrations([
