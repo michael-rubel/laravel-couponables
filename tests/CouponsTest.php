@@ -2,6 +2,7 @@
 
 namespace MichaelRubel\Couponables\Tests;
 
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
@@ -21,6 +22,7 @@ use MichaelRubel\Couponables\Exceptions\OverLimitException;
 use MichaelRubel\Couponables\Exceptions\OverQuantityException;
 use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 use MichaelRubel\Couponables\Models\Coupon;
+use MichaelRubel\Couponables\Models\Couponable;
 use MichaelRubel\Couponables\Services\Contracts\CouponServiceContract;
 use MichaelRubel\Couponables\Tests\Stubs\Models\Course;
 use MichaelRubel\Couponables\Tests\Stubs\Models\FakeCoupon;
@@ -588,5 +590,21 @@ class CouponsTest extends TestCase
             $this->assertInstanceOf($this->user::class, $coupon->redeemer);
             $this->assertSame($this->user->id, $coupon->redeemer->id);
         });
+    }
+
+    /** @test */
+    public function testCanCreateModelInstanceManually()
+    {
+        $coupon = new Coupon(['code' => 'test']);
+
+        $this->assertSame('test', $coupon->code);
+    }
+
+    /** @test */
+    public function testCanCreateMorphModelInstanceManually()
+    {
+        $coupon = new Couponable(['redeemed_at' => '2022-11-28 09:10:45']);
+
+        $this->assertEquals('2022-11-28 09:10:45', $coupon->redeemed_at);
     }
 }
