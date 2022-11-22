@@ -589,4 +589,12 @@ class CouponsTest extends TestCase
             $this->assertSame($this->user->id, $coupon->redeemer->id);
         });
     }
+
+    /** @test */
+    public function testCanCreateModelInstanceManually()
+    {
+        $coupon = new Coupon(['code' => 'test']);
+
+        $this->assertSame('test', $coupon->code);
+    }
 }
