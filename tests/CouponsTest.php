@@ -2,7 +2,6 @@
 
 namespace MichaelRubel\Couponables\Tests;
 
-use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
