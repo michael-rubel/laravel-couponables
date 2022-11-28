@@ -64,9 +64,9 @@ class Coupon extends Model implements CouponContract
      */
     public function isExpired(): bool
     {
-        $expires_at = $this->{static::$bindable->getExpiresAtColumn()};
+        $column = static::$bindable->getExpiresAtColumn();
 
-        return $expires_at && now()->gte($expires_at);
+        return now()->gte($this->{$column});
     }
 
     /**
@@ -146,10 +146,7 @@ class Coupon extends Model implements CouponContract
     {
         $column = static::$bindable->getCodeColumn();
 
-        return ! is_null($this->{$column}) && $redeemer
-            ->coupons()
-            ->where($column, $this->{$column})
-            ->exists();
+        return $redeemer->coupons()->where($column, $this->{$column})->exists();
     }
 
     /**
@@ -162,7 +159,7 @@ class Coupon extends Model implements CouponContract
     public function isAllowedToRedeemBy(Model $redeemer): bool
     {
         return with(static::$bindable, function ($coupon) use ($redeemer) {
-            if ($coupon->isMorphColumnsFilled() && ! $coupon->redeemer()?->is($redeemer)) {
+            if ($coupon->isMorphColumnsFilled() && ! $coupon->redeemer()->is($redeemer)) {
                 return false;
             }
 
