@@ -2,7 +2,6 @@
 
 namespace MichaelRubel\Couponables\Tests;
 
-use Illuminate\Support\Collection;
 use MichaelRubel\Couponables\Exceptions\InvalidCouponTypeException;
 use MichaelRubel\Couponables\Exceptions\InvalidCouponValueException;
 use MichaelRubel\Couponables\Models\Coupon;
