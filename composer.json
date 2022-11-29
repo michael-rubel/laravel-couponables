@@ -19,7 +19,7 @@
         "php": "^8.0",
         "illuminate/contracts": "^9.0",
         "spatie/laravel-package-tools": "^1.13",
-        "michael-rubel/laravel-enhanced-container": "^9.0"
+        "michael-rubel/laravel-enhanced-container": "^10.0"
     },
     "require-dev": {
         "brianium/paratest": "^6.3",
