@@ -12,7 +12,7 @@ class CalculationsTest extends TestCase
     {
         $coupon = Coupon::create([
             'code'  => 'test-code',
-            'type'  => 'subtract',
+            'type'  => 'subtraction',
             'value' => '250', // <-- Amount to subtract.
         ]);
 
@@ -27,7 +27,7 @@ class CalculationsTest extends TestCase
     {
         $coupon = Coupon::create([
             'code'  => 'test-code',
-            'type'  => 'percent',
+            'type'  => 'percentage',
             'value' => '50', // <-- %50.
         ]);
 

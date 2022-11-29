@@ -15,12 +15,12 @@ interface CouponContract
     /**
      * @var string
      */
-    public const TYPE_SUBTRACT = 'subtract';
+    public const TYPE_SUBTRACTION = 'subtraction';
 
     /**
      * @var string
      */
-    public const TYPE_PERCENT = 'percent';
+    public const TYPE_PERCENTAGE = 'percentage';
 
     /**
      * @var string

@@ -17,9 +17,9 @@ trait CalculatesCosts
     public function calcByType(float $ofValue): float
     {
         return match ($this->{static::$bindable->getTypeColumn()}) {
-            $this::TYPE_SUBTRACT => $this->subtract($ofValue),
-            $this::TYPE_PERCENT  => $this->percentage($ofValue),
-            $this::TYPE_FIXED    => $this->fixedPrice(),
+            $this::TYPE_SUBTRACTION => $this->subtract($ofValue),
+            $this::TYPE_PERCENTAGE  => $this->percentage($ofValue),
+            $this::TYPE_FIXED       => $this->fixedPrice(),
             default => throw new InvalidCouponTypeException,
         };
     }

@@ -457,7 +457,7 @@ class CouponsTest extends TestCase
 
         Coupon::create([
             'code'  => $code,
-            'type'  => 'percent',
+            'type'  => 'percentage',
             'value' => '50',
         ]);
 
