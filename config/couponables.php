@@ -49,7 +49,7 @@ return [
     /*
     | Rounding precision if you use calculations.
     |
-    | Default: 3
+    | Default: 2
     */
 
     'round' => 2,

@@ -103,6 +103,8 @@ If something's going wrong, methods `verifyCoupon` and `redeemCoupon` will throw
 ```php
 CouponExpiredException      // Coupon is expired (`expires_at` column).
 InvalidCouponException      // Coupon is not found in the database.
+InvalidCouponTypeException  // Wrong coupon type found in the database (`type` column).
+InvalidCouponValueException // Wrong coupon value passed from the database (`value` column).
 NotAllowedToRedeemException // Coupon is assigned to the specific model (`redeemer` morphs).
 OverLimitException          // Coupon is over the limit for the specific model (`limit` column).
 OverQuantityException       // Coupon is exhausted (`quantity` column).
@@ -148,6 +150,25 @@ This method references the model assigned to redeem the coupon:
 public function redeemer(): ?Model;
 ```
 
+### Calculations
+
+```php
+$coupon = Coupon::create([
+    'code'  => 'my-generated-coupon-code-to-use',
+    'type'  => CouponContract::TYPE_PERCENTAGE, // 'percentage'
+    'value' => '10', // <-- %10
+]);
+
+$coupon->calc(value: 300); // 270.00
+```
+
+The package supports three types of item cost calculations:
+- `subtraction` - subtracts the given value from the value defined in the coupon model;
+- `percentage` - subtracts the given value by the percentage defined in the coupon model;
+- `fixed` - completely ignores the given value and takes the coupon model value instead.
+
+Note: you can find constants for coupon types in the [`CouponContract`](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Models/Contracts/CouponContract.php)
+
 ### Listeners
 If you go event-driven, you can handle package events:
 - [CouponVerified](https://github.com/michael-rubel/laravel-couponables/blob/main/src/Events/CouponVerified.php)
@@ -163,15 +184,15 @@ If you go event-driven, you can handle package events:
 ### Generators
 #### Seeding records with random codes
 ```php
-app(CouponServiceContract::class)->generateCoupons(times: 10, length: 7);
+app(CouponServiceContract::class)->generateCoupons(times: 10, length: 7, [
+    // here you can pass coupon model attributes
+]);
 ```
-
-- Note: This will only fill the `code` column.
 
 #### Adding coupons to redeem only by specified model
 ```php
 app(CouponServiceContract::class)->generateCouponFor($redeemer, 'my-test-code', [
-  // here you can pass parameters from the list above
+  // here you can pass coupon model attributes
 ]);
 ```
 
