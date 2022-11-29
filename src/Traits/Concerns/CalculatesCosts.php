@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MichaelRubel\Couponables\Traits\Concerns;
 
 use MichaelRubel\Couponables\Exceptions\InvalidCouponTypeException;
+use MichaelRubel\Couponables\Exceptions\InvalidCouponValueException;
 
 trait CalculatesCosts
 {
@@ -15,48 +16,72 @@ trait CalculatesCosts
      *
      * @return float
      * @throws InvalidCouponTypeException
+     * @throws InvalidCouponValueException
      */
     public function calc(float $value): float
     {
-        return match ($this->{static::$bindable->getTypeColumn()}) {
-            static::TYPE_SUBTRACTION => $this->subtract($value),
-            static::TYPE_PERCENTAGE  => $this->percentage($value),
-            static::TYPE_FIXED       => $this->fixedPrice(),
+        $discount = (float) $this->{static::$bindable->getValueColumn()};
+
+        if ($this->lessOrEqualsZero($discount)) {
+            throw new InvalidCouponValueException;
+        }
+
+        $result = match ($this->{static::$bindable->getTypeColumn()}) {
+            static::TYPE_SUBTRACTION => $this->subtract($value, $discount),
+            static::TYPE_PERCENTAGE  => $this->percentage($value, $discount),
+            static::TYPE_FIXED       => $this->fixedPrice($discount),
             default => throw new InvalidCouponTypeException,
         };
+
+        return max(
+            round($result, config('couponables.round') ?? 2),
+            config('couponables.max') ?? 0
+        );
+    }
+
+    /**
+     * @param  float  $value
+     * @return bool
+     */
+    private function lessOrEqualsZero(float $value): bool
+    {
+        return $value <= 0;
     }
 
     /**
      * Apply the "Subtraction" calculation strategy.
      *
      * @param  float  $cost
+     * @param  float  $discount
      *
      * @return float
      */
-    private function subtract(float $cost): float
+    private function subtract(float $cost, float $discount): float
     {
-        return $cost - $this->{static::$bindable->getValueColumn()};
+        return $cost - $discount;
     }
 
     /**
      * Apply the "Percentage" calculation strategy.
      *
      * @param  float  $value
+     * @param  float  $discount
      *
      * @return float
      */
-    private function percentage(float $value): float
+    private function percentage(float $value, float $discount): float
     {
-        return ($this->{static::$bindable->getValueColumn()} / 100) * $value;
+        return (1.0 - ($discount / 100)) * $value;
     }
 
     /**
      * Apply the "Fixed Price" calculation strategy.
      *
+     * @param  float  $discount
      * @return float
      */
-    private function fixedPrice(): float
+    private function fixedPrice(float $discount): float
     {
-        return (float) $this->{static::$bindable->getValueColumn()};
+        return $discount;
     }
 }

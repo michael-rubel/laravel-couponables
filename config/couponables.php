@@ -46,4 +46,20 @@ return [
 
     'service' => \MichaelRubel\Couponables\Services\CouponService::class,
 
+    /*
+    | Rounding precision if you use calculations.
+    |
+    | Default: 3
+    */
+
+    'round' => 2,
+
+    /*
+    | Maximum allowed value to be returned by the calculations.
+    |
+    | Default: 0
+    */
+
+    'max' => 0,
+
 ];
