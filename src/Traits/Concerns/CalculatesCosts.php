@@ -9,12 +9,14 @@ use MichaelRubel\Couponables\Exceptions\InvalidCouponTypeException;
 trait CalculatesCosts
 {
     /**
+     * Calculate output value based on the coupon type.
+     *
      * @param  float  $ofValue
      *
      * @return float
      * @throws InvalidCouponTypeException
      */
-    public function calcByType(float $ofValue): float
+    public function calc(float $ofValue): float
     {
         return match ($this->{static::$bindable->getTypeColumn()}) {
             $this::TYPE_SUBTRACTION => $this->subtract($ofValue),
@@ -25,6 +27,8 @@ trait CalculatesCosts
     }
 
     /**
+     * Apply the "Subtraction" calculation strategy.
+     *
      * @param  float  $cost
      *
      * @return float
@@ -35,6 +39,8 @@ trait CalculatesCosts
     }
 
     /**
+     * Apply the "Percentage" calculation strategy.
+     *
      * @param  float  $of
      *
      * @return float
@@ -45,6 +51,8 @@ trait CalculatesCosts
     }
 
     /**
+     * Apply the "Fixed Price" calculation strategy.
+     *
      * @return float
      */
     private function fixedPrice(): float
