@@ -2,6 +2,7 @@
 
 namespace MichaelRubel\Couponables\Tests;
 
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
@@ -605,5 +606,29 @@ class CouponsTest extends TestCase
         $coupon = new Couponable(['redeemed_at' => '2022-11-28 09:10:45']);
 
         $this->assertEquals('2022-11-28 09:10:45', $coupon->redeemed_at);
+    }
+
+    /** @test */
+    public function testCanGetCouponablesFromCouponModel()
+    {
+        Carbon::setTestNow();
+
+        $coupon = Coupon::create(['code' => 'test']);
+
+        $this->user->redeemCoupon('test');
+
+        $this->assertSame(now()->toDateTimeString(), $coupon->couponables()->first()->redeemed_at);
+    }
+
+    /** @test */
+    public function testCanGetCouponFromPivotModel()
+    {
+        Coupon::create(['code' => 'test']);
+
+        $coupon = $this->user->redeemCoupon('test');
+
+        $pivot = $coupon->couponables()->first();
+
+        $this->assertEquals($coupon, $pivot->coupon()->first());
     }
 }
