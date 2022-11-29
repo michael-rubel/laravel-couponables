@@ -9,9 +9,6 @@
         "text": "php://stderr",
         "github": true
     },
-//     "logs": {
-//         "text": "infection.log"
-//     },
     "mutators": {
         "@default": true
     }
