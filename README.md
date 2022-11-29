@@ -159,7 +159,7 @@ $coupon = Coupon::create([
     'value' => '10', // <-- %10
 ]);
 
-$coupon->calc(value: 300); // 270.00
+$coupon->calc(using: 300); // 270.00
 ```
 
 The package supports three types of item cost calculations:

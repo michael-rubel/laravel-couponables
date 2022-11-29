@@ -12,13 +12,13 @@ trait CalculatesCosts
     /**
      * Calculate the output value based on the coupon type.
      *
-     * @param  float  $value
+     * @param  float  $using
      *
      * @return float
      * @throws InvalidCouponTypeException
      * @throws InvalidCouponValueException
      */
-    public function calc(float $value): float
+    public function calc(float $using): float
     {
         $discount = (float) $this->{static::$bindable->getValueColumn()};
 
@@ -27,8 +27,8 @@ trait CalculatesCosts
         }
 
         $result = match ($this->{static::$bindable->getTypeColumn()}) {
-            static::TYPE_SUBTRACTION => $this->subtract($value, $discount),
-            static::TYPE_PERCENTAGE  => $this->percentage($value, $discount),
+            static::TYPE_SUBTRACTION => $this->subtract($using, $discount),
+            static::TYPE_PERCENTAGE  => $this->percentage($using, $discount),
             static::TYPE_FIXED       => $this->fixedPrice($discount),
             default => throw new InvalidCouponTypeException,
         };

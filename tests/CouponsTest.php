@@ -483,7 +483,7 @@ class CouponsTest extends TestCase
             $coupon = $this->user->redeemCoupon($code);
             $this->assertSame('business-coupon', $coupon->code);
 
-            $newPrice = $coupon->calc(value: 150);
+            $newPrice = $coupon->calc(using: 150);
             $this->assertSame(75.0, $newPrice);
         }
     }
