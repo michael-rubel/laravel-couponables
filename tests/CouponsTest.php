@@ -192,8 +192,6 @@ class CouponsTest extends TestCase
         ]);
 
         $this->user->redeemCoupon('alien-coupon');
-
-        Event::assertDispatched(NotAllowedToRedeem::class);
     }
 
     /** @test */
@@ -636,8 +634,6 @@ class CouponsTest extends TestCase
             );
 
         $this->user->redeemCoupon('test-code');
-
-        Event::assertDispatched(FailedToRedeemCoupon::class);
     }
 
     /** @test */

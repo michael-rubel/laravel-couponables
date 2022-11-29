@@ -10,6 +10,11 @@
         "github": true
     },
     "mutators": {
-        "@default": true
+        "@default": true,
+        "MethodCallRemoval": {
+            "ignore": [
+                "MichaelRubel\\Couponables\\CouponableServiceProvider::packageRegistered::50"
+            ]
+        }
     }
 }
