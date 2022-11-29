@@ -9,7 +9,7 @@ use MichaelRubel\Couponables\Exceptions\InvalidCouponTypeException;
 trait CalculatesCosts
 {
     /**
-     * Calculate output value based on the coupon type.
+     * Calculate the output value based on the coupon type.
      *
      * @param  float  $value
      *
