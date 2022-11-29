@@ -64,9 +64,9 @@ class Coupon extends Model implements CouponContract
      */
     public function isExpired(): bool
     {
-        $column = static::$bindable->getExpiresAtColumn();
+        $expires_at = $this->{static::$bindable->getExpiresAtColumn()};
 
-        return now()->gte($this->{$column});
+        return $expires_at && now()->gte($expires_at);
     }
 
     /**

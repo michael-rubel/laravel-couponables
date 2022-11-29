@@ -46,16 +46,6 @@ class BasicOperationsTest extends TestCase
     }
 
     /** @test */
-    public function testIsNotExpired()
-    {
-        $coupon = Coupon::create([
-            'code' => 'not-expired-coupon',
-        ]);
-
-        $this->assertTrue($coupon->isNotExpired());
-    }
-
-    /** @test */
     public function testIsExpired()
     {
         $coupon = Coupon::create([
@@ -64,6 +54,21 @@ class BasicOperationsTest extends TestCase
         ]);
 
         $this->assertTrue($coupon->isExpired());
+    }
+
+    /** @test */
+    public function testIsNotExpired()
+    {
+        $coupon = Coupon::create([
+            'code' => 'not-expired-coupon',
+        ]);
+        $this->assertTrue($coupon->isNotExpired());
+
+        $coupon = Coupon::create([
+            'code' => 'not-expired-coupon2',
+            'expires_at' => now()->addDay(),
+        ]);
+        $this->assertTrue($coupon->isNotExpired());
     }
 
     /** @test */
