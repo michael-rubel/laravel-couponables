@@ -182,7 +182,7 @@ Traits [DefinesColumns](https://github.com/michael-rubel/laravel-couponables/blo
 
 Example method binding in your ServiceProvider:
 ```php
-bind(CouponContract::class)->method('getCodeColumn', fn () => 'coupon')
+bind(CouponContract::class)->method('getCodeColumn', fn () => 'coupon');
 // This method returns the `coupon` column name instead of `code` from now.
 ```
 
@@ -198,11 +198,11 @@ CouponService::macro('getCouponUsing', function (string $column, string $value) 
         ->first();
 });
 
-call(CouponService::class)->getCouponUsing('type', 'macro')
+call(CouponService::class)->getCouponUsing('type', 'macro');
 ```
 
 ## Contributing
-If you see any ways we can improve the package, PRs are welcomed. But remember to write tests for your use cases.
+If you see any ways we can improve the package, PRs are welcome. But remember to write tests for your use cases.
 
 ## Testing
 ```bash
