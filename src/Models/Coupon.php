@@ -10,14 +10,16 @@ use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 use MichaelRubel\Couponables\Models\Traits\DefinesColumnChecks;
 use MichaelRubel\Couponables\Models\Traits\DefinesColumns;
 use MichaelRubel\Couponables\Models\Traits\DefinesModelRelations;
+use MichaelRubel\Couponables\Traits\Concerns\CalculatesCosts;
 use MichaelRubel\EnhancedContainer\Core\CallProxy;
 
 class Coupon extends Model implements CouponContract
 {
-    use HasFactory,
-        DefinesColumns,
-        DefinesColumnChecks,
-        DefinesModelRelations;
+    use HasFactory;
+    use DefinesColumns;
+    use DefinesColumnChecks;
+    use DefinesModelRelations;
+    use CalculatesCosts;
 
     /**
      * The attributes that aren't mass assignable.
@@ -34,6 +36,7 @@ class Coupon extends Model implements CouponContract
     protected $casts = [
         'code'     => 'string',
         'type'     => 'string',
+        'value'    => 'string',
         'data'     => 'collection',
         'quantity' => 'integer',
         'limit'    => 'integer',

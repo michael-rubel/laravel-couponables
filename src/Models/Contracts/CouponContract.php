@@ -7,6 +7,27 @@ namespace MichaelRubel\Couponables\Models\Contracts;
 interface CouponContract
 {
     /*
+    | Coupon type definitions.
+    |
+    | These keys are used to determine the calculation strategy.
+    */
+
+    /**
+     * @var string
+     */
+    public const TYPE_SUBTRACT = 'subtract';
+
+    /**
+     * @var string
+     */
+    public const TYPE_PERCENT = 'percent';
+
+    /**
+     * @var string
+     */
+    public const TYPE_FIXED = 'fixed';
+
+    /*
     | Column definitions.
     |
     | For package's internal purposes.
