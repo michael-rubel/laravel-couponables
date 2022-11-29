@@ -28,7 +28,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, intl, fileinfo, sodium
-          coverage: xdebug
+          coverage: pcov
 
       - name: Setup problem matchers
         run: |
