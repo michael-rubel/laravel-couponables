@@ -16,13 +16,15 @@ trait GeneratesCoupons
      *
      * @param  int  $times
      * @param  int  $length
+     * @param  array  $attributes
      *
      * @return Collection
      */
-    public function generateCoupons(int $times = 5, int $length = 7): Collection
+    public function generateCoupons(int $times = 5, int $length = 7, array $attributes = []): Collection
     {
         return Collection::times($times, fn () => $this->model->create([
             $this->model->getCodeColumn() => Str::random($length),
+            ...$attributes,
         ]));
     }
 
@@ -37,14 +39,11 @@ trait GeneratesCoupons
      */
     public function generateCouponFor(Model $redeemer, string $code, array $attributes = []): CouponContract
     {
-        $fields = collect([
+        return $this->model->create([
             $this->model->getCodeColumn()         => $code,
             $this->model->getRedeemerTypeColumn() => $redeemer->getMorphClass(),
             $this->model->getRedeemerIdColumn()   => $redeemer->id,
+            ...$attributes,
         ]);
-
-        return $this->model->create(
-            $fields->merge($attributes)->toArray()
-        );
     }
 }
