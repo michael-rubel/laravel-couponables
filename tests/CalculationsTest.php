@@ -16,7 +16,7 @@ class CalculationsTest extends TestCase
             'value' => '250', // <-- Amount to subtract.
         ]);
 
-        $newPrice = $coupon->calc(ofValue: 500);
+        $newPrice = $coupon->calc(value: 500);
         // 500.00 - 250.00 = 250.00
 
         $this->assertSame(250.00, $newPrice);
@@ -31,7 +31,7 @@ class CalculationsTest extends TestCase
             'value' => '50', // <-- %50.
         ]);
 
-        $newPrice = $coupon->calc(ofValue: 25002.30);
+        $newPrice = $coupon->calc(value: 25002.30);
         // 25002.30 = Item cost.
 
         $this->assertSame(12501.15, $newPrice);
@@ -46,7 +46,7 @@ class CalculationsTest extends TestCase
             'value' => '25000', // <-- Fixed price for the item.
         ]);
 
-        $newPrice = $coupon->calc(ofValue: 500000);
+        $newPrice = $coupon->calc(value: 500000);
         // We're ignoring the item cost in this case ^.
 
         $this->assertSame(25000.00, $newPrice);
@@ -63,6 +63,6 @@ class CalculationsTest extends TestCase
             'value' => '25',
         ]);
 
-        $coupon->calc(ofValue: 500000);
+        $coupon->calc(value: 500000);
     }
 }

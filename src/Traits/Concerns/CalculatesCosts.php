@@ -11,16 +11,16 @@ trait CalculatesCosts
     /**
      * Calculate output value based on the coupon type.
      *
-     * @param  float  $ofValue
+     * @param  float  $value
      *
      * @return float
      * @throws InvalidCouponTypeException
      */
-    public function calc(float $ofValue): float
+    public function calc(float $value): float
     {
         return match ($this->{static::$bindable->getTypeColumn()}) {
-            $this::TYPE_SUBTRACTION => $this->subtract($ofValue),
-            $this::TYPE_PERCENTAGE  => $this->percentage($ofValue),
+            $this::TYPE_SUBTRACTION => $this->subtract($value),
+            $this::TYPE_PERCENTAGE  => $this->percentage($value),
             $this::TYPE_FIXED       => $this->fixedPrice(),
             default => throw new InvalidCouponTypeException,
         };
@@ -41,13 +41,13 @@ trait CalculatesCosts
     /**
      * Apply the "Percentage" calculation strategy.
      *
-     * @param  float  $of
+     * @param  float  $value
      *
      * @return float
      */
-    private function percentage(float $of): float
+    private function percentage(float $value): float
     {
-        return ($this->{static::$bindable->getValueColumn()} / 100) * $of;
+        return ($this->{static::$bindable->getValueColumn()} / 100) * $value;
     }
 
     /**
