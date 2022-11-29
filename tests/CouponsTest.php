@@ -21,6 +21,7 @@ use MichaelRubel\Couponables\Exceptions\OverLimitException;
 use MichaelRubel\Couponables\Exceptions\OverQuantityException;
 use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 use MichaelRubel\Couponables\Models\Coupon;
+use MichaelRubel\Couponables\Models\Couponable;
 use MichaelRubel\Couponables\Services\Contracts\CouponServiceContract;
 use MichaelRubel\Couponables\Tests\Stubs\Models\Course;
 use MichaelRubel\Couponables\Tests\Stubs\Models\FakeCoupon;
@@ -191,6 +192,21 @@ class CouponsTest extends TestCase
         ]);
 
         $this->user->redeemCoupon('alien-coupon');
+    }
+
+    /** @test */
+    public function testEventFiredWhenCouponAssignedToAnotherModel()
+    {
+        Coupon::create([
+            'code'          => 'alien-coupon',
+            'redeemer_type' => $this->user::class,
+            'redeemer_id'   => 100,
+        ]);
+
+        try {
+            $this->user->redeemCoupon('alien-coupon');
+        } catch (NotAllowedToRedeemException) {
+        }
 
         Event::assertDispatched(NotAllowedToRedeem::class);
     }
@@ -256,6 +272,22 @@ class CouponsTest extends TestCase
     }
 
     /** @test */
+    public function testEventFiredWhenCouponIsExpired()
+    {
+        Coupon::create([
+            'code'       => 'expired-coupon',
+            'expires_at' => now()->subMonth(),
+        ]);
+
+        try {
+            $this->user->redeemCoupon('expired-coupon');
+        } catch (CouponExpiredException) {
+        }
+
+        Event::assertDispatched(CouponExpired::class);
+    }
+
+    /** @test */
     public function testCouponIsDisposable()
     {
         $this->expectException(OverLimitException::class);
@@ -273,6 +305,24 @@ class CouponsTest extends TestCase
         ]);
 
         $this->user->redeemCoupon('disposable-coupon');
+
+        Event::assertDispatched(CouponIsOverLimit::class);
+    }
+
+    /** @test */
+    public function testEventFiredWhenCouponIsOverLimit()
+    {
+        Coupon::create([
+            'code'  => 'disposable-coupon',
+            'limit' => 1,
+        ]);
+
+        $this->user->redeemCoupon('disposable-coupon');
+
+        try {
+            $this->user->redeemCoupon('disposable-coupon');
+        } catch (OverLimitException) {
+        }
 
         Event::assertDispatched(CouponIsOverLimit::class);
     }
@@ -314,6 +364,12 @@ class CouponsTest extends TestCase
     }
 
     /** @test */
+    public function testIsOverLimitWhenNoCouponsAvailable()
+    {
+        $this->assertFalse($this->user->isCouponOverLimit('limited-coupon'));
+    }
+
+    /** @test */
     public function testCouponIsOverQuantity()
     {
         $this->expectException(OverQuantityException::class);
@@ -332,6 +388,24 @@ class CouponsTest extends TestCase
         ]);
 
         $this->user->redeemCoupon('quantity-coupon');
+
+        Event::assertDispatched(CouponIsOverQuantity::class);
+    }
+
+    /** @test */
+    public function testEventFiredWhenCouponIsOverQuantity()
+    {
+        Coupon::create([
+            'code'     => 'quantity-coupon',
+            'quantity' => 1,
+        ]);
+
+        $this->user->redeemCoupon('quantity-coupon');
+
+        try {
+            $this->user->redeemCoupon('quantity-coupon');
+        } catch (OverQuantityException) {
+        }
 
         Event::assertDispatched(CouponIsOverQuantity::class);
     }
@@ -449,11 +523,23 @@ class CouponsTest extends TestCase
     {
         $this->be($this->user);
 
-        $null = $this->user->redeemCouponOr(null);
+        $null = $this->user->redeemCouponOr(null, function () {
+            return null;
+        });
         $this->assertNull($null);
 
-        $non_existing = $this->user->redeemCouponOr('non-existing');
+        $non_existing = $this->user->redeemCouponOr('non-existing', function () {
+            return null;
+        });
         $this->assertNull($non_existing);
+    }
+
+    /** @test */
+    public function testThrowsExceptionWhenNoClosurePassedToRedeemCouponOr()
+    {
+        $this->expectException(InvalidCouponException::class);
+
+        $this->user->redeemCouponOr(null);
     }
 
     /** @test */
@@ -479,11 +565,23 @@ class CouponsTest extends TestCase
     {
         $this->be($this->user);
 
-        $null = $this->user->verifyCouponOr(null);
+        $null = $this->user->verifyCouponOr(null, function () {
+            return null;
+        });
         $this->assertNull($null);
 
-        $non_existing = $this->user->verifyCouponOr('non-existing');
+        $non_existing = $this->user->verifyCouponOr('non-existing', function () {
+            return null;
+        });
         $this->assertNull($non_existing);
+    }
+
+    /** @test */
+    public function testThrowsExceptionWhenNoClosurePassedToVerifyCouponOr()
+    {
+        $this->expectException(InvalidCouponException::class);
+
+        $this->user->verifyCouponOr(null);
     }
 
     /** @test */
@@ -536,6 +634,25 @@ class CouponsTest extends TestCase
             );
 
         $this->user->redeemCoupon('test-code');
+    }
+
+    /** @test */
+    public function testEventFiredWhenFailedToRedeem()
+    {
+        Coupon::create([
+            'code' => 'test-code',
+        ]);
+
+        bind(User::class)
+            ->method()
+            ->coupons(
+                fn () => throw new \Exception('test exception')
+            );
+
+        try {
+            $this->user->redeemCoupon('test-code');
+        } catch (\Exception) {
+        }
 
         Event::assertDispatched(FailedToRedeemCoupon::class);
     }
@@ -544,10 +661,14 @@ class CouponsTest extends TestCase
     public function testCanGenerateCoupons()
     {
         $service = app(CouponServiceContract::class);
-        $coupons = $service->generateCoupons(10);
+        $coupons = $service->generateCoupons();
 
         $this->assertInstanceOf(Collection::class, $coupons);
-        $this->assertDatabaseCount('coupons', 10);
+        $this->assertDatabaseCount('coupons', 5);
+
+        Coupon::all()->each(function ($coupon) {
+            $this->assertTrue(strlen($coupon->code) === 7);
+        });
     }
 
     /** @test */
@@ -588,5 +709,56 @@ class CouponsTest extends TestCase
             $this->assertInstanceOf($this->user::class, $coupon->redeemer);
             $this->assertSame($this->user->id, $coupon->redeemer->id);
         });
+    }
+
+    /** @test */
+    public function testCanCreateModelInstanceManually()
+    {
+        $coupon = new Coupon(['code' => 'test']);
+
+        $this->assertSame('test', $coupon->code);
+    }
+
+    /** @test */
+    public function testCanCreateMorphModelInstanceManually()
+    {
+        $coupon = new Couponable(['redeemed_at' => '2022-11-28 09:10:45']);
+
+        $this->assertEquals('2022-11-28 09:10:45', $coupon->redeemed_at);
+    }
+
+    /** @test */
+    public function testCanGetCouponablesFromCouponModel()
+    {
+        $coupon = Coupon::create(['code' => 'test']);
+
+        $redeemed = $this->user->redeemCoupon('test');
+
+        $this->assertInstanceOf(Couponable::class, $coupon->couponables()->first());
+        $this->assertEquals($redeemed->couponables()->first(), $coupon->couponables()->first());
+    }
+
+    /** @test */
+    public function testCanGetCouponFromPivotModel()
+    {
+        Coupon::create(['code' => 'test']);
+
+        $coupon = $this->user->redeemCoupon('test');
+
+        $pivot = $coupon->couponables()->first();
+
+        $this->assertEquals($coupon, $pivot->coupon()->first());
+    }
+
+    /** @test */
+    public function testPivotAttributesAreCorrect()
+    {
+        $this->assertSame([
+            0 => 'redeemed_type',
+            1 => 'redeemed_id',
+            2 => 'redeemed_at',
+            3 => 'created_at',
+            4 => 'updated_at',
+        ], $this->user->coupons()->getPivotColumns());
     }
 }

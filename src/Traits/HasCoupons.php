@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MichaelRubel\Couponables\Traits;
 
+use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Str;
@@ -11,6 +12,7 @@ use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 use MichaelRubel\Couponables\Services\Contracts\CouponServiceContract;
 use MichaelRubel\EnhancedContainer\Call;
 use MichaelRubel\EnhancedContainer\Core\CallProxy;
+use Throwable;
 
 trait HasCoupons
 {
@@ -29,7 +31,7 @@ trait HasCoupons
      *
      * @return void
      */
-    public function initializeHasCoupons(): void
+    protected function initializeHasCoupons(): void
     {
         static::$bindable        = call($this);
         static::$bindableService = call(CouponServiceContract::class);
@@ -117,30 +119,34 @@ trait HasCoupons
      * Verify the coupon or do something else on fail.
      *
      * @param  string|null  $code
-     * @param  mixed|null  $callback
+     * @param  Closure|null  $callback
      *
      * @return mixed
      */
-    public function verifyCouponOr(?string $code, mixed $callback = null): mixed
+    public function verifyCouponOr(?string $code, Closure $callback = null): mixed
     {
-        return rescue(function () use ($code) {
+        try {
             return static::$bindable->verifyCoupon($code);
-        }, $callback, report: false);
+        } catch (Throwable $e) {
+            return $callback instanceof Closure ? $callback($code) : throw $e;
+        }
     }
 
     /**
      * Redeem the coupon or do something else on fail.
      *
      * @param  string|null  $code
-     * @param  mixed|null  $callback
+     * @param  Closure|null  $callback
      *
      * @return mixed
      */
-    public function redeemCouponOr(?string $code, mixed $callback = null): mixed
+    public function redeemCouponOr(?string $code, Closure $callback = null): mixed
     {
-        return rescue(function () use ($code) {
+        try {
             return static::$bindable->redeemCoupon($code, null);
-        }, $callback, report: false);
+        } catch (Throwable $e) {
+            return $callback instanceof Closure ? $callback($code) : throw $e;
+        }
     }
 
     /**

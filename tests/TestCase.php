@@ -33,13 +33,11 @@ class TestCase extends Orchestra
      *
      * @return void
      */
-    protected function defineDatabaseMigrations()
+    protected function defineDatabaseMigrations(): void
     {
         $this->artisan('vendor:publish', [
             '--tag' => 'couponables-migrations',
         ])->run();
-
-        $this->artisan('migrate')->run();
 
         $this->loadMigrationsFrom(__DIR__ . '/Stubs/Migrations');
 

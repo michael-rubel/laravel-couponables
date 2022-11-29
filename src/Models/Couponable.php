@@ -11,8 +11,7 @@ use MichaelRubel\Couponables\Models\Traits\DefinesPivotRelations;
 
 class Couponable extends MorphPivot implements CouponPivotContract
 {
-    use DefinesPivotColumns,
-        DefinesPivotRelations;
+    use DefinesPivotColumns, DefinesPivotRelations;
 
     /**
      * @param  array  $attributes

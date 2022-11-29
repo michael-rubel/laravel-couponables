@@ -24,6 +24,7 @@ use MichaelRubel\Couponables\Services\Contracts\CouponServiceContract;
 use MichaelRubel\Couponables\Traits\Concerns\GeneratesCoupons;
 use MichaelRubel\EnhancedContainer\Call;
 use MichaelRubel\EnhancedContainer\Core\CallProxy;
+use Throwable;
 
 class CouponService implements CouponServiceContract
 {
@@ -126,7 +127,7 @@ class CouponService implements CouponServiceContract
      */
     public function applyCoupon(CouponContract $coupon, Model $redeemer, ?Model $redeemed): CouponContract
     {
-        rescue(function () use ($coupon, $redeemer, $redeemed) {
+        try {
             call($redeemer)->coupons()->attach($coupon, [
                 $this->pivot->getRedeemedTypeColumn() => $redeemed?->getMorphClass(),
                 $this->pivot->getRedeemedIdColumn()   => $redeemed?->id,
@@ -137,11 +138,11 @@ class CouponService implements CouponServiceContract
             if (! is_null($coupon->{$this->model->getQuantityColumn()})) {
                 $coupon->decrement($this->model->getQuantityColumn());
             }
-        }, function ($e) use ($coupon, $redeemer, $redeemed) {
+        } catch (Throwable $e) {
             event(new FailedToRedeemCoupon($coupon, $redeemer, $redeemed));
 
             throw $e;
-        });
+        }
 
         event(new CouponRedeemed($coupon, $redeemer));
 
