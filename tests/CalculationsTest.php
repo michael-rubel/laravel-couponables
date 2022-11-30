@@ -231,4 +231,18 @@ class CalculationsTest extends TestCase
         $newPrice = $coupon->calc(using: 10);
         $this->assertSame(1.00, $newPrice);
     }
+
+    /** @test */
+    public function testCalcUsesSubtractionWhenNull()
+    {
+        $coupon = Coupon::create([
+            'code'  => 'test-code',
+            'type'  => null,
+            'value' => '5',
+        ]);
+
+        $this->assertNull($coupon->type);
+        $newPrice = $coupon->calc(using: 15);
+        $this->assertSame(10.00, $newPrice);
+    }
 }

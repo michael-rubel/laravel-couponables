@@ -27,10 +27,10 @@ trait CalculatesCosts
         }
 
         $result = match ($this->{static::$bindable->getTypeColumn()}) {
-            static::TYPE_SUBTRACTION => static::$bindable->subtract($using, $discount),
-            static::TYPE_PERCENTAGE  => static::$bindable->percentage($using, $discount),
-            static::TYPE_FIXED       => static::$bindable->fixedPrice($discount),
-            default => throw new InvalidCouponTypeException,
+            static::TYPE_SUBTRACTION, null => static::$bindable->subtract($using, $discount),
+            static::TYPE_PERCENTAGE        => static::$bindable->percentage($using, $discount),
+            static::TYPE_FIXED             => static::$bindable->fixedPrice($discount),
+            default                        => throw new InvalidCouponTypeException,
         };
 
         $rounded = round($result,
