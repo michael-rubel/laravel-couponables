@@ -54,7 +54,7 @@ php artisan make:coupon YourCouponCode
 Optionally, you can pass the next arguments:
 ```php
 '--value'         // The 'value' to perform calculations based on the coupon provided
-'--type'          // The 'type' to point out calculation strategy
+'--type'          // The 'type' to point out the calculation strategy
 '--limit'         // Limit how many times the coupon can be applied by the model
 '--quantity'      // Limit how many coupons are available overall (this value will decrement)
 '--expires_at'    // Set expiration time for the coupon
@@ -68,10 +68,14 @@ You can as well add coupons simply using model:
 ```php
 Coupon::create([
     'code'  => '...',
+    'type'  => '...'
     'value' => '...',
     ...
 ]);
 ```
+
+- **Note:** `type` and `value` columns are used for cost calculations (this is optional).\
+If the `type` column is `null`, the `subtraction` strategy will be chosen.
 
 ---
 
