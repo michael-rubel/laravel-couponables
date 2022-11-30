@@ -29,6 +29,9 @@ parameters:
         - '#Unable to resolve the template type TValue in call to function collect#'
         - '#Parameter \#1 \$related of method Illuminate\\Database\\Eloquent\\Model\:\:hasMany\(\) expects string, mixed given\.#'
         - '#Unable to resolve the template type TTimesValue in call to method static method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:times\(\)#'
+        - '#Method MichaelRubel\\Couponables\\Models\\Coupon\:\:calc\(\) should return float but returns mixed\.#'
+        - '#Parameter \$precision of function round expects int, mixed given\.#'
+        - '#Parameter \$mode of function round expects 1\|2\|3\|4, mixed given\.#'
 
     level: max
 

@@ -456,12 +456,9 @@ class CouponsTest extends TestCase
         $code = 'business-coupon';
 
         Coupon::create([
-            'code' => $code,
-            'data' => [
-                'run-jobs' => [
-                    'queue-job-name' => true,
-                ],
-            ],
+            'code'  => $code,
+            'type'  => 'percentage',
+            'value' => '50',
         ]);
 
         $this->be($this->user);
@@ -469,14 +466,7 @@ class CouponsTest extends TestCase
         if (! $this->user->isCouponAlreadyUsed($code)) {
             // show different validation errors
             try {
-                $coupon = $this->user->verifyCoupon($code);
-
-                // apply some action if coupon isn't fail
-                // for example get the data from the coupon to identify
-                // which queue job or action to run after coupon is redeemed.
-                if ($coupon->isRedeemedBy($this->user)) {
-                    $this->assertArrayHasKey('queue-job-name', $coupon->data->get('run-jobs'));
-                }
+                $this->user->verifyCoupon($code);
             } catch (InvalidCouponException $e) {
                 $this->assertStringContainsString('The coupon is invalid', $e->getMessage());
             } catch (CouponExpiredException $e) {
@@ -491,8 +481,10 @@ class CouponsTest extends TestCase
 
             // If all set.
             $coupon = $this->user->redeemCoupon($code);
-
             $this->assertSame('business-coupon', $coupon->code);
+
+            $newPrice = $coupon->calc(using: 150);
+            $this->assertSame(75.0, $newPrice);
         }
     }
 
