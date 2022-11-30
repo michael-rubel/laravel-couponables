@@ -142,6 +142,7 @@ class CalculationsTest extends TestCase
             'type'  => 'percentage',
             'value' => '122',
         ]);
+
         config()->offsetUnset('couponables.max');
         $newPrice = $coupon->calc(using: 200);
         $this->assertSame(0.00, $newPrice);
@@ -167,6 +168,7 @@ class CalculationsTest extends TestCase
             'type'  => 'percentage',
             'value' => '0.7123123',
         ]);
+
         config()->offsetUnset('couponables.round');
         $newPrice = $coupon->calc(using: 200);
         $this->assertSame('198.58', (string) $newPrice);
@@ -198,5 +200,35 @@ class CalculationsTest extends TestCase
         config()->set('couponables.round', 7);
         $newPrice = $coupon->calc(using: 200);
         $this->assertSame(198.5753754, $newPrice);
+    }
+
+    /** @test */
+    public function testCalcRoundMode()
+    {
+        $coupon = Coupon::create([
+            'code'  => 'test-code',
+            'type'  => 'fixed',
+            'value' => '1.5',
+        ]);
+
+        config()->set('couponables.round', 0);
+        config()->offsetUnset('couponables.round_mode');
+        $newPrice = $coupon->calc(using: 10);
+        $this->assertSame(2.00, $newPrice);
+
+        config()->set('couponables.round', 0);
+        config()->set('couponables.round_mode', PHP_ROUND_HALF_EVEN);
+        $newPrice = $coupon->calc(using: 10);
+        $this->assertSame(2.00, $newPrice);
+
+        config()->set('couponables.round', 0);
+        config()->set('couponables.round_mode', PHP_ROUND_HALF_DOWN);
+        $newPrice = $coupon->calc(using: 10);
+        $this->assertSame(1.00, $newPrice);
+
+        config()->set('couponables.round', 0);
+        config()->set('couponables.round_mode', PHP_ROUND_HALF_ODD);
+        $newPrice = $coupon->calc(using: 10);
+        $this->assertSame(1.00, $newPrice);
     }
 }

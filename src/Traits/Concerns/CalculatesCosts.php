@@ -33,10 +33,12 @@ trait CalculatesCosts
             default => throw new InvalidCouponTypeException,
         };
 
-        return max(
-            round($result, config('couponables.round') ?? 2),
-            config('couponables.max') ?? 0
+        $rounded = round($result,
+            precision: config('couponables.round') ?? 2,
+            mode: config('couponables.round_mode') ?? PHP_ROUND_HALF_UP
         );
+
+        return max($rounded, config('couponables.max') ?? 0);
     }
 
     /**
