@@ -237,7 +237,6 @@ class CalculationsTest extends TestCase
     {
         $coupon = Coupon::create([
             'code'  => 'test-code',
-            'type'  => null,
             'value' => '5',
         ]);
 
