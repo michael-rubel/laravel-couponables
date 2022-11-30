@@ -22,14 +22,14 @@ trait CalculatesCosts
     {
         $discount = (float) $this->{static::$bindable->getValueColumn()};
 
-        if ($this->lessOrEqualsZero($discount)) {
+        if ($this->lessOrEqualZero($discount)) {
             throw new InvalidCouponValueException;
         }
 
         $result = match ($this->{static::$bindable->getTypeColumn()}) {
-            static::TYPE_SUBTRACTION => $this->subtract($using, $discount),
-            static::TYPE_PERCENTAGE  => $this->percentage($using, $discount),
-            static::TYPE_FIXED       => $this->fixedPrice($discount),
+            static::TYPE_SUBTRACTION => static::$bindable->subtract($using, $discount),
+            static::TYPE_PERCENTAGE  => static::$bindable->percentage($using, $discount),
+            static::TYPE_FIXED       => static::$bindable->fixedPrice($discount),
             default => throw new InvalidCouponTypeException,
         };
 
@@ -42,15 +42,6 @@ trait CalculatesCosts
     }
 
     /**
-     * @param  float  $value
-     * @return bool
-     */
-    private function lessOrEqualsZero(float $value): bool
-    {
-        return $value <= 0;
-    }
-
-    /**
      * Apply the "Subtraction" calculation strategy.
      *
      * @param  float  $cost
@@ -58,7 +49,7 @@ trait CalculatesCosts
      *
      * @return float
      */
-    private function subtract(float $cost, float $discount): float
+    public function subtract(float $cost, float $discount): float
     {
         return $cost - $discount;
     }
@@ -71,7 +62,7 @@ trait CalculatesCosts
      *
      * @return float
      */
-    private function percentage(float $value, float $discount): float
+    public function percentage(float $value, float $discount): float
     {
         return (1.0 - ($discount / 100)) * $value;
     }
@@ -82,8 +73,17 @@ trait CalculatesCosts
      * @param  float  $discount
      * @return float
      */
-    private function fixedPrice(float $discount): float
+    public function fixedPrice(float $discount): float
     {
         return $discount;
+    }
+
+    /**
+     * @param  float  $value
+     * @return bool
+     */
+    private function lessOrEqualZero(float $value): bool
+    {
+        return $value <= 0;
     }
 }
