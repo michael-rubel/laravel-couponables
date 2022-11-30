@@ -25,6 +25,7 @@ trait GeneratesCoupons
         return Collection::times($times, function () use ($length, $attributes) {
             $fields = collect([
                 $this->model->getCodeColumn() => Str::random($length),
+                $this->model->getTypeColumn() => CouponContract::TYPE_PERCENTAGE,
             ]);
 
             $this->model->create($fields->merge($attributes)->toArray());
@@ -44,6 +45,7 @@ trait GeneratesCoupons
     {
         $fields = collect([
             $this->model->getCodeColumn()         => $code,
+            $this->model->getTypeColumn()         => CouponContract::TYPE_PERCENTAGE,
             $this->model->getRedeemerTypeColumn() => $redeemer->getMorphClass(),
             $this->model->getRedeemerIdColumn()   => $redeemer->id,
         ]);
