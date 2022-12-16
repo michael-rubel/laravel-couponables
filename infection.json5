@@ -15,6 +15,11 @@
             "ignore": [
                 "MichaelRubel\\Couponables\\CouponableServiceProvider::packageRegistered::50"
             ]
+        },
+        "Throw_": {
+            "ignore": [
+                "MichaelRubel\\Couponables\\Services\\CouponService::applyCoupon"
+            ]
         }
     }
 }
