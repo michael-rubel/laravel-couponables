@@ -2,11 +2,11 @@
 
 # Laravel Couponables
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/michael-rubel/laravel-couponables.svg?style=flat-square&logo=packagist)](https://packagist.org/packages/michael-rubel/laravel-couponables)
-[![Total Downloads](https://img.shields.io/packagist/dt/michael-rubel/laravel-couponables.svg?style=flat-square&logo=packagist)](https://packagist.org/packages/michael-rubel/laravel-couponables)
+[![Tests](https://img.shields.io/github/actions/workflow/status/michael-rubel/laravel-couponables/run-tests.yml?branch=main&style=flat-square&label=tests&logo=github)](https://github.com/michael-rubel/laravel-couponables/actions)
 [![Code Quality](https://img.shields.io/scrutinizer/quality/g/michael-rubel/laravel-couponables.svg?style=flat-square&logo=scrutinizer)](https://scrutinizer-ci.com/g/michael-rubel/laravel-couponables/?branch=main)
 [![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/michael-rubel/laravel-couponables.svg?style=flat-square&logo=scrutinizer)](https://scrutinizer-ci.com/g/michael-rubel/laravel-couponables/?branch=main)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/michael-rubel/laravel-couponables/run-tests/main?style=flat-square&label=tests&logo=github)](https://github.com/michael-rubel/laravel-couponables/actions)
-[![PHPStan](https://img.shields.io/github/workflow/status/michael-rubel/laravel-couponables/phpstan/main?style=flat-square&label=larastan&logo=laravel)](https://github.com/michael-rubel/laravel-couponables/actions)
+[![Infection](https://img.shields.io/github/actions/workflow/status/michael-rubel/laravel-couponables/infection.yml?branch=main&style=flat-square&label=infection&logo=php)](https://github.com/michael-rubel/laravel-couponables/actions)
+[![Larastan](https://img.shields.io/github/actions/workflow/status/michael-rubel/laravel-couponables/phpstan.yml?branch=main&style=flat-square&label=larastan&logo=laravel)](https://github.com/michael-rubel/laravel-couponables/actions)
 
 This package provides polymorphic coupon functionality for your Laravel application.
 
