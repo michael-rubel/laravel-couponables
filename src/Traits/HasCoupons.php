@@ -33,8 +33,11 @@ trait HasCoupons
      */
     protected function initializeHasCoupons(): void
     {
-        static::$bindable        = call($this);
-        static::$bindableService = call(CouponServiceContract::class);
+        static::$bindable = call($this);
+
+        if (app()->bound(CouponServiceContract::class)) {
+            static::$bindableService = call(CouponServiceContract::class);
+        }
     }
 
     /**
