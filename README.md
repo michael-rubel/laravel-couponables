@@ -10,7 +10,7 @@
 
 This package provides polymorphic coupon functionality for your Laravel application.
 
-The package requires PHP `^8.x` and Laravel `^8.71` or `^9.0`.
+The package requires `PHP 8` or higher and `Laravel 9` or higher.
 
 ---
 
