@@ -131,7 +131,7 @@ trait HasCoupons
         try {
             return static::$bindable->verifyCoupon($code);
         } catch (Throwable $e) {
-            return $callback instanceof Closure ? $callback($code) : throw $e;
+            return $callback instanceof Closure ? $callback($code, $e) : throw $e;
         }
     }
 
@@ -148,7 +148,7 @@ trait HasCoupons
         try {
             return static::$bindable->redeemCoupon($code, null);
         } catch (Throwable $e) {
-            return $callback instanceof Closure ? $callback($code) : throw $e;
+            return $callback instanceof Closure ? $callback($code, $e) : throw $e;
         }
     }
 
