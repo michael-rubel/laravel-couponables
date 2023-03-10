@@ -1,4 +1,4 @@
-![Laravel Couponables](https://user-images.githubusercontent.com/37669560/224354714-2bc028f7-5161-4306-9fa9-c50b3dcdfa5a.png)
+![Laravel Couponables](https://user-images.githubusercontent.com/37669560/224356302-5c021249-2290-4fb4-8bbe-99fbef4b5df5.png)
 
 # Laravel Couponables
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/michael-rubel/laravel-couponables.svg?style=flat-square&logo=packagist)](https://packagist.org/packages/michael-rubel/laravel-couponables)
