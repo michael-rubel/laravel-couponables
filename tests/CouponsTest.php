@@ -566,6 +566,11 @@ class CouponsTest extends TestCase
             return null;
         });
         $this->assertNull($non_existing);
+
+        $isCouponInvalid = $this->user->verifyCouponOr(null, function ($code, $exception) {
+            return $exception instanceof InvalidCouponException;
+        });
+        $this->assertTrue($isCouponInvalid);
     }
 
     /** @test */

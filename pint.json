@@ -8,6 +8,7 @@
     "binary_operator_spaces": {
       "default": "single_space",
       "operators": {"=>": null, "=": "align_single_space_minimal"}
-    }
+    },
+    "no_superfluous_phpdoc_tags": false
   }
 }

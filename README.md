@@ -117,14 +117,14 @@ CouponException             // Generic exception for all cases.
 
 If you want to bypass the exception and do something else:
 ```php
-$redeemer->verifyCouponOr($code, function ($exception) {
-    // Your action with $exception!
+$redeemer->verifyCouponOr($code, function ($code, $exception) {
+    // Your action with $code or $exception!
 });
 ```
 
 ```php
-$redeemer->redeemCouponOr($code, function ($exception) {
-    // Your action with $exception!
+$redeemer->redeemCouponOr($code, function ($code, $exception) {
+    // Your action with $code or $exception!
 });
 ```
 
