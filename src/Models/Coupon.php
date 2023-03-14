@@ -34,12 +34,12 @@ class Coupon extends Model implements CouponContract
      * @var array<string, string>
      */
     protected $casts = [
-        'code'     => 'string',
-        'type'     => 'string',
-        'value'    => 'string',
-        'data'     => 'collection',
-        'quantity' => 'integer',
-        'limit'    => 'integer',
+        'code'       => 'string',
+        'type'       => 'string',
+        'value'      => 'string',
+        'data'       => 'collection',
+        'quantity'   => 'integer',
+        'limit'      => 'integer',
         'expires_at' => 'datetime',
     ];
 
