@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use MichaelRubel\Couponables\Events\CouponDisabled;
 use MichaelRubel\Couponables\Events\CouponExpired;
 use MichaelRubel\Couponables\Events\CouponIsOverLimit;
 use MichaelRubel\Couponables\Events\CouponIsOverQuantity;
@@ -13,6 +14,7 @@ use MichaelRubel\Couponables\Events\CouponRedeemed;
 use MichaelRubel\Couponables\Events\CouponVerified;
 use MichaelRubel\Couponables\Events\FailedToRedeemCoupon;
 use MichaelRubel\Couponables\Events\NotAllowedToRedeem;
+use MichaelRubel\Couponables\Exceptions\CouponDisabledException;
 use MichaelRubel\Couponables\Exceptions\CouponException;
 use MichaelRubel\Couponables\Exceptions\CouponExpiredException;
 use MichaelRubel\Couponables\Exceptions\InvalidCouponException;
@@ -257,6 +259,36 @@ class CouponsTest extends TestCase
     }
 
     /** @test */
+    public function testCouponIsDisabled()
+    {
+        $this->expectException(CouponDisabledException::class);
+
+        Coupon::create([
+            'code'       => 'disabled-coupon',
+            'is_enabled' => false,
+        ]);
+
+        $this->user->redeemCoupon('disabled-coupon');
+    }
+
+    /** @test */
+    public function testEventFiredWhenCouponIsDisabled()
+    {
+        Coupon::create([
+            'code'       => 'disabled-coupon',
+            'is_enabled' => false,
+        ]);
+
+        try {
+            $this->user->redeemCoupon('disabled-coupon');
+        } catch (CouponDisabledException $e) {
+            $this->assertSame('The coupon is disabled.', $e->getMessage());
+        }
+
+        Event::assertDispatched(CouponDisabled::class);
+    }
+
+    /** @test */
     public function testCouponIsExpired()
     {
         $this->expectException(CouponExpiredException::class);
@@ -469,6 +501,8 @@ class CouponsTest extends TestCase
                 $this->user->verifyCoupon($code);
             } catch (InvalidCouponException $e) {
                 $this->assertStringContainsString('The coupon is invalid', $e->getMessage());
+            } catch (CouponDisabledException $e) {
+                $this->assertStringContainsString('The coupon is disabled', $e->getMessage());
             } catch (CouponExpiredException $e) {
                 $this->assertStringContainsString('The coupon is expired', $e->getMessage());
             } catch (OverQuantityException $e) {

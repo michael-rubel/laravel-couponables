@@ -153,4 +153,16 @@ class BindabilityTest extends TestCase
         bind(CouponContract::class)->method()->getLimitColumn(fn () => 'test');
         $this->assertFalse($coupon->isDisposable());
     }
+
+    /** @test */
+    public function testSimulateNoIsEnabledColumnIsPresent()
+    {
+        bind(CouponContract::class)->method('getIsEnabledColumn', fn () => null);
+
+        $this->assertNull(call(CouponContract::class)->getIsEnabledColumn());
+
+        $coupon = Coupon::create(['code' => 'coupon-with-no-is-enabled-column']);
+
+        $this->assertTrue($coupon->isEnabled());
+    }
 }
