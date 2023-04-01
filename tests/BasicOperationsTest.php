@@ -63,6 +63,7 @@ class BasicOperationsTest extends TestCase
             'code' => 'not-disabled-coupon2',
             'is_enabled' => true,
         ]);
+
         $this->assertTrue($coupon->isEnabled());
     }
 

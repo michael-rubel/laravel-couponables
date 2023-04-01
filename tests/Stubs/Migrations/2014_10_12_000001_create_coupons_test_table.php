@@ -16,12 +16,12 @@ return new class extends Migration
         Schema::create('coupons_test', function (Blueprint $table) {
             $table->id();
             $table->string('code', 64)->unique();
+            $table->boolean('is_enabled')->default(true);
             $table->json('data_test')->nullable();
             $table->unsignedInteger('quantity')->nullable();
             $table->unsignedInteger('limit')->default(1);
             $table->nullableMorphs('redeemer');
             $table->timestamp('expires_at')->nullable();
-            $table->boolean('is_enabled')->default(true);
             $table->timestamps();
         });
     }
