@@ -14,8 +14,8 @@ use MichaelRubel\Couponables\Events\CouponRedeemed;
 use MichaelRubel\Couponables\Events\CouponVerified;
 use MichaelRubel\Couponables\Events\FailedToRedeemCoupon;
 use MichaelRubel\Couponables\Events\NotAllowedToRedeem;
-use MichaelRubel\Couponables\Exceptions\CouponException;
 use MichaelRubel\Couponables\Exceptions\CouponDisabledException;
+use MichaelRubel\Couponables\Exceptions\CouponException;
 use MichaelRubel\Couponables\Exceptions\CouponExpiredException;
 use MichaelRubel\Couponables\Exceptions\InvalidCouponException;
 use MichaelRubel\Couponables\Exceptions\NotAllowedToRedeemException;
@@ -269,21 +269,21 @@ class CouponsTest extends TestCase
         ]);
 
         $this->user->redeemCoupon('disabled-coupon');
-
-        Event::assertDispatched(CouponDisabled::class);
     }
 
     /** @test */
     public function testEventFiredWhenCouponIsDisabled()
     {
-        $this->expectException(CouponDisabledException::class);
-
         Coupon::create([
             'code'       => 'disabled-coupon',
             'is_enabled' => false,
         ]);
 
-        $this->user->redeemCoupon('disabled-coupon');
+        try {
+            $this->user->redeemCoupon('disabled-coupon');
+        } catch (CouponDisabledException $e) {
+            $this->assertSame('The coupon is disabled.', $e->getMessage());
+        }
 
         Event::assertDispatched(CouponDisabled::class);
     }
