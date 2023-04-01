@@ -90,7 +90,7 @@ class Coupon extends Model implements CouponContract
      */
     public function isEnabled(): bool
     {
-        return $this->is_enable;
+        return $this->{static::$bindable->getIsEnabledColumn()};
     }
 
     /**

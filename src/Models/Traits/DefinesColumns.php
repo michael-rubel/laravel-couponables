@@ -57,6 +57,14 @@ trait DefinesColumns
     /**
      * @return string
      */
+    public function getIsEnabledColumn(): string
+    {
+        return 'is_enabled';
+    }
+
+    /**
+     * @return string
+     */
     public function getRedeemerTypeColumn(): string
     {
         return 'redeemer_type';
