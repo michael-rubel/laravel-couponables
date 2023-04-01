@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedInteger('limit')->default(1);
             $table->nullableMorphs('redeemer');
             $table->timestamp('expires_at')->nullable();
+            $table->boolean('is_enabled')->default(true);
             $table->timestamps();
         });
     }

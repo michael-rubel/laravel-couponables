@@ -46,6 +46,27 @@ class BasicOperationsTest extends TestCase
     }
 
     /** @test */
+    public function testIsDisabled()
+    {
+        $coupon = Coupon::create([
+            'code'       => 'disabled-coupon',
+            'is_enabled' => false,
+        ]);
+
+        $this->assertTrue($coupon->isDisabled());
+    }
+
+    /** @test */
+    public function testIsNotDisabled()
+    {
+        $coupon = Coupon::create([
+            'code' => 'not-disabled-coupon2',
+            'is_enabled' => true,
+        ]);
+        $this->assertTrue($coupon->isNotDisabled());
+    }
+
+    /** @test */
     public function testIsExpired()
     {
         $coupon = Coupon::create([
