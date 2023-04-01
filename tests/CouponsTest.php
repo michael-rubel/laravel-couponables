@@ -501,6 +501,8 @@ class CouponsTest extends TestCase
                 $this->user->verifyCoupon($code);
             } catch (InvalidCouponException $e) {
                 $this->assertStringContainsString('The coupon is invalid', $e->getMessage());
+            } catch (CouponDisabledException $e) {
+                $this->assertStringContainsString('The coupon is disabled', $e->getMessage());
             } catch (CouponExpiredException $e) {
                 $this->assertStringContainsString('The coupon is expired', $e->getMessage());
             } catch (OverQuantityException $e) {
