@@ -41,7 +41,7 @@ class Coupon extends Model implements CouponContract
         'quantity'   => 'integer',
         'limit'      => 'integer',
         'expires_at' => 'datetime',
-        'is_enable'  => 'boolean',
+        'is_enabled' => 'boolean',
     ];
 
     /**
