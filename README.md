@@ -105,7 +105,7 @@ $course->redeemBy($redeemer, $code);
 If something's going wrong, methods `verifyCoupon` and `redeemCoupon` will throw an exception:
 
 ```php
-CouponDisabledException     // Coupon is disabled (`is_enable` column).
+CouponDisabledException     // Coupon is disabled (`is_enabled` column).
 CouponExpiredException      // Coupon is expired (`expires_at` column).
 InvalidCouponException      // Coupon is not found in the database.
 InvalidCouponTypeException  // Wrong coupon type found in the database (`type` column).

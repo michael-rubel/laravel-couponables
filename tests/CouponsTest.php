@@ -263,7 +263,7 @@ class CouponsTest extends TestCase
 
         Coupon::create([
             'code'       => 'disabled-coupon',
-            'is_enable'  => false,
+            'is_enabled' => false,
         ]);
 
         $this->user->redeemCoupon('disabled-coupon');
@@ -278,7 +278,7 @@ class CouponsTest extends TestCase
 
         Coupon::create([
             'code'       => 'disabled-coupon',
-            'is_enable'  => false,
+            'is_enabled' => false,
         ]);
 
         $this->user->redeemCoupon('disabled-coupon');
