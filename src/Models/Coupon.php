@@ -41,6 +41,7 @@ class Coupon extends Model implements CouponContract
         'quantity'   => 'integer',
         'limit'      => 'integer',
         'expires_at' => 'datetime',
+        'is_enable'  => 'boolean',
     ];
 
     /**
@@ -80,6 +81,26 @@ class Coupon extends Model implements CouponContract
     public function isNotExpired(): bool
     {
         return ! static::$bindable->isExpired();
+    }
+
+    /**
+     * Check if code is enabled.
+     *
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return $this->is_enable;
+    }
+
+    /**
+     * Check if code is disabled.
+     *
+     * @return bool
+     */
+    public function isDisabled(): bool
+    {
+        return ! static::$bindable->isEnabled();
     }
 
     /**

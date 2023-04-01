@@ -6,6 +6,7 @@ namespace MichaelRubel\Couponables\Services;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Traits\Macroable;
+use MichaelRubel\Couponables\Events\CouponDisabled;
 use MichaelRubel\Couponables\Events\CouponExpired;
 use MichaelRubel\Couponables\Events\CouponIsOverLimit;
 use MichaelRubel\Couponables\Events\CouponIsOverQuantity;
@@ -13,6 +14,7 @@ use MichaelRubel\Couponables\Events\CouponRedeemed;
 use MichaelRubel\Couponables\Events\CouponVerified;
 use MichaelRubel\Couponables\Events\FailedToRedeemCoupon;
 use MichaelRubel\Couponables\Events\NotAllowedToRedeem;
+use MichaelRubel\Couponables\Exceptions\CouponDisabledException;
 use MichaelRubel\Couponables\Exceptions\CouponExpiredException;
 use MichaelRubel\Couponables\Exceptions\InvalidCouponException;
 use MichaelRubel\Couponables\Exceptions\NotAllowedToRedeemException;
@@ -78,6 +80,7 @@ class CouponService implements CouponServiceContract
      * @throws OverQuantityException
      * @throws OverLimitException
      * @throws NotAllowedToRedeemException
+     * @throws CouponDisabledException
      * @throws CouponExpiredException
      * @throws InvalidCouponException
      */
@@ -86,6 +89,12 @@ class CouponService implements CouponServiceContract
         $coupon = call($this->getCoupon($code) ?? throw new InvalidCouponException);
 
         $instance = $coupon->getInternal(Call::INSTANCE);
+
+        if ($coupon->isDisabled()) {
+            event(new CouponDisabled($instance, $redeemer));
+
+            throw new CouponDisabledException;
+        }
 
         if ($coupon->isExpired()) {
             event(new CouponExpired($instance, $redeemer));

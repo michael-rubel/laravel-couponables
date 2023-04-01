@@ -257,6 +257,36 @@ class CouponsTest extends TestCase
     }
 
     /** @test */
+    public function testCouponIsDisabled()
+    {
+        $this->expectException(CouponDisabledException::class);
+
+        Coupon::create([
+            'code'       => 'disabled-coupon',
+            'is_enable'  => false,
+        ]);
+
+        $this->user->redeemCoupon('disabled-coupon');
+
+        Event::assertDispatched(CouponDisabled::class);
+    }
+
+    /** @test */
+    public function testEventFiredWhenCouponIsDisabled()
+    {
+        $this->expectException(CouponDisabledException::class);
+
+        Coupon::create([
+            'code'       => 'disabled-coupon',
+            'is_enable'  => false,
+        ]);
+
+        $this->user->redeemCoupon('disabled-coupon');
+
+        Event::assertDispatched(CouponDisabled::class);
+    }
+
+    /** @test */
     public function testCouponIsExpired()
     {
         $this->expectException(CouponExpiredException::class);
