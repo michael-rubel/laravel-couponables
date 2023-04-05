@@ -184,11 +184,11 @@ class Coupon extends Model implements CouponContract
     {
         return with(static::$bindable, function ($coupon) use ($redeemer) {
             if ($coupon->isMorphColumnsFilled()) {
-                if(empty($coupon->redeemer)){
+                if (empty($coupon->redeemer)) {
                     return false;
                 }
 
-                if(! $coupon->redeemer->is($redeemer)){
+                if (! $coupon->redeemer->is($redeemer)) {
                     return false;
                 }
             }
