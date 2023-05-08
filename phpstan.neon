@@ -33,7 +33,7 @@ parameters:
         - '#Parameter \$precision of function round expects int, mixed given\.#'
         - '#Parameter \$mode of function round expects 1\|2\|3\|4, mixed given\.#'
         - '#Return type of call to function transform contains unresolvable type.#'
-        - '#Cannot call method get(.*)Column\(\) on Illuminate\\Database\\Eloquent\\Model\|null\.#'
+        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:get(.*)Column\(\)\.#'
         - '#Access to an undefined property MichaelRubel\\EnhancedContainer\\Core\\CallProxy(.*)#'
 
     level: max
