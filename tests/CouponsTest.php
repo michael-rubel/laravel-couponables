@@ -163,6 +163,24 @@ class CouponsTest extends TestCase
     }
 
     /** @test */
+    public function testCanVerifyCouponWhenSpecificModelAssigned()
+    {
+        Coupon::create([
+            'code'          => 'redeemer-coupon',
+            'redeemer_type' => $this->user::class,
+            'redeemer_id'   => $this->user->id,
+        ]);
+
+        $redeemer = User::find($this->user->id);
+
+        $redeemed = $redeemer->verifyCoupon('redeemer-coupon');
+
+        $this->assertInstanceOf(Coupon::class, $redeemed);
+
+        Event::assertDispatched(CouponVerified::class);
+    }
+
+    /** @test */
     public function testCanRedeemCouponWhenSpecificModelAssigned()
     {
         Coupon::create([
