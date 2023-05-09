@@ -102,6 +102,12 @@ class CouponService implements CouponServiceContract
             throw new CouponExpiredException;
         }
 
+        if (! $coupon->isAllowedToRedeemBy($redeemer)) {
+            event(new NotAllowedToRedeem($instance, $redeemer));
+
+            throw new NotAllowedToRedeemException;
+        }
+
         if ($coupon->isOverQuantity()) {
             event(new CouponIsOverQuantity($instance, $redeemer));
 
@@ -112,12 +118,6 @@ class CouponService implements CouponServiceContract
             event(new CouponIsOverLimit($instance, $redeemer));
 
             throw new OverLimitException;
-        }
-
-        if (! $coupon->isAllowedToRedeemBy($redeemer)) {
-            event(new NotAllowedToRedeem($instance, $redeemer));
-
-            throw new NotAllowedToRedeemException;
         }
 
         event(new CouponVerified($instance, $redeemer));
