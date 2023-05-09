@@ -181,6 +181,28 @@ class CouponsTest extends TestCase
     }
 
     /** @test */
+    public function testVerifyCouponThrowsExceptionWhenSpecificModelAssignedAndLimitIsSet()
+    {
+        $this->expectException(NotAllowedToRedeemException::class);
+
+        Coupon::create([
+            'code'          => 'redeemer-coupon',
+            'redeemer_type' => $this->user::class,
+            'redeemer_id'   => $this->user->id,
+            'limit'         => 1,
+            'quantity'      => 1,
+        ]);
+
+        $redeemer = User::create([
+            'name'     => 'Tester2',
+            'email'    => 'test2@example.com',
+            'password' => Hash::make('pass2'),
+        ]);
+
+        $redeemer->verifyCoupon('redeemer-coupon');
+    }
+
+    /** @test */
     public function testCanRedeemCouponWhenSpecificModelAssigned()
     {
         Coupon::create([
