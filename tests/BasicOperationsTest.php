@@ -26,9 +26,7 @@ class BasicOperationsTest extends TestCase
     /** @test */
     public function testCouponIsGenerated()
     {
-        Coupon::create([
-            'code' => 'test-code',
-        ]);
+        Coupon::factory()->create();
 
         $this->assertDatabaseHas(
             'coupons',
@@ -48,7 +46,7 @@ class BasicOperationsTest extends TestCase
     /** @test */
     public function testIsDisabled()
     {
-        $coupon = Coupon::create([
+        $coupon = Coupon::factory()->create([
             'code'       => 'disabled-coupon',
             'is_enabled' => false,
         ]);
@@ -59,7 +57,7 @@ class BasicOperationsTest extends TestCase
     /** @test */
     public function testIsEnabled()
     {
-        $coupon = Coupon::create([
+        $coupon = Coupon::factory()->create([
             'code' => 'not-disabled-coupon2',
             'is_enabled' => true,
         ]);
@@ -70,7 +68,7 @@ class BasicOperationsTest extends TestCase
     /** @test */
     public function testIsExpired()
     {
-        $coupon = Coupon::create([
+        $coupon = Coupon::factory()->create([
             'code'       => 'expired-coupon',
             'expires_at' => now()->subMonth(),
         ]);
@@ -81,12 +79,12 @@ class BasicOperationsTest extends TestCase
     /** @test */
     public function testIsNotExpired()
     {
-        $coupon = Coupon::create([
+        $coupon = Coupon::factory()->create([
             'code' => 'not-expired-coupon',
         ]);
         $this->assertTrue($coupon->isNotExpired());
 
-        $coupon = Coupon::create([
+        $coupon = Coupon::factory()->create([
             'code' => 'not-expired-coupon2',
             'expires_at' => now()->addDay(),
         ]);
@@ -96,7 +94,7 @@ class BasicOperationsTest extends TestCase
     /** @test */
     public function testTypeColumnIsAccessible()
     {
-        $coupon = Coupon::create([
+        $coupon = Coupon::factory()->create([
             'code' => 'coupon',
             'type' => 'percent',
         ]);
@@ -110,7 +108,7 @@ class BasicOperationsTest extends TestCase
     /** @test */
     public function testValueColumnIsAccessible()
     {
-        $coupon = Coupon::create([
+        $coupon = Coupon::factory()->create([
             'code'  => 'coupon',
             'value' => '1000',
         ]);
@@ -124,7 +122,7 @@ class BasicOperationsTest extends TestCase
     /** @test */
     public function testCanGetCouponFromCouponable()
     {
-        $coupon = Coupon::create([
+        $coupon = Coupon::factory()->create([
             'code' => 'coupon',
         ]);
 

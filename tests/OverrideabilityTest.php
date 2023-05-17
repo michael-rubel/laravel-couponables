@@ -39,8 +39,7 @@ class OverrideabilityTest extends TestCase
             'couponables.model' => FakeCoupon::class,
         ]);
 
-        $coupon = FakeCoupon::create([
-            'code' => 'fake-coupon',
+        $coupon = FakeCoupon::factory()->create([
             'data_test' => [
                 'run-actions' => [
                     'queue-job' => true,
@@ -61,9 +60,7 @@ class OverrideabilityTest extends TestCase
 
         app()->register(CouponableServiceProvider::class, true);
 
-        $coupon = FakeCoupon::create([
-            'code' => 'fake-coupon',
-        ]);
+        $coupon = FakeCoupon::factory()->create();
 
         $redeemed_at = app(CouponPivotContract::class)->getRedeemedAtColumn();
         $now         = now();
@@ -80,8 +77,7 @@ class OverrideabilityTest extends TestCase
     /** @test */
     public function testCanOverrideConstructor()
     {
-        $coupon = FakeCoupon::create([
-            'code'          => 'fake-coupon',
+        $coupon = FakeCoupon::factory()->create([
             'redeemer_type' => User::class,
             'redeemer_id'   => 1,
         ]);

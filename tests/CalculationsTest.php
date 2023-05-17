@@ -11,7 +11,7 @@ class CalculationsTest extends TestCase
     /** @test */
     public function testCanCalcUsingSubtractionStrategy()
     {
-        $coupon = Coupon::create([
+        $coupon = Coupon::factory()->create([
             'code'  => 'test-code',
             'type'  => 'subtraction',
             'value' => '250', // <-- Amount to subtract.
@@ -26,7 +26,7 @@ class CalculationsTest extends TestCase
     /** @test */
     public function testCanCalcUsingPercentStrategy()
     {
-        $coupon = Coupon::create([
+        $coupon = Coupon::factory()->create([
             'code'  => 'test-code',
             'type'  => 'percentage',
             'value' => '10', // <-- %10.
@@ -40,7 +40,7 @@ class CalculationsTest extends TestCase
     /** @test */
     public function testCanCalcUsingFixedStrategy()
     {
-        $coupon = Coupon::create([
+        $coupon = Coupon::factory()->create([
             'code'  => 'test-code',
             'type'  => 'fixed',
             'value' => '25000', // <-- Fixed price for the item.
@@ -57,7 +57,7 @@ class CalculationsTest extends TestCase
     {
         $this->expectException(InvalidCouponTypeException::class);
 
-        $coupon = Coupon::create([
+        $coupon = Coupon::factory()->create([
             'code'  => 'test-code',
             'type'  => 'not-found',
             'value' => '25',
@@ -71,7 +71,7 @@ class CalculationsTest extends TestCase
     {
         $this->expectException(InvalidCouponValueException::class);
 
-        $coupon = Coupon::create([
+        $coupon = Coupon::factory()->create([
             'code'  => 'test-code',
             'type'  => 'percentage',
             'value' => '0',
@@ -85,7 +85,7 @@ class CalculationsTest extends TestCase
     {
         $this->expectException(InvalidCouponValueException::class);
 
-        $coupon = Coupon::create([
+        $coupon = Coupon::factory()->create([
             'code'  => 'test-code',
             'type'  => 'percentage',
             'value' => '-1000',
@@ -122,7 +122,7 @@ class CalculationsTest extends TestCase
         ];
 
         collect($iterations)->each(function ($result, $discount) {
-            $coupon = Coupon::create([
+            $coupon = Coupon::factory()->create([
                 'code'  => (string) ($discount + $result),
                 'type'  => 'percentage',
                 'value' => $discount,
@@ -137,7 +137,7 @@ class CalculationsTest extends TestCase
     /** @test */
     public function testCalcMaximumAllowedValue()
     {
-        $coupon = Coupon::create([
+        $coupon = Coupon::factory()->create([
             'code'  => 'test-code',
             'type'  => 'percentage',
             'value' => '122',
@@ -163,7 +163,7 @@ class CalculationsTest extends TestCase
     /** @test */
     public function testCalcMethodRoundsResult()
     {
-        $coupon = Coupon::create([
+        $coupon = Coupon::factory()->create([
             'code'  => 'test-code',
             'type'  => 'percentage',
             'value' => '0.7123123',
@@ -205,7 +205,7 @@ class CalculationsTest extends TestCase
     /** @test */
     public function testCalcRoundMode()
     {
-        $coupon = Coupon::create([
+        $coupon = Coupon::factory()->create([
             'code'  => 'test-code',
             'type'  => 'fixed',
             'value' => '1.5',
@@ -235,7 +235,7 @@ class CalculationsTest extends TestCase
     /** @test */
     public function testCalcUsesSubtractionWhenNull()
     {
-        $coupon = Coupon::create([
+        $coupon = Coupon::factory()->create([
             'code'  => 'test-code',
             'value' => '5',
         ]);
