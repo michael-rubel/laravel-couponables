@@ -17,7 +17,7 @@ class FailedToRedeemCoupon
      */
     public function __construct(
         public CouponContract $coupon,
-        public Model $redeemer,
+        public ?Model $redeemer = null,
         private ?Model $triedToRedeem = null
     ) {
     }

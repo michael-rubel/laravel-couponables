@@ -71,47 +71,71 @@ class CouponService implements CouponServiceContract
     }
 
     /**
-     * Verify if coupon is valid otherwise throw an exception.
+     * Perform the stateless checks on the coupon
+     * model. Redeemer is optional in this case.
      *
-     * @param  string|null  $code
-     * @param  Model  $redeemer
+     * @param  CouponContract  $coupon
+     * @param  Model|null  $redeemer
      *
      * @return CouponContract
-     * @throws OverQuantityException
-     * @throws OverLimitException
-     * @throws NotAllowedToRedeemException
-     * @throws CouponDisabledException
+     *
      * @throws CouponExpiredException
-     * @throws InvalidCouponException
+     * @throws OverQuantityException
+     * @throws CouponDisabledException
      */
-    public function verifyCoupon(?string $code, Model $redeemer): CouponContract
+    public function performBasicChecks(CouponContract $coupon, ?Model $redeemer = null): CouponContract
     {
-        $coupon = call($this->getCoupon($code) ?? throw new InvalidCouponException);
-
-        $instance = $coupon->getInternal(Call::INSTANCE);
-
         if ($coupon->isDisabled()) {
-            event(new CouponDisabled($instance, $redeemer));
+            event(new CouponDisabled($coupon, $redeemer));
 
             throw new CouponDisabledException;
         }
 
         if ($coupon->isExpired()) {
-            event(new CouponExpired($instance, $redeemer));
+            event(new CouponExpired($coupon, $redeemer));
 
             throw new CouponExpiredException;
         }
+
+        if ($coupon->isOverQuantity()) {
+            event(new CouponIsOverQuantity($coupon, $redeemer));
+
+            throw new OverQuantityException;
+        }
+
+        return $coupon;
+    }
+
+    /**
+     * Verify if coupon is valid otherwise throw an exception.
+     *
+     * @param  string|null  $code
+     * @param  Model|null  $redeemer
+     *
+     * @return CouponContract
+     * @throws CouponExpiredException
+     * @throws InvalidCouponException
+     * @throws NotAllowedToRedeemException
+     * @throws OverLimitException
+     * @throws OverQuantityException
+     * @throws CouponDisabledException
+     */
+    public function verifyCoupon(?string $code, ?Model $redeemer = null): CouponContract
+    {
+        $coupon = call($this->getCoupon($code) ?? throw new InvalidCouponException);
+
+        $instance = $coupon->getInternal(Call::INSTANCE);
+
+        /**
+         * @var CouponContract $coupon
+         */
+
+        $this->performBasicChecks($instance);
 
         if (! $coupon->isAllowedToRedeemBy($redeemer)) {
             event(new NotAllowedToRedeem($instance, $redeemer));
 
             throw new NotAllowedToRedeemException;
-        }
-
-        if ($coupon->isOverQuantity()) {
-            event(new CouponIsOverQuantity($instance, $redeemer));
-
-            throw new OverQuantityException;
         }
 
         if ($coupon->isOverLimit($redeemer, $code)) {
