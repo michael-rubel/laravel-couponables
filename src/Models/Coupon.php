@@ -223,7 +223,7 @@ class Coupon extends Model implements CouponContract
      *
      * @return Factory<Coupon>
      */
-    protected static function newFactory(): Factory
+    protected static function newFactory()
     {
         return CouponFactory::new();
     }
