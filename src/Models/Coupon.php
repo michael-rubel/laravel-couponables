@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace MichaelRubel\Couponables\Models;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use MichaelRubel\Couponables\Models\Contracts\CouponContract;
+use MichaelRubel\Couponables\Models\Factories\CouponFactory;
 use MichaelRubel\Couponables\Models\Traits\DefinesColumnChecks;
 use MichaelRubel\Couponables\Models\Traits\DefinesColumns;
 use MichaelRubel\Couponables\Models\Traits\DefinesModelRelations;
@@ -214,5 +216,15 @@ class Coupon extends Model implements CouponContract
 
             return $this;
         });
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return Factory<Coupon>
+     */
+    protected static function newFactory(): Factory
+    {
+        return CouponFactory::new();
     }
 }
