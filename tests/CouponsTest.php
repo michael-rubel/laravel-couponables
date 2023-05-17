@@ -55,9 +55,7 @@ class CouponsTest extends TestCase
     /** @test */
     public function testCanRedeemTheCoupon()
     {
-        Coupon::create([
-            'code' => 'test-code',
-        ]);
+        Coupon::factory()->create();
 
         $redeemed = $this->user->redeemCoupon('test-code');
 
@@ -73,7 +71,7 @@ class CouponsTest extends TestCase
     /** @test */
     public function testCanUseCouponByPassedModelInContextOfAnother()
     {
-        Coupon::create(['code' => 'test-code']);
+        Coupon::factory()->create();
 
         $course = new Course(['id' => 1]);
 
@@ -94,7 +92,7 @@ class CouponsTest extends TestCase
     /** @test */
     public function testCanUseWithRedeemedMethodChained()
     {
-        Coupon::create(['code' => 'test-code']);
+        Coupon::factory()->create();
 
         $course = new Course(['id' => 1]);
 
@@ -117,11 +115,9 @@ class CouponsTest extends TestCase
     /** @test */
     public function testIsThatCouponCodeAlreadyApplied()
     {
-        Coupon::create([
-            'code' => 'test-code',
-        ]);
+        Coupon::factory()->create();
 
-        Coupon::create([
+        Coupon::factory()->create([
             'code' => 'applied-code',
         ]);
 
@@ -141,11 +137,9 @@ class CouponsTest extends TestCase
     /** @test */
     public function testReturnsFalseIfCouponIsNotApplied()
     {
-        Coupon::create([
-            'code' => 'test-code',
-        ]);
+        Coupon::factory()->create();
 
-        Coupon::create([
+        Coupon::factory()->create([
             'code' => 'applied-code',
         ]);
 
@@ -165,7 +159,7 @@ class CouponsTest extends TestCase
     /** @test */
     public function testCanVerifyCouponWhenSpecificModelAssigned()
     {
-        Coupon::create([
+        Coupon::factory()->create([
             'code'          => 'redeemer-coupon',
             'redeemer_type' => $this->user::class,
             'redeemer_id'   => $this->user->id,
@@ -185,7 +179,7 @@ class CouponsTest extends TestCase
     {
         $this->expectException(NotAllowedToRedeemException::class);
 
-        Coupon::create([
+        Coupon::factory()->create([
             'code'          => 'redeemer-coupon',
             'redeemer_type' => $this->user::class,
             'redeemer_id'   => $this->user->id,
@@ -205,7 +199,7 @@ class CouponsTest extends TestCase
     /** @test */
     public function testCanRedeemCouponWhenSpecificModelAssigned()
     {
-        Coupon::create([
+        Coupon::factory()->create([
             'code'          => 'redeemer-coupon',
             'redeemer_type' => $this->user::class,
             'redeemer_id'   => $this->user->id,
@@ -227,7 +221,7 @@ class CouponsTest extends TestCase
     {
         $this->expectException(NotAllowedToRedeemException::class);
 
-        Coupon::create([
+        Coupon::factory()->create([
             'code'          => 'alien-coupon',
             'redeemer_type' => $this->user::class,
             'redeemer_id'   => 100,
@@ -239,7 +233,7 @@ class CouponsTest extends TestCase
     /** @test */
     public function testEventFiredWhenCouponAssignedToAnotherModel()
     {
-        Coupon::create([
+        Coupon::factory()->create([
             'code'          => 'alien-coupon',
             'redeemer_type' => $this->user::class,
             'redeemer_id'   => 100,
@@ -256,7 +250,7 @@ class CouponsTest extends TestCase
     /** @test */
     public function testCanRedeemCouponByTheModelWithoutMorphId()
     {
-        Coupon::create([
+        Coupon::factory()->create([
             'code'          => 'same-model-coupon',
             'redeemer_type' => $this->user::class,
         ]);
@@ -274,7 +268,7 @@ class CouponsTest extends TestCase
     {
         $this->expectException(NotAllowedToRedeemException::class);
 
-        Coupon::create([
+        Coupon::factory()->create([
             'code'          => 'another-model-coupon',
             'redeemer_type' => FakeCoupon::class,
         ]);
@@ -287,7 +281,7 @@ class CouponsTest extends TestCase
     /** @test */
     public function testCannotVerifyCouponWhenWrongModelAssigned()
     {
-        Coupon::create([
+        Coupon::factory()->create([
             'code'          => 'redeemer-coupon',
             'redeemer_type' => User::class,
             'redeemer_id'   => 7,
@@ -303,7 +297,7 @@ class CouponsTest extends TestCase
     {
         $this->expectException(CouponDisabledException::class);
 
-        Coupon::create([
+        Coupon::factory()->create([
             'code'       => 'disabled-coupon',
             'is_enabled' => false,
         ]);
@@ -314,7 +308,7 @@ class CouponsTest extends TestCase
     /** @test */
     public function testEventFiredWhenCouponIsDisabled()
     {
-        Coupon::create([
+        Coupon::factory()->create([
             'code'       => 'disabled-coupon',
             'is_enabled' => false,
         ]);
@@ -333,7 +327,7 @@ class CouponsTest extends TestCase
     {
         $this->expectException(CouponExpiredException::class);
 
-        Coupon::create([
+        Coupon::factory()->create([
             'code'       => 'expired-coupon',
             'expires_at' => now()->subMonth(),
         ]);
@@ -346,7 +340,7 @@ class CouponsTest extends TestCase
     /** @test */
     public function testEventFiredWhenCouponIsExpired()
     {
-        Coupon::create([
+        Coupon::factory()->create([
             'code'       => 'expired-coupon',
             'expires_at' => now()->subMonth(),
         ]);
@@ -364,7 +358,7 @@ class CouponsTest extends TestCase
     {
         $this->expectException(OverLimitException::class);
 
-        Coupon::create([
+        Coupon::factory()->create([
             'code'  => 'disposable-coupon',
             'limit' => 1,
         ]);
@@ -384,7 +378,7 @@ class CouponsTest extends TestCase
     /** @test */
     public function testEventFiredWhenCouponIsOverLimit()
     {
-        Coupon::create([
+        Coupon::factory()->create([
             'code'  => 'disposable-coupon',
             'limit' => 1,
         ]);
@@ -404,7 +398,7 @@ class CouponsTest extends TestCase
     {
         $this->expectException(OverLimitException::class);
 
-        Coupon::create([
+        Coupon::factory()->create([
             'code'  => 'limited-coupon',
             'limit' => 3,
         ]);
@@ -420,7 +414,7 @@ class CouponsTest extends TestCase
     /** @test */
     public function testIsOverLimitForModel()
     {
-        Coupon::create([
+        Coupon::factory()->create([
             'code'  => 'limited-coupon',
             'limit' => 3,
         ]);
@@ -446,7 +440,7 @@ class CouponsTest extends TestCase
     {
         $this->expectException(OverQuantityException::class);
 
-        Coupon::create([
+        Coupon::factory()->create([
             'code'     => 'quantity-coupon',
             'quantity' => 1,
         ]);
@@ -467,7 +461,7 @@ class CouponsTest extends TestCase
     /** @test */
     public function testEventFiredWhenCouponIsOverQuantity()
     {
-        Coupon::create([
+        Coupon::factory()->create([
             'code'     => 'quantity-coupon',
             'quantity' => 1,
         ]);
@@ -485,7 +479,7 @@ class CouponsTest extends TestCase
     /** @test */
     public function testCanUseDataAsCollection()
     {
-        $coupon = Coupon::create([
+        $coupon = Coupon::factory()->create([
             'code' => 'business-coupon',
             'data' => [
                 'run-actions' => [
@@ -512,7 +506,7 @@ class CouponsTest extends TestCase
     /** @test */
     public function testCanCheckIsRedeemedByModel()
     {
-        Coupon::create([
+        Coupon::factory()->create([
             'code' => 'redeemed-by-coupon',
         ]);
 
@@ -527,7 +521,7 @@ class CouponsTest extends TestCase
         // code from form request or livewire input
         $code = 'business-coupon';
 
-        Coupon::create([
+        Coupon::factory()->create([
             'code'  => $code,
             'type'  => 'percentage',
             'value' => '50',
@@ -567,7 +561,7 @@ class CouponsTest extends TestCase
     {
         $this->be($this->user);
 
-        Coupon::create([
+        Coupon::factory()->create([
             'code' => 'correct-coupon',
         ]);
 
@@ -613,7 +607,7 @@ class CouponsTest extends TestCase
     {
         $this->be($this->user);
 
-        Coupon::create([
+        Coupon::factory()->create([
             'code' => 'existing-coupon',
         ]);
 
@@ -660,7 +654,7 @@ class CouponsTest extends TestCase
     {
         $this->be($this->user);
 
-        Coupon::create([
+        Coupon::factory()->create([
             'code' => 'existing-coupon',
         ]);
 
@@ -694,9 +688,7 @@ class CouponsTest extends TestCase
     {
         $this->expectException(\Exception::class);
 
-        Coupon::create([
-            'code' => 'test-code',
-        ]);
+        Coupon::factory()->create();
 
         bind(User::class)
             ->method()
@@ -710,9 +702,7 @@ class CouponsTest extends TestCase
     /** @test */
     public function testEventFiredWhenFailedToRedeem()
     {
-        Coupon::create([
-            'code' => 'test-code',
-        ]);
+        Coupon::factory()->create();
 
         bind(User::class)
             ->method()
@@ -762,13 +752,13 @@ class CouponsTest extends TestCase
     /** @test */
     public function testCanRetrieveRedeemerUsingEagerLoading()
     {
-        Coupon::create([
+        Coupon::factory()->create([
             'code'          => 'redeemer-coupon',
             'redeemer_type' => $this->user::class,
             'redeemer_id'   => $this->user->id,
         ]);
 
-        Coupon::create([
+        Coupon::factory()->create([
             'code'          => 'redeemer-coupon2',
             'redeemer_type' => $this->user::class,
             'redeemer_id'   => $this->user->id,
@@ -801,7 +791,7 @@ class CouponsTest extends TestCase
     /** @test */
     public function testCanGetCouponablesFromCouponModel()
     {
-        $coupon = Coupon::create(['code' => 'test']);
+        $coupon = Coupon::factory()->create(['code' => 'test']);
 
         $redeemed = $this->user->redeemCoupon('test');
 
@@ -812,7 +802,7 @@ class CouponsTest extends TestCase
     /** @test */
     public function testCanGetCouponFromPivotModel()
     {
-        Coupon::create(['code' => 'test']);
+        Coupon::factory()->create(['code' => 'test']);
 
         $coupon = $this->user->redeemCoupon('test');
 

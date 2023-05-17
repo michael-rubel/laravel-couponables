@@ -15,7 +15,7 @@ class MacroabilityTest extends TestCase
     {
         parent::setUp();
 
-        Coupon::create([
+        Coupon::factory()->create([
             'code' => 'coupon',
             'type' => 'macro',
         ]);

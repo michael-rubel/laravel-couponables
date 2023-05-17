@@ -34,7 +34,7 @@ class BindabilityTest extends TestCase
             'password' => Hash::make('pass'),
         ]);
 
-        $this->coupon = Coupon::create([
+        $this->coupon = Coupon::factory()->create([
             'code'     => 'bound-coupon',
             'quantity' => 2,
             'limit'    => 3,
@@ -115,7 +115,7 @@ class BindabilityTest extends TestCase
     /** @test */
     public function testCanBindModelMethods()
     {
-        $coupon = Coupon::create([
+        $coupon = Coupon::factory()->create([
             'code'          => 'test-bind',
             'limit'         => 1,
             'redeemer_type' => $this->user::class,
@@ -161,7 +161,7 @@ class BindabilityTest extends TestCase
 
         $this->assertNull(call(CouponContract::class)->getIsEnabledColumn());
 
-        $coupon = Coupon::create(['code' => 'coupon-with-no-is-enabled-column']);
+        $coupon = Coupon::factory()->create(['code' => 'coupon-with-no-is-enabled-column']);
 
         $this->assertTrue($coupon->isEnabled());
     }
