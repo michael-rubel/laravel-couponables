@@ -12,7 +12,6 @@ use MichaelRubel\Couponables\Events\CouponIsOverLimit;
 use MichaelRubel\Couponables\Events\CouponIsOverQuantity;
 use MichaelRubel\Couponables\Events\CouponRedeemed;
 use MichaelRubel\Couponables\Events\CouponVerified;
-use MichaelRubel\Couponables\Events\FailedToRedeemCoupon;
 use MichaelRubel\Couponables\Events\NotAllowedToRedeem;
 use MichaelRubel\Couponables\Exceptions\CouponDisabledException;
 use MichaelRubel\Couponables\Exceptions\CouponException;
@@ -690,32 +689,7 @@ class CouponsTest extends TestCase
 
         Coupon::factory()->create();
 
-        bind(User::class)
-            ->method()
-            ->coupons(
-                fn () => throw new \Exception('test exception')
-            );
-
-        $this->user->redeemCoupon('test-code');
-    }
-
-    /** @test */
-    public function testEventFiredWhenFailedToRedeem()
-    {
-        Coupon::factory()->create();
-
-        bind(User::class)
-            ->method()
-            ->coupons(
-                fn () => throw new \Exception('test exception')
-            );
-
-        try {
-            $this->user->redeemCoupon('test-code');
-        } catch (\Exception) {
-        }
-
-        Event::assertDispatched(FailedToRedeemCoupon::class);
+        $this->user->redeemCoupon('non-existing-code');
     }
 
     /** @test */

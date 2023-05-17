@@ -10,21 +10,14 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Str;
 use MichaelRubel\Couponables\Models\Contracts\CouponContract;
 use MichaelRubel\Couponables\Services\Contracts\CouponServiceContract;
-use MichaelRubel\EnhancedContainer\Call;
-use MichaelRubel\EnhancedContainer\Core\CallProxy;
 use Throwable;
 
 trait HasCoupons
 {
     /**
-     * @var CallProxy
+     * @var CouponServiceContract
      */
-    protected static CallProxy $bindable;
-
-    /**
-     * @var CallProxy
-     */
-    protected static CallProxy $bindableService;
+    protected CouponServiceContract $couponService;
 
     /**
      * Initialize the method binding objects.
@@ -33,10 +26,8 @@ trait HasCoupons
      */
     protected function initializeHasCoupons(): void
     {
-        static::$bindable = call($this);
-
         if (app()->bound(CouponServiceContract::class)) {
-            static::$bindableService = call(CouponServiceContract::class);
+            $this->couponService = app(CouponServiceContract::class);
         }
     }
 
@@ -47,8 +38,8 @@ trait HasCoupons
      */
     public function coupons(): MorphToMany
     {
-        return with(static::$bindableService, fn ($service) => $this->morphToMany(
-            $service->model->getInternal(Call::INSTANCE),
+        return with($this->couponService, fn ($service) => $this->morphToMany(
+            $service->model,
             Str::singular(config('couponables.pivot_table', 'couponables'))
         )->withPivot([
             $service->pivot->getRedeemedTypeColumn(),
@@ -68,7 +59,7 @@ trait HasCoupons
      */
     public function isCouponAlreadyUsed(?string $code): bool
     {
-        $column = static::$bindableService->model->getCodeColumn();
+        $column = $this->couponService->model->getCodeColumn();
 
         return $this->coupons()
             ->where($column, $code)
@@ -84,9 +75,9 @@ trait HasCoupons
      */
     public function isCouponOverLimit(?string $code): bool
     {
-        $coupon = static::$bindableService->getCoupon($code);
+        $coupon = $this->couponService->getCoupon($code);
 
-        return ! is_null($coupon) && call($coupon)->isOverLimitFor($this);
+        return ! is_null($coupon) && $coupon->isOverLimitFor($this);
     }
 
     /**
@@ -98,7 +89,7 @@ trait HasCoupons
      */
     public function verifyCoupon(?string $code): CouponContract
     {
-        return static::$bindableService->verifyCoupon($code, $this);
+        return $this->couponService->verifyCoupon($code, $this);
     }
 
     /**
@@ -111,11 +102,9 @@ trait HasCoupons
      */
     public function redeemCoupon(?string $code, ?Model $redeemed = null): CouponContract
     {
-        return with(static::$bindableService, function ($service) use ($code, $redeemed) {
-            $coupon = $service->verifyCoupon($code, $this);
+        $coupon = $this->couponService->verifyCoupon($code, $this);
 
-            return $service->applyCoupon($coupon, $this, $redeemed);
-        });
+        return $this->couponService->applyCoupon($coupon, $this, $redeemed);
     }
 
     /**
@@ -129,7 +118,7 @@ trait HasCoupons
     public function verifyCouponOr(?string $code, Closure $callback = null): mixed
     {
         try {
-            return static::$bindable->verifyCoupon($code);
+            return $this->verifyCoupon($code);
         } catch (Throwable $e) {
             return $callback instanceof Closure ? $callback($code, $e) : throw $e;
         }
@@ -146,7 +135,7 @@ trait HasCoupons
     public function redeemCouponOr(?string $code, Closure $callback = null): mixed
     {
         try {
-            return static::$bindable->redeemCoupon($code, null);
+            return $this->redeemCoupon($code, null);
         } catch (Throwable $e) {
             return $callback instanceof Closure ? $callback($code, $e) : throw $e;
         }
@@ -162,10 +151,8 @@ trait HasCoupons
      */
     public function redeemBy(Model $model, ?string $couponCode): CouponContract
     {
-        return with(static::$bindableService, function ($service) use ($couponCode, $model) {
-            $coupon = $service->verifyCoupon($couponCode, $model);
+        $coupon = $this->couponService->verifyCoupon($couponCode, $model);
 
-            return $service->applyCoupon($coupon, $model, $this);
-        });
+        return $this->couponService->applyCoupon($coupon, $model, $this);
     }
 }

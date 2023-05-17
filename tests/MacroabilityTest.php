@@ -30,7 +30,7 @@ class MacroabilityTest extends TestCase
                 ->first();
         });
 
-        $coupon = call(CouponServiceContract::class)
+        $coupon = app(CouponServiceContract::class)
             ->getCouponUsing('type', 'macro');
 
         $this->assertInstanceOf(Coupon::class, $coupon);

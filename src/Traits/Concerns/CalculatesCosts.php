@@ -20,16 +20,16 @@ trait CalculatesCosts
      */
     public function calc(float $using): float
     {
-        $discount = (float) $this->{static::$bindable->getValueColumn()};
+        $discount = (float) $this->{static::getValueColumn()};
 
         if ($this->lessOrEqualZero($discount)) {
             throw new InvalidCouponValueException;
         }
 
-        $result = match ($this->{static::$bindable->getTypeColumn()}) {
-            static::TYPE_SUBTRACTION, null => static::$bindable->subtract($using, $discount),
-            static::TYPE_PERCENTAGE        => static::$bindable->percentage($using, $discount),
-            static::TYPE_FIXED             => static::$bindable->fixedPrice($discount),
+        $result = match ($this->{static::getTypeColumn()}) {
+            static::TYPE_SUBTRACTION, null => $this->subtract($using, $discount),
+            static::TYPE_PERCENTAGE        => $this->percentage($using, $discount),
+            static::TYPE_FIXED             => $this->fixedPrice($discount),
             default                        => throw new InvalidCouponTypeException,
         };
 
@@ -49,7 +49,7 @@ trait CalculatesCosts
      *
      * @return float
      */
-    public function subtract(float $cost, float $discount): float
+    protected function subtract(float $cost, float $discount): float
     {
         return $cost - $discount;
     }
@@ -62,7 +62,7 @@ trait CalculatesCosts
      *
      * @return float
      */
-    public function percentage(float $value, float $discount): float
+    protected function percentage(float $value, float $discount): float
     {
         return (1.0 - ($discount / 100)) * $value;
     }
@@ -73,7 +73,7 @@ trait CalculatesCosts
      * @param  float  $discount
      * @return float
      */
-    public function fixedPrice(float $discount): float
+    protected function fixedPrice(float $discount): float
     {
         return $discount;
     }

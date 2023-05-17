@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use MichaelRubel\Couponables\Models\Contracts\CouponPivotContract;
-use MichaelRubel\EnhancedContainer\Call;
 
 trait DefinesModelRelations
 {
@@ -19,10 +18,10 @@ trait DefinesModelRelations
      */
     public function couponables(): HasMany
     {
-        $pivot = call(CouponPivotContract::class);
+        $pivot = app(CouponPivotContract::class);
 
         return $this
-            ->hasMany($pivot->getInternal(Call::INSTANCE))
+            ->hasMany($pivot::class)
             ->orderBy($pivot->getRedeemedAtColumn(), 'desc');
     }
 

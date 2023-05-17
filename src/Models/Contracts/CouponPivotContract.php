@@ -6,8 +6,8 @@ namespace MichaelRubel\Couponables\Models\Contracts;
 
 interface CouponPivotContract
 {
-    /**
-     * @return string
-     */
+    public function getRedeemedTypeColumn(): string;
+    public function getRedeemedIdColumn(): string;
     public function getRedeemedAtColumn(): string;
+    public function getCreatedAtColumn(): string;
 }

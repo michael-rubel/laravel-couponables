@@ -33,7 +33,7 @@ class MakeCouponCommand extends Command
      */
     public function handle(): void
     {
-        $coupon = call(CouponContract::class);
+        $coupon = app(CouponContract::class);
 
         $coupon->create([
             $coupon->getCodeColumn()         => $this->argument('code'),
