@@ -11,7 +11,7 @@ trait DefinesColumnChecks
     /**
      * @return bool
      */
-    protected function isMorphColumnsFilled(): bool
+    private function isMorphColumnsFilled(): bool
     {
         return ! is_null($this->{static::getRedeemerTypeColumn()})
             && ! is_null($this->{static::getRedeemerIdColumn()});
@@ -20,7 +20,7 @@ trait DefinesColumnChecks
     /**
      * @return bool
      */
-    protected function isOnlyRedeemerTypeFilled(): bool
+    private function isOnlyRedeemerTypeFilled(): bool
     {
         return ! is_null($this->{static::getRedeemerTypeColumn()})
             && is_null($this->{static::getRedeemerIdColumn()});
@@ -31,7 +31,7 @@ trait DefinesColumnChecks
      *
      * @return bool
      */
-    protected function isSameRedeemerModel(Model $model): bool
+    private function isSameRedeemerModel(Model $model): bool
     {
         return $this->{static::getRedeemerTypeColumn()} === $model->getMorphClass();
     }

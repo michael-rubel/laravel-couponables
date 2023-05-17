@@ -114,11 +114,9 @@ class Coupon extends Model implements CouponContract
      *
      * @return bool
      */
-    protected function isDisposable(): bool
+    public function isDisposable(): bool
     {
-        $limit = $this->{static::getLimitColumn()};
-
-        return ! is_null($limit) && $limit == 1;
+        return $this->{static::getLimitColumn()} == 1;
     }
 
     /**

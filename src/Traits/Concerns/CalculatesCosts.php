@@ -49,7 +49,7 @@ trait CalculatesCosts
      *
      * @return float
      */
-    protected function subtract(float $cost, float $discount): float
+    private function subtract(float $cost, float $discount): float
     {
         return $cost - $discount;
     }
@@ -62,7 +62,7 @@ trait CalculatesCosts
      *
      * @return float
      */
-    protected function percentage(float $value, float $discount): float
+    private function percentage(float $value, float $discount): float
     {
         return (1.0 - ($discount / 100)) * $value;
     }
@@ -73,7 +73,7 @@ trait CalculatesCosts
      * @param  float  $discount
      * @return float
      */
-    protected function fixedPrice(float $discount): float
+    private function fixedPrice(float $discount): float
     {
         return $discount;
     }
