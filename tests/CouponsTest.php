@@ -810,4 +810,18 @@ class CouponsTest extends TestCase
 
         $this->assertSame($coupon, $couponAfterChecks);
     }
+
+    /** @test */
+    public function testCanPerformChecksOnCouponWithoutModelAndCoupon()
+    {
+        $service = app(CouponServiceContract::class);
+
+        $coupon = $service->getCoupon('non-existing-code');
+
+        $couponAfterChecks = $service->performBasicChecksOn($coupon);
+        $this->assertNull($couponAfterChecks);
+
+        $couponAfterChecks = $service->performRedeemerChecksOn($coupon, new User);
+        $this->assertNull($couponAfterChecks);
+    }
 }
