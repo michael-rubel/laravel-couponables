@@ -17,5 +17,5 @@ interface CouponServiceContract
 
     public function verifyCoupon(?string $code, ?Model $redeemer = null): CouponContract;
 
-    public function applyCoupon(CouponContract $coupon, Model $redeemer, ?Model $redeemed): CouponContract;
+    public function applyCoupon(CouponContract $coupon, Model $redeemer, ?Model $for): CouponContract;
 }

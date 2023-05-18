@@ -148,15 +148,15 @@ class CouponService implements CouponServiceContract
      *
      * @param  CouponContract  $coupon
      * @param  Model  $redeemer
-     * @param  Model|null  $redeemed
+     * @param  Model|null  $for
      *
      * @return CouponContract
      */
-    public function applyCoupon(CouponContract $coupon, Model $redeemer, ?Model $redeemed): CouponContract
+    public function applyCoupon(CouponContract $coupon, Model $redeemer, ?Model $for): CouponContract
     {
         $redeemer->coupons()->attach($coupon, [
-            $this->pivot->getRedeemedTypeColumn() => $redeemed?->getMorphClass(),
-            $this->pivot->getRedeemedIdColumn()   => $redeemed?->id,
+            $this->pivot->getRedeemedTypeColumn() => $for?->getMorphClass(),
+            $this->pivot->getRedeemedIdColumn()   => $for?->id,
             $this->pivot->getRedeemedAtColumn()   => now(),
             $this->pivot->getCreatedAtColumn()    => now(),
         ]);

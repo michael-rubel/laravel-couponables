@@ -38,16 +38,17 @@ trait HasCoupons
      */
     public function coupons(): MorphToMany
     {
-        return with($this->couponService, fn ($service) => $this->morphToMany(
-            $service->model,
-            Str::singular(config('couponables.pivot_table', 'couponables'))
-        )->withPivot([
-            $service->pivot->getRedeemedTypeColumn(),
-            $service->pivot->getRedeemedIdColumn(),
-            $service->pivot->getRedeemedAtColumn(),
-            $service->pivot->getCreatedAtColumn(),
-            $service->pivot->getUpdatedAtColumn(),
-        ]));
+        return with($this->couponService, function (CouponServiceContract $service) {
+            $morphName = Str::singular(config('couponables.pivot_table', 'couponables'));
+
+            return $this->morphToMany($service->model, $morphName)->withPivot([
+                $service->pivot->getRedeemedTypeColumn(),
+                $service->pivot->getRedeemedIdColumn(),
+                $service->pivot->getRedeemedAtColumn(),
+                $service->pivot->getCreatedAtColumn(),
+                $service->pivot->getUpdatedAtColumn(),
+            ]);
+        });
     }
 
     /**
@@ -61,9 +62,7 @@ trait HasCoupons
     {
         $column = $this->couponService->model->getCodeColumn();
 
-        return $this->coupons()
-            ->where($column, $code)
-            ->exists();
+        return $this->coupons()->where($column, $code)->exists();
     }
 
     /**
@@ -96,15 +95,15 @@ trait HasCoupons
      * Verify and use the coupon.
      *
      * @param  string|null  $code
-     * @param  Model|null  $redeemed
+     * @param  Model|null  $for
      *
      * @return CouponContract
      */
-    public function redeemCoupon(?string $code, ?Model $redeemed = null): CouponContract
+    public function redeemCoupon(?string $code, ?Model $for = null): CouponContract
     {
         $coupon = $this->couponService->verifyCoupon($code, $this);
 
-        return $this->couponService->applyCoupon($coupon, $this, $redeemed);
+        return $this->couponService->applyCoupon($coupon, $this, $for);
     }
 
     /**
@@ -135,7 +134,7 @@ trait HasCoupons
     public function redeemCouponOr(?string $code, Closure $callback = null): mixed
     {
         try {
-            return $this->redeemCoupon($code, null);
+            return $this->redeemCoupon($code);
         } catch (Throwable $e) {
             return $callback instanceof Closure ? $callback($code, $e) : throw $e;
         }
