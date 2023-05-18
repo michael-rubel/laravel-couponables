@@ -17,7 +17,7 @@ class CouponRedeemed
      */
     public function __construct(
         public CouponContract $coupon,
-        public Model $redeemer
+        public ?Model $redeemer = null,
     ) {
     }
 }

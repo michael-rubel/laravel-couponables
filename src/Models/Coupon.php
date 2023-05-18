@@ -13,7 +13,6 @@ use MichaelRubel\Couponables\Models\Traits\DefinesColumnChecks;
 use MichaelRubel\Couponables\Models\Traits\DefinesColumns;
 use MichaelRubel\Couponables\Models\Traits\DefinesModelRelations;
 use MichaelRubel\Couponables\Traits\Concerns\CalculatesCosts;
-use MichaelRubel\EnhancedContainer\Core\CallProxy;
 
 class Coupon extends Model implements CouponContract
 {
@@ -47,11 +46,6 @@ class Coupon extends Model implements CouponContract
     ];
 
     /**
-     * @var CallProxy
-     */
-    protected static CallProxy $bindable;
-
-    /**
      * @param  array  $attributes
      */
     public function __construct(array $attributes = [])
@@ -59,8 +53,6 @@ class Coupon extends Model implements CouponContract
         parent::__construct($attributes);
 
         $this->table = config('couponables.table', 'coupons');
-
-        static::$bindable = call($this);
     }
 
     /**
@@ -70,7 +62,7 @@ class Coupon extends Model implements CouponContract
      */
     public function isExpired(): bool
     {
-        $expires_at = $this->{static::$bindable->getExpiresAtColumn()};
+        $expires_at = $this->{static::getExpiresAtColumn()};
 
         return $expires_at && now()->gte($expires_at);
     }
@@ -82,7 +74,7 @@ class Coupon extends Model implements CouponContract
      */
     public function isNotExpired(): bool
     {
-        return ! static::$bindable->isExpired();
+        return ! $this->isExpired();
     }
 
     /**
@@ -92,7 +84,7 @@ class Coupon extends Model implements CouponContract
      */
     public function isEnabled(): bool
     {
-        return $this->{static::$bindable->getIsEnabledColumn()} ?? true;
+        return $this->{static::getIsEnabledColumn()} ?? true;
     }
 
     /**
@@ -102,7 +94,7 @@ class Coupon extends Model implements CouponContract
      */
     public function isDisabled(): bool
     {
-        return ! static::$bindable->isEnabled();
+        return ! $this->isEnabled();
     }
 
     /**
@@ -112,7 +104,7 @@ class Coupon extends Model implements CouponContract
      */
     public function isOverQuantity(): bool
     {
-        $quantity = $this->{static::$bindable->getQuantityColumn()};
+        $quantity = $this->{static::getQuantityColumn()};
 
         return ! is_null($quantity) && $quantity <= 0;
     }
@@ -124,23 +116,20 @@ class Coupon extends Model implements CouponContract
      */
     public function isDisposable(): bool
     {
-        $limit = $this->{static::$bindable->getLimitColumn()};
-
-        return ! is_null($limit) && $limit == 1;
+        return $this->{static::getLimitColumn()} == 1;
     }
 
     /**
      * Check if the code is reached its global limit.
      *
      * @param  Model  $redeemer
-     * @param  string|null  $code
      *
      * @return bool
      */
-    public function isOverLimit(Model $redeemer, ?string $code): bool
+    public function isOverLimit(Model $redeemer): bool
     {
-        return (static::$bindable->isDisposable() && call($redeemer)->isCouponAlreadyUsed($code))
-            || static::$bindable->isOverLimitFor($redeemer);
+        return ($this->isDisposable() && $redeemer->isCouponAlreadyUsed($this->{static::getCodeColumn()}))
+            || $this->isOverLimitFor($redeemer);
     }
 
     /**
@@ -152,8 +141,8 @@ class Coupon extends Model implements CouponContract
      */
     public function isOverLimitFor(Model $redeemer): bool
     {
-        $column = static::$bindable->getCodeColumn();
-        $limit  = $this->{static::$bindable->getLimitColumn()};
+        $column = static::getCodeColumn();
+        $limit  = $this->{static::getLimitColumn()};
 
         return ! is_null($limit) && $limit <= $redeemer
             ->coupons()
@@ -170,7 +159,7 @@ class Coupon extends Model implements CouponContract
      */
     public function isRedeemedBy(Model $redeemer): bool
     {
-        $column = static::$bindable->getCodeColumn();
+        $column = static::getCodeColumn();
 
         return $redeemer->coupons()->where($column, $this->{$column})->exists();
     }
@@ -184,18 +173,15 @@ class Coupon extends Model implements CouponContract
      */
     public function isAllowedToRedeemBy(Model $redeemer): bool
     {
-        /** @var bool */
-        return with(static::$bindable, function ($coupon) use ($redeemer) {
-            if ($coupon->isMorphColumnsFilled() && ! $coupon->redeemer?->is($redeemer)) {
-                return false;
-            }
+        if ($this->isMorphColumnsFilled() && ! $this->redeemer?->is($redeemer)) {
+            return false;
+        }
 
-            if ($coupon->isOnlyRedeemerTypeFilled() && ! $coupon->isSameRedeemerModel($redeemer)) {
-                return false;
-            }
+        if ($this->isOnlyRedeemerTypeFilled() && ! $this->isSameRedeemerModel($redeemer)) {
+            return false;
+        }
 
-            return true;
-        });
+        return true;
     }
 
     /**
@@ -224,7 +210,7 @@ class Coupon extends Model implements CouponContract
      *
      * @return Factory<Coupon>
      */
-    protected static function newFactory()
+    protected static function newFactory(): Factory
     {
         return CouponFactory::new();
     }

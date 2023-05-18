@@ -66,6 +66,38 @@ class BasicOperationsTest extends TestCase
     }
 
     /** @test */
+    public function testIsDisposable()
+    {
+        $coupon = Coupon::factory()->create([
+            'code' => 'first',
+            'limit' => 0,
+        ]);
+        $this->assertFalse($coupon->isDisposable());
+
+        $coupon = Coupon::factory()->create([
+            'code' => 'second',
+            'limit' => 1,
+        ]);
+        $this->assertTrue($coupon->isDisposable());
+
+        $coupon = Coupon::factory()->create([
+            'code' => 'third',
+            'limit' => 2,
+        ]);
+        $this->assertFalse($coupon->isDisposable());
+    }
+
+    /** @test */
+    public function testIsEnabledStillTrueWhenNotSet()
+    {
+        $coupon = Coupon::factory()->create([
+            'code' => 'not-disabled-coupon2',
+        ]);
+
+        $this->assertTrue($coupon->isEnabled());
+    }
+
+    /** @test */
     public function testIsExpired()
     {
         $coupon = Coupon::factory()->create([

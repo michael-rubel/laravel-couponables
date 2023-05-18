@@ -11,7 +11,6 @@ use MichaelRubel\Couponables\Models\Coupon;
 use MichaelRubel\Couponables\Models\Couponable;
 use MichaelRubel\Couponables\Services\Contracts\CouponServiceContract;
 use MichaelRubel\Couponables\Services\CouponService;
-use MichaelRubel\EnhancedContainer\LecServiceProvider;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -47,8 +46,6 @@ class CouponableServiceProvider extends PackageServiceProvider
      */
     public function packageRegistered(): void
     {
-        $this->app->register(LecServiceProvider::class);
-
         $model = config('couponables.model', Coupon::class);
         $this->app->scoped(CouponContract::class, $model);
 
