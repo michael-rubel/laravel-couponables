@@ -63,7 +63,7 @@ class CouponService implements CouponServiceContract
      * @throws OverQuantityException
      * @throws CouponDisabledException
      */
-    public function performBasicChecks(CouponContract $coupon, ?Model $redeemer = null): CouponContract
+    public function performBasicChecksOn(CouponContract $coupon, ?Model $redeemer = null): CouponContract
     {
         if ($coupon->isDisabled()) {
             event(new CouponDisabled($coupon, $redeemer));
@@ -97,7 +97,7 @@ class CouponService implements CouponServiceContract
      * @throws OverLimitException
      * @throws NotAllowedToRedeemException
      */
-    public function performChecksOnRedeemer(CouponContract $coupon, Model $redeemer): CouponContract
+    public function performRedeemerChecksOn(CouponContract $coupon, Model $redeemer): CouponContract
     {
         if (! $coupon->isAllowedToRedeemBy($redeemer)) {
             event(new NotAllowedToRedeem($coupon, $redeemer));
@@ -132,10 +132,10 @@ class CouponService implements CouponServiceContract
     {
         $coupon = $this->getCoupon($code) ?? throw new InvalidCouponException;
 
-        $this->performBasicChecks($coupon);
+        $this->performBasicChecksOn($coupon);
 
         if ($redeemer) {
-            $this->performChecksOnRedeemer($coupon, $redeemer);
+            $this->performRedeemerChecksOn($coupon, $redeemer);
         }
 
         event(new CouponVerified($coupon, $redeemer));

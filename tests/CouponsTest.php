@@ -796,4 +796,18 @@ class CouponsTest extends TestCase
             4 => 'updated_at',
         ], $this->user->coupons()->getPivotColumns());
     }
+
+    /** @test */
+    public function testCanPerformChecksOnCouponWithoutModel()
+    {
+        Coupon::factory()->create();
+
+        $service = app(CouponServiceContract::class);
+
+        $coupon = $service->getCoupon('test-code');
+
+        $couponAfterChecks = $service->performBasicChecksOn($coupon);
+
+        $this->assertSame($coupon, $couponAfterChecks);
+    }
 }
