@@ -34,12 +34,12 @@ interface CouponServiceContract
      * @return CouponContract
      *
      * @throws CouponException
-     * @throws CouponExpiredException
-     * @throws InvalidCouponException
-     * @throws NotAllowedToRedeemException
      * @throws OverLimitException
      * @throws OverQuantityException
+     * @throws InvalidCouponException
+     * @throws CouponExpiredException
      * @throws CouponDisabledException
+     * @throws NotAllowedToRedeemException
      */
     public function verifyCoupon(?string $code, ?Model $redeemer = null): CouponContract;
 
@@ -50,14 +50,14 @@ interface CouponServiceContract
      * @param  CouponContract|null  $coupon
      * @param  Model|null  $redeemer
      *
-     * @return CouponContract|null
+     * @return CouponContract
      *
      * @throws CouponException
-     * @throws CouponExpiredException
      * @throws OverQuantityException
+     * @throws CouponExpiredException
      * @throws CouponDisabledException
      */
-    public function performBasicChecksOn(?CouponContract $coupon, ?Model $redeemer = null): ?CouponContract;
+    public function performBasicChecksOn(?CouponContract $coupon, ?Model $redeemer = null): CouponContract;
 
     /**
      * Perform the "Redeemer" checks on the coupon model.
@@ -65,13 +65,13 @@ interface CouponServiceContract
      * @param  CouponContract|null  $coupon
      * @param  Model  $redeemer
      *
-     * @return CouponContract|null
+     * @return CouponContract
      *
      * @throws CouponException
      * @throws OverLimitException
      * @throws NotAllowedToRedeemException
      */
-    public function performRedeemerChecksOn(?CouponContract $coupon, Model $redeemer): ?CouponContract;
+    public function performRedeemerChecksOn(?CouponContract $coupon, Model $redeemer): CouponContract;
 
     /**
      * Apply the coupon.

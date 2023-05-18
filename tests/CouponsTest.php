@@ -818,10 +818,16 @@ class CouponsTest extends TestCase
 
         $coupon = $service->getCoupon('non-existing-code');
 
-        $couponAfterChecks = $service->performBasicChecksOn($coupon);
-        $this->assertNull($couponAfterChecks);
+        try {
+            $service->performBasicChecksOn($coupon);
+        } catch (CouponException $exception) {
+            $this->assertInstanceOf(InvalidCouponException::class, $exception);
+        }
 
-        $couponAfterChecks = $service->performRedeemerChecksOn($coupon, new User);
-        $this->assertNull($couponAfterChecks);
+        try {
+            $service->performRedeemerChecksOn($coupon, new User);
+        } catch (CouponException $exception) {
+            $this->assertInstanceOf(InvalidCouponException::class, $exception);
+        }
     }
 }

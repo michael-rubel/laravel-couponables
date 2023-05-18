@@ -58,13 +58,14 @@ class CouponService implements CouponServiceContract
      * @param  Model|null  $redeemer
      *
      * @return CouponContract
+     *
      * @throws CouponException
-     * @throws CouponExpiredException
-     * @throws InvalidCouponException
-     * @throws NotAllowedToRedeemException
      * @throws OverLimitException
      * @throws OverQuantityException
+     * @throws InvalidCouponException
+     * @throws CouponExpiredException
      * @throws CouponDisabledException
+     * @throws NotAllowedToRedeemException
      */
     public function verifyCoupon(?string $code, ?Model $redeemer = null): CouponContract
     {
@@ -88,28 +89,32 @@ class CouponService implements CouponServiceContract
      * @param  CouponContract|null  $coupon
      * @param  Model|null  $redeemer
      *
-     * @return CouponContract|null
+     * @return CouponContract
      *
      * @throws CouponException
-     * @throws CouponExpiredException
      * @throws OverQuantityException
+     * @throws CouponExpiredException
      * @throws CouponDisabledException
      */
-    public function performBasicChecksOn(?CouponContract $coupon, ?Model $redeemer = null): ?CouponContract
+    public function performBasicChecksOn(?CouponContract $coupon, ?Model $redeemer = null): CouponContract
     {
-        if ($coupon?->isDisabled()) {
+        if (! $coupon) {
+            throw new InvalidCouponException;
+        }
+
+        if ($coupon->isDisabled()) {
             event(new CouponDisabled($coupon, $redeemer));
 
             throw new CouponDisabledException;
         }
 
-        if ($coupon?->isExpired()) {
+        if ($coupon->isExpired()) {
             event(new CouponExpired($coupon, $redeemer));
 
             throw new CouponExpiredException;
         }
 
-        if ($coupon?->isOverQuantity()) {
+        if ($coupon->isOverQuantity()) {
             event(new CouponIsOverQuantity($coupon, $redeemer));
 
             throw new OverQuantityException;
@@ -124,16 +129,16 @@ class CouponService implements CouponServiceContract
      * @param  CouponContract|null  $coupon
      * @param  Model  $redeemer
      *
-     * @return CouponContract|null
+     * @return CouponContract
      *
      * @throws CouponException
      * @throws OverLimitException
      * @throws NotAllowedToRedeemException
      */
-    public function performRedeemerChecksOn(?CouponContract $coupon, Model $redeemer): ?CouponContract
+    public function performRedeemerChecksOn(?CouponContract $coupon, Model $redeemer): CouponContract
     {
         if (! $coupon) {
-            return null;
+            throw new InvalidCouponException;
         }
 
         if (! $coupon->isAllowedToRedeemBy($redeemer)) {
