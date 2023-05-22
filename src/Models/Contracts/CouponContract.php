@@ -4,12 +4,25 @@ declare(strict_types=1);
 
 namespace MichaelRubel\Couponables\Models\Contracts;
 
+use Carbon\CarbonInterface;
+use Illuminate\Database\Eloquent\Collection;
 use MichaelRubel\Couponables\Models\Coupon;
 
 /**
- * @method Coupon|null firstWhere(string $column, string|null $value)
- *
  * @see Coupon
+ *
+ * @property string $code
+ * @property string|null $type
+ * @property string|null $value
+ * @property bool $is_enabled
+ * @property Collection|null $data
+ * @property int|null $quantity
+ * @property int|null $limit
+ * @property string|null $redeemer_type
+ * @property int|null $redeemer_id
+ * @property CarbonInterface|null $expires_at
+ *
+ * @method Coupon|null firstWhere(string $column, string|null $value)
  */
 interface CouponContract
 {
@@ -46,17 +59,14 @@ interface CouponContract
 
     public function getValueColumn(): string;
 
+    public function getIsEnabledColumn(): string;
+    public function getDataColumn(): string;
     public function getQuantityColumn(): string;
 
     public function getLimitColumn(): string;
-
-    public function getExpiresAtColumn(): string;
-
-    public function getIsEnabledColumn(): string;
-
     public function getRedeemerTypeColumn(): string;
 
     public function getRedeemerIdColumn(): string;
+    public function getExpiresAtColumn(): string;
 
-    public function getDataColumn(): string;
 }

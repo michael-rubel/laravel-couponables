@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MichaelRubel\Couponables\Models;
 
+use Carbon\CarbonInterface;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +16,20 @@ use MichaelRubel\Couponables\Models\Traits\DefinesColumns;
 use MichaelRubel\Couponables\Models\Traits\DefinesModelRelations;
 use MichaelRubel\Couponables\Traits\Concerns\CalculatesCosts;
 
+/**
+ * "Coupon code" model class.
+ *
+ * @property string $code
+ * @property string|null $type
+ * @property string|null $value
+ * @property bool $is_enabled
+ * @property Collection|null $data
+ * @property int|null $quantity
+ * @property int|null $limit
+ * @property string|null $redeemer_type
+ * @property int|null $redeemer_id
+ * @property CarbonInterface|null $expires_at
+ */
 class Coupon extends Model implements CouponContract
 {
     use HasFactory;
