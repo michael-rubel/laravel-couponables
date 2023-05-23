@@ -60,13 +60,16 @@ interface CouponContract
     public function getValueColumn(): string;
 
     public function getIsEnabledColumn(): string;
+
     public function getDataColumn(): string;
+
     public function getQuantityColumn(): string;
 
     public function getLimitColumn(): string;
+
     public function getRedeemerTypeColumn(): string;
 
     public function getRedeemerIdColumn(): string;
-    public function getExpiresAtColumn(): string;
 
+    public function getExpiresAtColumn(): string;
 }
