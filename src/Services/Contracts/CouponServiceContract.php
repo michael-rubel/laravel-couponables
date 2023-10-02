@@ -41,7 +41,7 @@ interface CouponServiceContract
      * @throws CouponDisabledException
      * @throws NotAllowedToRedeemException
      */
-    public function verifyCoupon(?string $code, ?Model $redeemer = null): CouponContract;
+    public function verifyCoupon(?string $code, Model $redeemer = null): CouponContract;
 
     /**
      * Perform the stateless checks on the coupon
@@ -57,7 +57,7 @@ interface CouponServiceContract
      * @throws CouponExpiredException
      * @throws CouponDisabledException
      */
-    public function performBasicChecksOn(?CouponContract $coupon, ?Model $redeemer = null): CouponContract;
+    public function performBasicChecksOn(?CouponContract $coupon, Model $redeemer = null): CouponContract;
 
     /**
      * Perform the "Redeemer" checks on the coupon model.

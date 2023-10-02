@@ -32,11 +32,11 @@ use MichaelRubel\Couponables\Traits\Concerns\CalculatesCosts;
  */
 class Coupon extends Model implements CouponContract
 {
-    use HasFactory;
-    use DefinesColumns;
-    use DefinesColumnChecks;
-    use DefinesModelRelations;
     use CalculatesCosts;
+    use DefinesColumnChecks;
+    use DefinesColumns;
+    use DefinesModelRelations;
+    use HasFactory;
 
     /**
      * The attributes that aren't mass assignable.

@@ -27,7 +27,7 @@ use MichaelRubel\Couponables\Traits\Concerns\GeneratesCoupons;
 
 class CouponService implements CouponServiceContract
 {
-    use Macroable, GeneratesCoupons;
+    use GeneratesCoupons, Macroable;
 
     /**
      * @param  CouponContract  $model
@@ -67,7 +67,7 @@ class CouponService implements CouponServiceContract
      * @throws CouponDisabledException
      * @throws NotAllowedToRedeemException
      */
-    public function verifyCoupon(?string $code, ?Model $redeemer = null): CouponContract
+    public function verifyCoupon(?string $code, Model $redeemer = null): CouponContract
     {
         $coupon = $this->getCoupon($code) ?? throw new InvalidCouponException;
 
@@ -96,7 +96,7 @@ class CouponService implements CouponServiceContract
      * @throws CouponExpiredException
      * @throws CouponDisabledException
      */
-    public function performBasicChecksOn(?CouponContract $coupon, ?Model $redeemer = null): CouponContract
+    public function performBasicChecksOn(?CouponContract $coupon, Model $redeemer = null): CouponContract
     {
         if (! $coupon) {
             throw new InvalidCouponException;
