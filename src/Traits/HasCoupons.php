@@ -99,7 +99,7 @@ trait HasCoupons
      *
      * @return CouponContract
      */
-    public function redeemCoupon(?string $code, ?Model $for = null): CouponContract
+    public function redeemCoupon(?string $code, Model $for = null): CouponContract
     {
         $coupon = $this->couponService->verifyCoupon($code, $this);
 

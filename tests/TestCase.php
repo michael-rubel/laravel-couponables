@@ -9,7 +9,7 @@ use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
-    use RefreshDatabase, InteractsWithViews;
+    use InteractsWithViews, RefreshDatabase;
 
     public function setUp(): void
     {
