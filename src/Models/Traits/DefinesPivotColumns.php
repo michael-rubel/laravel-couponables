@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MichaelRubel\Couponables\Models\Traits;
 
 trait DefinesPivotColumns
