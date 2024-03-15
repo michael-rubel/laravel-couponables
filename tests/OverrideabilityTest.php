@@ -73,7 +73,7 @@ class OverrideabilityTest extends TestCase
 
         $fakePivotModel = FakeCouponable::where($redeemed_at, $now)->first();
 
-        $this->assertStringContainsString($fakePivotModel->{$redeemed_at}, $now->toDateTimeString());
+        $this->assertEquals($fakePivotModel->{$redeemed_at}, $now->toDateTimeString());
     }
 
     /** @test */
