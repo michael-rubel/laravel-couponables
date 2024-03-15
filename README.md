@@ -8,9 +8,9 @@
 [![Infection](https://img.shields.io/github/actions/workflow/status/michael-rubel/laravel-couponables/infection.yml?branch=main&style=flat-square&label=infection&logo=php)](https://github.com/michael-rubel/laravel-couponables/actions)
 [![Larastan](https://img.shields.io/github/actions/workflow/status/michael-rubel/laravel-couponables/phpstan.yml?branch=main&style=flat-square&label=larastan&logo=laravel)](https://github.com/michael-rubel/laravel-couponables/actions)
 
-This package provides polymorphic coupon functionality for your Laravel application.
+This package provides coupons/promocodes functionality for your Laravel application leveraging Eloquent's polymorphic relationships.
 
-The package requires `PHP 8` or higher and `Laravel 9` or higher.
+The package requires `PHP 8.1` or higher and `Laravel 10` or higher.
 
 ---
 
