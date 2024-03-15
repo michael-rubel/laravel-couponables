@@ -11,3 +11,4 @@ vendor
 node_modules
 .php-cs-fixer.cache
 infection.log
+.phpunit.cache

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MichaelRubel\Couponables\Tests\Stubs\Models;
 
 use Illuminate\Database\Eloquent\Model;

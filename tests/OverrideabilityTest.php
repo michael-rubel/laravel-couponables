@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MichaelRubel\Couponables\Tests;
 
 use Illuminate\Support\Collection;
@@ -71,7 +73,7 @@ class OverrideabilityTest extends TestCase
 
         $fakePivotModel = FakeCouponable::where($redeemed_at, $now)->first();
 
-        $this->assertStringContainsString($fakePivotModel->{$redeemed_at}, $now->toDateTimeString());
+        $this->assertEquals($fakePivotModel->{$redeemed_at}, $now->toDateTimeString());
     }
 
     /** @test */

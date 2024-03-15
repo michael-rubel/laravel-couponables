@@ -99,7 +99,7 @@ trait HasCoupons
      *
      * @return CouponContract
      */
-    public function redeemCoupon(?string $code, Model $for = null): CouponContract
+    public function redeemCoupon(?string $code, ?Model $for = null): CouponContract
     {
         $coupon = $this->couponService->verifyCoupon($code, $this);
 
@@ -114,7 +114,7 @@ trait HasCoupons
      *
      * @return mixed
      */
-    public function verifyCouponOr(?string $code, Closure $callback = null): mixed
+    public function verifyCouponOr(?string $code, ?Closure $callback = null): mixed
     {
         try {
             return $this->verifyCoupon($code);
@@ -131,7 +131,7 @@ trait HasCoupons
      *
      * @return mixed
      */
-    public function redeemCouponOr(?string $code, Closure $callback = null): mixed
+    public function redeemCouponOr(?string $code, ?Closure $callback = null): mixed
     {
         try {
             return $this->redeemCoupon($code);
