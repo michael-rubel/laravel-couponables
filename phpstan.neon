@@ -7,36 +7,21 @@ parameters:
         - src
 
     ignoreErrors:
-        - '#Property MichaelRubel\\Couponables\\Services\\CouponService(.*)MichaelRubel\\EnhancedContainer\\Core\\CallProxy\) does not accept mixed\.#'
-        - '#Parameter \#2 \$concrete of method Illuminate\\Contracts\\Container\\Container(.*) expects Closure\|string\|null, mixed given\.#'
-        - '#Property Illuminate\\Database\\Eloquent\\Model\:\:\$table \(string\) does not accept mixed\.#'
         - '#Property MichaelRubel\\Couponables\\Events\\(.*) is never read, only written\.#'
-        - '#Parameter \#1 \$coupon of class MichaelRubel\\Couponables\\Events\\(.*) constructor expects MichaelRubel\\Couponables\\Models\\Contracts\\CouponContract, mixed given\.#'
         - '#Access to an undefined property MichaelRubel\\Couponables\\Models\\Contracts\\CouponContract(.*)#'
         - '#Call to an undefined method MichaelRubel\\Couponables\\Models\\Contracts\\CouponContract(.*)#'
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:isCouponAlreadyUsed\(\)\.#'
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:coupons\(\)#'
-        - '#Call to an undefined method MichaelRubel\\EnhancedContainer\\Core\\CallProxy(.*)#'
         - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model(.*)#'
-        - '#Cannot call method (.*) on mixed\.#'
-        - '#Method MichaelRubel\\Couponables\\Services\\CouponService\:\:verifyCoupon\(\) should return MichaelRubel\\Couponables\\Models\\Contracts\\CouponContract but returns mixed\.#'
-        - '#Method MichaelRubel\\Couponables\\Models\\Coupon\:\:isAllowedToRedeemBy\(\) should return bool but returns bool\|MichaelRubel\\EnhancedContainer\\Core\\CallProxy\.#'
-        - '#Cannot call method (.*) on bool\|MichaelRubel\\EnhancedContainer\\Core\\CallProxy\.#'
         - '#Method MichaelRubel\\Couponables\\Models\\Coupon\:\:for\(\) should return MichaelRubel\\Couponables\\Models\\Contracts\\CouponContract but returns Illuminate\\Database\\Eloquent\\Model\|null\.#'
         - '#Cannot call method update\(\) on Illuminate\\Database\\Eloquent\\Model\|null\.#'
         - '#Parameter \#1 \$related of method Illuminate\\Database\\Eloquent\\Model\:\:hasMany\(\) expects string, MichaelRubel\\Couponables\\Models\\Contracts\\CouponPivotContract given\.#'
-        - '#Parameter \#1 \$related of method Illuminate\\Database\\Eloquent\\Model\:\:belongsTo\(\) expects string, mixed given\.#'
         - '#Unable to resolve the template type TValue in call to function collect#'
-        - '#Parameter \#1 \$related of method Illuminate\\Database\\Eloquent\\Model\:\:hasMany\(\) expects string, mixed given\.#'
-        - '#Unable to resolve the template type TTimesValue in call to method static method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:times\(\)#'
-        - '#Method MichaelRubel\\Couponables\\Models\\Coupon\:\:calc\(\) should return float but returns mixed\.#'
-        - '#Parameter \$precision of function round expects int, mixed given\.#'
-        - '#Parameter \$mode of function round expects 1\|2\|3\|4, mixed given\.#'
         - '#Return type of call to function transform contains unresolvable type.#'
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:get(.*)Column\(\)\.#'
-        - '#Access to an undefined property MichaelRubel\\EnhancedContainer\\Core\\CallProxy(.*)#'
+        - '#^Unable to resolve the template type TRelatedModel in call to method Illuminate\\Database\\Eloquent\\Model\:\:belongsTo\(\)$#'
 
-    level: max
+    level: 6
 
     checkMissingIterableValueType: false
 
