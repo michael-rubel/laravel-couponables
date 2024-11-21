@@ -8,7 +8,7 @@ on:
 
 jobs:
   backwards-compatibility-check:
-    name: Backwards Compatibility Check
+    name: "Backwards Compatibility Check"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -20,7 +20,7 @@ jobs:
           php-version: "8.3"
       - name: "Install dependencies"
         run: "composer install"
-      - name: "Composer install"
-        run: "composer install -n --prefer-dist"
+      - name: "Install BC check"
+        run: "composer require --dev roave/backward-compatibility-check"
       - name: "Check for BC breaks"
         run: "vendor/bin/roave-backward-compatibility-check"
