@@ -10,7 +10,7 @@ use MichaelRubel\Couponables\CouponableServiceProvider;
 class PackageConfigurationTest extends TestCase
 {
     /** @test */
-    public function testProviderHasProperConfiguration()
+    public function test_provider_has_proper_configuration()
     {
         $package = $this->app->register(CouponableServiceProvider::class)->package;
 

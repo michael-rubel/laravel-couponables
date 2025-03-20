@@ -12,7 +12,7 @@ class CommandsTest extends TestCase
     /**
      * @var void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -20,7 +20,7 @@ class CommandsTest extends TestCase
     }
 
     /** @test */
-    public function testCanSeedCouponUsingArtisanCommand()
+    public function test_can_seed_coupon_using_artisan_command()
     {
         $this->artisan('make:coupon', [
             'code'            => 'my-test-coupon',

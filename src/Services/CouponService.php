@@ -36,8 +36,7 @@ class CouponService implements CouponServiceContract
     public function __construct(
         public CouponContract $model,
         public CouponPivotContract $pivot,
-    ) {
-    }
+    ) {}
 
     /**
      * Get the coupon model by the code.

@@ -11,7 +11,7 @@ use MichaelRubel\Couponables\Models\Coupon;
 class CalculationsTest extends TestCase
 {
     /** @test */
-    public function testCanCalcUsingSubtractionStrategy()
+    public function test_can_calc_using_subtraction_strategy()
     {
         $coupon = Coupon::factory()->create([
             'code'  => 'test-code',
@@ -26,7 +26,7 @@ class CalculationsTest extends TestCase
     }
 
     /** @test */
-    public function testCanCalcUsingPercentStrategy()
+    public function test_can_calc_using_percent_strategy()
     {
         $coupon = Coupon::factory()->create([
             'code'  => 'test-code',
@@ -40,7 +40,7 @@ class CalculationsTest extends TestCase
     }
 
     /** @test */
-    public function testCanCalcUsingFixedStrategy()
+    public function test_can_calc_using_fixed_strategy()
     {
         $coupon = Coupon::factory()->create([
             'code'  => 'test-code',
@@ -55,7 +55,7 @@ class CalculationsTest extends TestCase
     }
 
     /** @test */
-    public function testReturnsSameValueIfTypeNotFound()
+    public function test_returns_same_value_if_type_not_found()
     {
         $this->expectException(InvalidCouponTypeException::class);
 
@@ -69,7 +69,7 @@ class CalculationsTest extends TestCase
     }
 
     /** @test */
-    public function testValueCannotBeZero()
+    public function test_value_cannot_be_zero()
     {
         $this->expectException(InvalidCouponValueException::class);
 
@@ -83,7 +83,7 @@ class CalculationsTest extends TestCase
     }
 
     /** @test */
-    public function testValueCannotBeLessThanZero()
+    public function test_value_cannot_be_less_than_zero()
     {
         $this->expectException(InvalidCouponValueException::class);
 
@@ -97,7 +97,7 @@ class CalculationsTest extends TestCase
     }
 
     /** @test */
-    public function testDifferentPercentageValues()
+    public function test_different_percentage_values()
     {
         // Base value: 200
         $iterations = [
@@ -137,7 +137,7 @@ class CalculationsTest extends TestCase
     }
 
     /** @test */
-    public function testCalcMaximumAllowedValue()
+    public function test_calc_maximum_allowed_value()
     {
         $coupon = Coupon::factory()->create([
             'code'  => 'test-code',
@@ -163,7 +163,7 @@ class CalculationsTest extends TestCase
     }
 
     /** @test */
-    public function testCalcMethodRoundsResult()
+    public function test_calc_method_rounds_result()
     {
         $coupon = Coupon::factory()->create([
             'code'  => 'test-code',
@@ -205,7 +205,7 @@ class CalculationsTest extends TestCase
     }
 
     /** @test */
-    public function testCalcRoundMode()
+    public function test_calc_round_mode()
     {
         $coupon = Coupon::factory()->create([
             'code'  => 'test-code',
@@ -235,7 +235,7 @@ class CalculationsTest extends TestCase
     }
 
     /** @test */
-    public function testCalcUsesSubtractionWhenNull()
+    public function test_calc_uses_subtraction_when_null()
     {
         $coupon = Coupon::factory()->create([
             'code'  => 'test-code',

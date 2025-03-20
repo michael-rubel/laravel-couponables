@@ -18,6 +18,5 @@ class CouponIsOverLimit
     public function __construct(
         public CouponContract $coupon,
         public ?Model $redeemer = null,
-    ) {
-    }
+    ) {}
 }

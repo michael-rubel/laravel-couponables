@@ -20,6 +20,7 @@ trait DefinesModelRelations
     {
         $pivot = app(CouponPivotContract::class);
 
+        // @phpstan-ignore-next-line
         return $this
             ->hasMany($pivot::class)
             ->orderBy($pivot->getRedeemedAtColumn(), 'desc');

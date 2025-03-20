@@ -13,7 +13,7 @@ class MacroabilityTest extends TestCase
     /**
      * @var void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -24,7 +24,7 @@ class MacroabilityTest extends TestCase
     }
 
     /** @test */
-    public function testCanMacroIntoTheService()
+    public function test_can_macro_into_the_service()
     {
         CouponService::macro('getCouponUsing', function (string $column, string $value) {
             return $this->model

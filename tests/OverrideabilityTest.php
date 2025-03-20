@@ -22,7 +22,7 @@ class OverrideabilityTest extends TestCase
     /**
      * @var void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -34,7 +34,7 @@ class OverrideabilityTest extends TestCase
     }
 
     /** @test */
-    public function testCanOverrideModelAttributes()
+    public function test_can_override_model_attributes()
     {
         config([
             'couponables.table' => 'coupons_test',
@@ -53,7 +53,7 @@ class OverrideabilityTest extends TestCase
     }
 
     /** @test */
-    public function testCanOverridePivotAttributes()
+    public function test_can_override_pivot_attributes()
     {
         config([
             'couponables.pivot_table' => 'couponable_tests',
@@ -77,7 +77,7 @@ class OverrideabilityTest extends TestCase
     }
 
     /** @test */
-    public function testCanOverrideConstructor()
+    public function test_can_override_constructor()
     {
         $coupon = FakeCoupon::factory()->create([
             'redeemer_type' => User::class,
