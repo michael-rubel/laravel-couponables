@@ -11,16 +11,36 @@ jobs:
     name: "Backwards Compatibility Check"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: "Install PHP"
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.3"
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, intl, fileinfo, sodium
+          coverage: none
+
+      - name: "Cache composer dependencies"
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.json') }}
+
       - name: "Install dependencies"
-        run: "composer install"
+        run: composer install --no-interaction --prefer-dist
+
+      - name: "Set up git"
+        run: |
+          git config --global --add safe.directory '*'
+          git fetch --depth=1 origin main
+
       - name: "Install BC check"
-        run: "composer require --dev roave/backward-compatibility-check"
+        run: |
+          composer config minimum-stability dev
+          composer require --dev roave/backward-compatibility-check --prefer-dist --with-all-dependencies
+
       - name: "Check for BC breaks"
-        run: "vendor/bin/roave-backward-compatibility-check"
+        run: |
+          vendor/bin/roave-backward-compatibility-check --format=markdown --from=origin/main
