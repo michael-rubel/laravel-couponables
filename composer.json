@@ -22,7 +22,7 @@
     },
     "require-dev": {
         "brianium/paratest": "^6.3|^7.4",
-        "infection/infection": "^0.27.3",
+        "infection/infection": "^0.27.3|^0.29.14",
         "larastan/larastan": "^2.0|^3.0",
         "laravel/pint": "^1.0",
         "nunomaduro/collision": "^7.0|^8.0",
